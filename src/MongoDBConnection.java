@@ -77,6 +77,37 @@ public class MongoDBConnection {
         return numRes;
     }
 
+    public HashMap<Character, Integer> numInFarms() {
+        Morphia morphia = new Morphia();
+        morphia.map(Student.class).map(Sector.class);
+
+        DB db = openConnection();
+        DBCollection coll = db.getCollection("users");
+        DBCursor cursor = coll.find();
+        HashMap<Character, Integer> numRes = new HashMap<>();
+        numRes.put(GameDriver.SMALL_FARM, 0);
+        numRes.put(GameDriver.MED_FARM, 0);
+        numRes.put(GameDriver.LARGE_FARM, 0);
+        FarmSector studentSector;
+        Student student;
+        try {
+            while (cursor.hasNext()) {
+                student = morphia.fromDBObject(Student.class, cursor.next());
+                //System.out.println(student.uName.matches("[a-zA-Z]+"));
+                if (student.sector.name.equals(GameDriver.FARM_SECTOR_NAME)) {
+                    studentSector = (FarmSector) student.sector;
+                    numRes.put(studentSector.farm.size, numRes.get(studentSector.farm.size) + 1);
+                }
+                //numRes.put(student.sector, numRes.get(student.sector.name) + 1);
+            }
+        } finally {
+            cursor.close();
+        }
+        //System.out.println(numRes);
+        closeConnection();
+        return numRes;
+    }
+
     public void addUser(Student student) {
         Morphia morphia = new Morphia();
         morphia.map(Student.class).map(Sector.class);

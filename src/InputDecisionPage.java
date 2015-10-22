@@ -19,7 +19,6 @@ public class InputDecisionPage extends JFrame implements ActionListener {
     private Student student;
     private InputSector studentSector;
     private JPanel rootPanel;
-    private JPanel decisionsPanel;
     private JPanel earlyNumsPanel;
     private JPanel midNumsPanel;
     private JPanel fullNumsPanel;
@@ -32,9 +31,10 @@ public class InputDecisionPage extends JFrame implements ActionListener {
     private JRadioButton earlyButton;
     private JRadioButton midButton;
     private JRadioButton fullButton;
-    private JLabel seedMaturityLabel;
     private JLabel inputSupplyLabel;
     private JButton submitButton;
+    private JPanel decisionsPanel;
+    private JLabel seedMaturityLabel;
     private BalloonTipStyle modern = new MinimalBalloonStyle(Color.white, 5);
     private BalloonTip balloonTip = new BalloonTip(earlyUnitSale, new JLabel(), modern, BalloonTip.Orientation.LEFT_ABOVE, BalloonTip.AttachLocation.ALIGNED, 10, 10, false);
     private MongoDBConnection db = MongoDBConnection.getInstance();
@@ -46,7 +46,7 @@ public class InputDecisionPage extends JFrame implements ActionListener {
         setResizable(false);
         pack();
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
         inputSupplyLabel.setText("Hey " + student.uName + "!");
 
@@ -119,7 +119,7 @@ public class InputDecisionPage extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         boolean clean = true;
         if (earlyButton.isSelected()) {
-            if (!earlyUnitSale.getText().matches("\\d+")) {
+            if (!"\\d+".matches(earlyUnitSale.getText())) {
                 clean = false;
                 earlyUnitSale.setBackground(Color.RED);
                 balloonTip.setAttachedComponent(earlyUnitSale);
@@ -128,7 +128,7 @@ public class InputDecisionPage extends JFrame implements ActionListener {
             } else {
                 earlyUnitSale.setBackground(Color.green);
             }
-            if (!earlyUnitPrice.getText().matches("\\d+")) {
+            if (!"\\d+".matches(earlyUnitPrice.getText())) {
                 clean = false;
                 earlyUnitPrice.setBackground(Color.RED);
                 balloonTip.setAttachedComponent(earlyUnitPrice);
@@ -139,7 +139,7 @@ public class InputDecisionPage extends JFrame implements ActionListener {
             }
         }
         if (midButton.isSelected()) {
-            if (!midUnitSale.getText().matches("\\d+")) {
+            if (!"\\d+".matches(midUnitSale.getText())) {
                 clean = false;
                 midUnitSale.setBackground(Color.RED);
                 balloonTip.setAttachedComponent(midUnitSale);
@@ -148,7 +148,7 @@ public class InputDecisionPage extends JFrame implements ActionListener {
             } else {
                 midUnitSale.setBackground(Color.green);
             }
-            if (!midUnitPrice.getText().matches("\\d+")) {
+            if (!"\\d+".matches(midUnitPrice.getText())) {
                 clean = false;
                 midUnitPrice.setBackground(Color.RED);
                 balloonTip.setAttachedComponent(midUnitPrice);
@@ -159,7 +159,7 @@ public class InputDecisionPage extends JFrame implements ActionListener {
             }
         }
         if (fullButton.isSelected()) {
-            if (!fullUnitSale.getText().matches("\\d+")) {
+            if (!"\\d+".matches(fullUnitSale.getText())) {
                 clean = false;
                 fullUnitSale.setBackground(Color.RED);
                 balloonTip.setAttachedComponent(fullUnitSale);
@@ -168,7 +168,7 @@ public class InputDecisionPage extends JFrame implements ActionListener {
             } else {
                 fullUnitSale.setBackground(Color.green);
             }
-            if (!fullUnitPrice.getText().matches("\\d+")) {
+            if (!"\\d+".matches(fullUnitPrice.getText())) {
                 clean = false;
                 fullUnitPrice.setBackground(Color.RED);
                 balloonTip.setAttachedComponent(fullUnitPrice);
@@ -179,25 +179,26 @@ public class InputDecisionPage extends JFrame implements ActionListener {
             }
         }
         if (clean) {
-            int unitSale = 0;
-            int unitPrice = 0;
+            int unitSale;
+            int unitPrice;
             if (earlyButton.isSelected()) {
                 //System.out.println();
                 unitSale = Integer.parseInt(earlyUnitSale.getText());
                 unitPrice = Integer.parseInt(earlyUnitPrice.getText());
                 studentSector.updateEarly(unitSale, unitPrice);
-                db.updateStudent(student);
             }
             if (midButton.isSelected()) {
                 unitSale = Integer.parseInt(midUnitSale.getText());
                 unitPrice = Integer.parseInt(midUnitPrice.getText());
-
+                studentSector.updateMid(unitSale, unitPrice);
             }
             if (fullButton.isSelected()) {
                 unitSale = Integer.parseInt(fullUnitSale.getText());
                 unitPrice = Integer.parseInt(fullUnitPrice.getText());
+                studentSector.updateFull(unitSale, unitPrice);
 
             }
+            db.updateStudent(student);
             new HomePage(student.uName, student.sector);
             setVisible(false);
             dispose();

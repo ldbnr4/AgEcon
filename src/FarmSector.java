@@ -13,4 +13,8 @@ public class FarmSector extends Sector {
         super(GameDriver.FARM_SECTOR_NAME);
         farm = new FarmTypes();
     }
+
+    public void updateSize(char size) {
+        farm.setSize(size);
+    }
 }

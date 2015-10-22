@@ -6,18 +6,22 @@ public class FarmTypes {
     public int acres;
 
     public FarmTypes(char size) {
+        setSize(size);
+    }
+
+    public FarmTypes() {
+        size = GameDriver.NO_FARM;
+        acres = 0;
+    }
+
+    public void setSize(char size) {
         this.size = size;
-        if (size == 'S') {
+        if (size == GameDriver.SMALL_FARM) {
             acres = 100;
-        } else if (size == 'M') {
+        } else if (size == GameDriver.MED_FARM) {
             acres = 250;
         } else {
             acres = 500;
         }
-    }
-
-    public FarmTypes() {
-        size = 'X';
-        acres = 0;
     }
 }

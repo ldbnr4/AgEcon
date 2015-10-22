@@ -14,9 +14,7 @@ import java.util.HashMap;
  * Created by Lorenzo on 9/18/2015.
  */
 public class CreatePage extends JFrame implements ActionListener/*, Runnable */ {
-    private static final int SUPPLYCAP = 5;
-    private static final int FARMCAP = 20;
-    private static final int FOODCAP = 5;
+    protected MongoDBConnection db = MongoDBConnection.getInstance();
     private JPanel rootPanel;
     private JButton foodMarketingButton;
     private JButton inputSupplyButton;
@@ -33,7 +31,6 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
     private BalloonTip uNameBalloonTip = new BalloonTip(usernameTextField, new JLabel(), modern, BalloonTip.Orientation.RIGHT_ABOVE, BalloonTip.AttachLocation.ALIGNED, 10, 10, false);
     private BalloonTip passBalloonTip = new BalloonTip(passwordPasswordField, new JLabel(), modern, BalloonTip.Orientation.RIGHT_ABOVE, BalloonTip.AttachLocation.ALIGNED, 10, 10, false);
     private BalloonTip confPassBalloonTip = new BalloonTip(confirmPasswordPasswordField, new JLabel(), modern, BalloonTip.Orientation.RIGHT_ABOVE, BalloonTip.AttachLocation.ALIGNED, 10, 10, false);
-    private MongoDBConnection db = MongoDBConnection.getInstance();
     private UNameVerifier usernameVerifier = new UNameVerifier(uNameBalloonTip);
     private PassVerifier passwordVerifier = new PassVerifier(passBalloonTip);
     private PassVerifier confPassVerifier = new PassVerifier(confPassBalloonTip);
@@ -47,7 +44,7 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
         setResizable(false);
         pack();
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
 
         updateBtns();
@@ -114,19 +111,18 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
         farmProductionButton.setText(GameDriver.FARM_SECTOR_NAME);
         foodMarketingButton.setText(GameDriver.FOOD_SECTOR_NAME);
 
-        System.out.println(inputSupplyButton.getSize());
+        /*System.out.println(inputSupplyButton.getSize());
         System.out.println(farmProductionButton.getSize());
-        System.out.println(foodMarketingButton.getSize());
+        System.out.println(foodMarketingButton.getSize());*/
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton button = (JButton) e.getSource();
         String selectedSect = button.getText();
-        if (!usernameVerifier.verify(usernameTextField)) {
-        } else if (!passwordVerifier.verifyLive(passwordPasswordField)) {
-        } else if (!passwordVerifier.verifyLive(confirmPasswordPasswordField)) {
-        } else if (!passwordVerifier.verifyMatch(passwordPasswordField, confirmPasswordPasswordField)) {
+        if (!usernameVerifier.verify(usernameTextField) || !passwordVerifier.verifyLive(passwordPasswordField) ||
+                !passwordVerifier.verifyLive(confirmPasswordPasswordField) ||
+                !passwordVerifier.verifyMatch(passwordPasswordField, confirmPasswordPasswordField)) {
         } else if (!sectCheck(button.getText())) {
             button.setEnabled(false);
         } else {
@@ -143,7 +139,8 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
                     new InputDecisionPage(student);
                     break;
                 case GameDriver.FARM_SECTOR_NAME:
-
+                    student = new Student(usernameTextField.getText(), passWordInfo[1], passWordInfo[0], new FarmSector());
+                    new FarmerDecisionPage(student);
                     break;
                 case GameDriver.FOOD_SECTOR_NAME:
                     break;
@@ -159,13 +156,13 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
         int sectLimit;
         switch (sector) {
             case GameDriver.INPUT_SECTOR_NAME:
-                sectLimit = SUPPLYCAP;
+                sectLimit = GameDriver.SUPPLY_CAP;
                 break;
             case GameDriver.FARM_SECTOR_NAME:
-                sectLimit = FARMCAP;
+                sectLimit = GameDriver.FARM_CAP;
                 break;
             case GameDriver.FOOD_SECTOR_NAME:
-                sectLimit = FOODCAP;
+                sectLimit = GameDriver.FOOD_CAP;
                 break;
             default:
                 sectLimit = 0;
@@ -184,25 +181,25 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
         //(new Thread(new CreatePage())).start();
         sectorAmounts = db.numInSectors();
         int dbNumInputSupply = sectorAmounts.get(GameDriver.INPUT_SECTOR_NAME);
-        setAvailableLabel(inputSupplyNumber, dbNumInputSupply, SUPPLYCAP);
+        setAvailableLabel(inputSupplyNumber, dbNumInputSupply, GameDriver.SUPPLY_CAP);
 
         int dbNumFarmProduction = sectorAmounts.get(GameDriver.FARM_SECTOR_NAME);
-        setAvailableLabel(farmProductionNumber, dbNumFarmProduction, FARMCAP);
+        setAvailableLabel(farmProductionNumber, dbNumFarmProduction, GameDriver.SUPPLY_CAP);
 
         int dbNumFoodMarketing = sectorAmounts.get(GameDriver.FOOD_SECTOR_NAME);
-        setAvailableLabel(foodMarketingNumber, dbNumFoodMarketing, FOODCAP);
+        setAvailableLabel(foodMarketingNumber, dbNumFoodMarketing, GameDriver.FOOD_CAP);
 
-        if (dbNumInputSupply >= SUPPLYCAP) {
+        if (dbNumInputSupply >= GameDriver.SUPPLY_CAP) {
             inputSupplyButton.setEnabled(false);
         } else
             inputSupplyButton.setEnabled(true);
 
-        if (dbNumFarmProduction >= FARMCAP) {
+        if (dbNumFarmProduction >= GameDriver.FARM_CAP) {
             farmProductionButton.setEnabled(false);
         } else
             farmProductionButton.setEnabled(true);
 
-        if (dbNumFoodMarketing >= FOODCAP) {
+        if (dbNumFoodMarketing >= GameDriver.FOOD_CAP) {
             foodMarketingButton.setEnabled(false);
         } else
             foodMarketingButton.setEnabled(true);
@@ -222,7 +219,6 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
             label.setForeground(new Color(207, 174, 0));
         } else
             label.setForeground(Color.RED);
-        return;
     }
 
 /*    @Override
