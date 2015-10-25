@@ -180,11 +180,12 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
     private void updateBtns() {
         //(new Thread(new CreatePage())).start();
         sectorAmounts = db.numInSectors();
+        //System.out.println(sectorAmounts);
         int dbNumInputSupply = sectorAmounts.get(GameDriver.INPUT_SECTOR_NAME);
         setAvailableLabel(inputSupplyNumber, dbNumInputSupply, GameDriver.SUPPLY_CAP);
 
         int dbNumFarmProduction = sectorAmounts.get(GameDriver.FARM_SECTOR_NAME);
-        setAvailableLabel(farmProductionNumber, dbNumFarmProduction, GameDriver.SUPPLY_CAP);
+        setAvailableLabel(farmProductionNumber, dbNumFarmProduction, GameDriver.FARM_CAP);
 
         int dbNumFoodMarketing = sectorAmounts.get(GameDriver.FOOD_SECTOR_NAME);
         setAvailableLabel(foodMarketingNumber, dbNumFoodMarketing, GameDriver.FOOD_CAP);

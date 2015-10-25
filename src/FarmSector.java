@@ -6,15 +6,15 @@ public class FarmSector extends Sector {
 
     public FarmSector(char farmSize) {
         super(GameDriver.FARM_SECTOR_NAME);
-        farm = new FarmTypes(farmSize);
+        updateSize(farmSize);
     }
 
     public FarmSector() {
         super(GameDriver.FARM_SECTOR_NAME);
-        farm = new FarmTypes();
+        //farm = new FarmTypes();
     }
 
     public void updateSize(char size) {
-        farm.setSize(size);
+        farm = new FarmTypes(size);
     }
 }
