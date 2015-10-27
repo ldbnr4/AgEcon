@@ -32,7 +32,7 @@ public class GameDriver {
             DB.updateGameFlowPlayers();
             DB.saveGameFlow();
         }
-        //new AdminDecisionPage(DB.getAdmin("admin"));
+        new AdminDecisionPage(DB.getAdmin("admin"));
         //new WelcomePage();
         /*for (int i = 0; i < 3; i++) {
             Student student = new Student("Input"+ String.valueOf(i), "passpass", new InputSector());

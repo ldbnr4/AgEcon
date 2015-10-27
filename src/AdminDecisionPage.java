@@ -13,13 +13,14 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
     private JLabel startingYearLabel;
     private JLabel currentNumOfPlayersLabel;
     private JButton nextYearBtn;
+    private JButton prevYearBtn;
 
     public AdminDecisionPage(Admin admin) {
         super("Admin Page");
         setContentPane(rootPanel);
         setResizable(false);
         nameLabel.setText("Welcome " + admin.name + "!");
-        GameDriver.DB.saveGameFlow();
+        //GameDriver.DB.saveGameFlow();
         numOfPlayersLabel.setText(String.valueOf(GameDriver.GAME_FLOW.totalPlayers));
         startingYearLabel.setText(String.valueOf(GameDriver.GAME_FLOW.startingYear));
         setLabels();
@@ -31,12 +32,17 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
 
         nextYearBtn.addActionListener(this);
 
+        prevYearBtn.addActionListener(this);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        GameDriver.GAME_FLOW.currentYear = GameDriver.GAME_FLOW.currentYear + 1;
-        GameDriver.DB.updateGameFlowPlayers();
+        JButton button = (JButton) e.getSource();
+        if (button.getText().equals(nextYearBtn.getText())) {
+            GameDriver.GAME_FLOW.nextYear();
+        } else {
+            GameDriver.GAME_FLOW.prevYear();
+        }
         GameDriver.DB.saveGameFlow();
         setGameYearLabel();
         setNumOfPlayersLabel();

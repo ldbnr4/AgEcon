@@ -38,4 +38,20 @@ public class GameFlow {
         this.currentPlayers = currentPlayers;
     }
 
+    public void updateCurretPlayers() {
+        setCurrentPlayers(GameDriver.DB.getCurrentPlayers());
+    }
+
+    public void nextYear() {
+        setCurrentYear(GameDriver.GAME_FLOW.currentYear + 1);
+        updateCurretPlayers();
+    }
+
+    public void prevYear() {
+        if (GameDriver.GAME_FLOW.currentYear > GameDriver.GAME_FLOW.startingYear) {
+            setCurrentYear(GameDriver.GAME_FLOW.currentYear - 1);
+            updateCurretPlayers();
+        }
+    }
+
 }

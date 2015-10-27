@@ -238,6 +238,8 @@ public class MongoDBConnection {
     public int getCurrentPlayers() {
         DB db = openConnection();
         int count = (int) db.getCollection("users").count(new BasicDBObject("startingYear", GameDriver.GAME_FLOW.currentYear));
+        closeConnection();
+
         return count;
     }
 
