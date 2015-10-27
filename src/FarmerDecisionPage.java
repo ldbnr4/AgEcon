@@ -11,7 +11,6 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
     Student student;
     FarmSector studentSector;
     HashMap<Character, Integer> farmSizeAmounts;
-    MongoDBConnection db = MongoDBConnection.getInstance();
     private JPanel rootPanel;
     private JLabel farmerLabel;
     private JButton smallFarmBtn;
@@ -63,14 +62,14 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
                 studentSector.updateSize(GameDriver.LARGE_FARM);
             }
         }
-        db.updateStudent(student);
+        GameDriver.DB.updateStudent(student);
         new HomePage(student.uName, student.sector);
         setVisible(false);
         dispose();
     }
 
     private void updateBtns() {
-        farmSizeAmounts = db.numInFarms();
+        farmSizeAmounts = GameDriver.DB.numInFarms();
         int dbNumOfSmall = farmSizeAmounts.get(GameDriver.SMALL_FARM);
         setAvailableLabel(smallAmntLbl, dbNumOfSmall, GameDriver.S_FARM_CAP);
 

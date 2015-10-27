@@ -11,7 +11,6 @@ public class HomePage extends JFrame {
     private JPanel rootPanel;
     private JButton logoutButton;
     private JPanel titlePanel;
-    private MongoDBConnection db = MongoDBConnection.getInstance();
     //private Student student;
 
     public HomePage(String name, Sector sector) {

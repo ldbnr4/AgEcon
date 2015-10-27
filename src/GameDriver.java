@@ -15,20 +15,34 @@ public class GameDriver {
     public static final int S_FARM_CAP = 5;
     public static final int M_FARM_CAP = 10;
     public static final int L_FARM_CAP = 5;
+    public static final MongoDBConnection DB = MongoDBConnection.getInstance();
+    public static GameFlow GAME_FLOW = DB.getGameFlow("GameFlow");
+
+    public static boolean checkEmpty(String field) {
+        return field.isEmpty();
+    }
 
     public static void main(String[] args) {
-        new WelcomePage();
-        //Student student = new Student();
-        //new InputDecisionPage(student);
-        //MongoDBConnection db = MongoDBConnection.getInstance( );
+        //out.println(Arrays.toString(EncryptPassword.encrypt("pass")));
+        //Admin admin = new Admin("admin", "pass");
+        //DB.addAdmin(admin);
+        //System.out.println(DB.gameFlowInDB("GameFlow"));
+        if (GAME_FLOW == null) {
+            GAME_FLOW = new GameFlow();
+            DB.updateGameFlowPlayers();
+            DB.saveGameFlow();
+        }
+        //new AdminDecisionPage(DB.getAdmin("admin"));
+        //new WelcomePage();
         /*for (int i = 0; i < 3; i++) {
-            Student student = new Student("Input"+ String.valueOf(i), "passpass", "salt", new InputSector());
-            db.addUser(student);
+            Student student = new Student("Input"+ String.valueOf(i), "passpass", new InputSector());
+            DB.addUser(student);
         }*/
+
+        //new AdminDecisionPage(DB.getAdmin("admin"));
         /*for (int i = 0; i < 7; i++) {
             Student student = new Student("Farm"+ String.valueOf(i), "passpass", "salt", new InputSector());
             db.addUser(student);
         }*/
     }
-
 }

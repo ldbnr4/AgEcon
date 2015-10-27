@@ -14,7 +14,6 @@ import java.util.HashMap;
  * Created by Lorenzo on 9/18/2015.
  */
 public class CreatePage extends JFrame implements ActionListener/*, Runnable */ {
-    protected MongoDBConnection db = MongoDBConnection.getInstance();
     private JPanel rootPanel;
     private JButton foodMarketingButton;
     private JButton inputSupplyButton;
@@ -130,22 +129,21 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
             confirmPasswordPasswordField.setBackground(Color.GREEN);
             passwordPasswordField.setBackground(Color.GREEN);
             button.setEnabled(true);
-            String[] passWordInfo = EncryptPassword.encrypt(String.valueOf(passwordPasswordField.getPassword()));
-
             Student student = null;
+
             switch (selectedSect) {
                 case GameDriver.INPUT_SECTOR_NAME:
-                    student = new Student(usernameTextField.getText(), passWordInfo[1], passWordInfo[0], new InputSector());
+                    student = new Student(usernameTextField.getText(), String.valueOf(passwordPasswordField.getPassword()), new InputSector());
                     new InputDecisionPage(student);
                     break;
                 case GameDriver.FARM_SECTOR_NAME:
-                    student = new Student(usernameTextField.getText(), passWordInfo[1], passWordInfo[0], new FarmSector());
+                    student = new Student(usernameTextField.getText(), String.valueOf(passwordPasswordField.getPassword()), new FarmSector());
                     new FarmerDecisionPage(student);
                     break;
                 case GameDriver.FOOD_SECTOR_NAME:
                     break;
             }
-            db.addUser(student);
+            GameDriver.DB.addUser(student);
             //new HomePage(student);
             setVisible(false);
             dispose();
@@ -179,7 +177,7 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
 
     private void updateBtns() {
         //(new Thread(new CreatePage())).start();
-        sectorAmounts = db.numInSectors();
+        sectorAmounts = GameDriver.DB.numInSectors();
         //System.out.println(sectorAmounts);
         int dbNumInputSupply = sectorAmounts.get(GameDriver.INPUT_SECTOR_NAME);
         setAvailableLabel(inputSupplyNumber, dbNumInputSupply, GameDriver.SUPPLY_CAP);

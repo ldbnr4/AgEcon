@@ -1,15 +1,16 @@
+import java.util.HashMap;
+
 /**
  * Created by Lorenzo on 9/24/2015.
  */
 public class EncryptPassword {
-    public static String[] encrypt(String password) {
-        String ret[] = new String[10];
+    public static HashMap<String, String> encrypt(String password) {
+        HashMap<String, String> ret = new HashMap<>();
         CSPRNG salt = new CSPRNG();
         String saltString = String.valueOf(salt.getAll());
         String hash = String.valueOf((password + saltString).hashCode());
-        ret[0] = saltString;
-        ret[1] = hash;
-
+        ret.put("salt", saltString);
+        ret.put("password", hash);
         return ret;
     }
 

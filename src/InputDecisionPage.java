@@ -37,7 +37,6 @@ public class InputDecisionPage extends JFrame implements ActionListener {
     private JLabel seedMaturityLabel;
     private BalloonTipStyle modern = new MinimalBalloonStyle(Color.white, 5);
     private BalloonTip balloonTip = new BalloonTip(earlyUnitSale, new JLabel(), modern, BalloonTip.Orientation.LEFT_ABOVE, BalloonTip.AttachLocation.ALIGNED, 10, 10, false);
-    private MongoDBConnection db = MongoDBConnection.getInstance();
 
     public InputDecisionPage(Student student) {
         super("Input Supply Decisions");
@@ -198,7 +197,7 @@ public class InputDecisionPage extends JFrame implements ActionListener {
                 studentSector.updateFull(unitSale, unitPrice);
 
             }
-            db.updateStudent(student);
+            GameDriver.DB.updateStudent(student);
             new HomePage(student.uName, student.sector);
             setVisible(false);
             dispose();
