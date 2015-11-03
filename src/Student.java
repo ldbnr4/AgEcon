@@ -28,8 +28,8 @@ public class Student {
         this.password = passInfo.get("password");
         this.salt = passInfo.get("salt");
         this.sector = sector;
-        this.startingYear = GameDriver.DB.getGameFlow("GameFlow").startingYear;
-        this.currentYear = this.startingYear;
+        this.startingYear = GameDriver.GAME_FLOW.startingYear;
+        this.currentYear = GameDriver.GAME_FLOW.currentYear;
     }
 
     public void setCurrentYear(int year) {

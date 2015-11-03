@@ -62,7 +62,7 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
                 studentSector.updateSize(GameDriver.LARGE_FARM);
             }
         }
-        GameDriver.DB.updateStudent(student);
+        GameDriver.DB.saveStudent(student);
         new HomePage(student.uName, student.sector);
         setVisible(false);
         dispose();

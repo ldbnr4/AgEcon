@@ -118,7 +118,7 @@ public class InputDecisionPage extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         boolean clean = true;
         if (earlyButton.isSelected()) {
-            if (!"\\d+".matches(earlyUnitSale.getText())) {
+            if (!earlyUnitSale.getText().matches("\\d+")) {
                 clean = false;
                 earlyUnitSale.setBackground(Color.RED);
                 balloonTip.setAttachedComponent(earlyUnitSale);
@@ -127,7 +127,7 @@ public class InputDecisionPage extends JFrame implements ActionListener {
             } else {
                 earlyUnitSale.setBackground(Color.green);
             }
-            if (!"\\d+".matches(earlyUnitPrice.getText())) {
+            if (!earlyUnitPrice.getText().matches("\\d+")) {
                 clean = false;
                 earlyUnitPrice.setBackground(Color.RED);
                 balloonTip.setAttachedComponent(earlyUnitPrice);
@@ -138,7 +138,7 @@ public class InputDecisionPage extends JFrame implements ActionListener {
             }
         }
         if (midButton.isSelected()) {
-            if (!"\\d+".matches(midUnitSale.getText())) {
+            if (!midUnitSale.getText().matches("\\d+")) {
                 clean = false;
                 midUnitSale.setBackground(Color.RED);
                 balloonTip.setAttachedComponent(midUnitSale);
@@ -147,7 +147,7 @@ public class InputDecisionPage extends JFrame implements ActionListener {
             } else {
                 midUnitSale.setBackground(Color.green);
             }
-            if (!"\\d+".matches(midUnitPrice.getText())) {
+            if (!midUnitPrice.getText().matches("\\d+")) {
                 clean = false;
                 midUnitPrice.setBackground(Color.RED);
                 balloonTip.setAttachedComponent(midUnitPrice);
@@ -158,7 +158,7 @@ public class InputDecisionPage extends JFrame implements ActionListener {
             }
         }
         if (fullButton.isSelected()) {
-            if (!"\\d+".matches(fullUnitSale.getText())) {
+            if (!fullUnitSale.getText().matches("\\d+")) {
                 clean = false;
                 fullUnitSale.setBackground(Color.RED);
                 balloonTip.setAttachedComponent(fullUnitSale);
@@ -167,7 +167,7 @@ public class InputDecisionPage extends JFrame implements ActionListener {
             } else {
                 fullUnitSale.setBackground(Color.green);
             }
-            if (!"\\d+".matches(fullUnitPrice.getText())) {
+            if (!fullUnitPrice.getText().matches("\\d+")) {
                 clean = false;
                 fullUnitPrice.setBackground(Color.RED);
                 balloonTip.setAttachedComponent(fullUnitPrice);
@@ -197,7 +197,7 @@ public class InputDecisionPage extends JFrame implements ActionListener {
                 studentSector.updateFull(unitSale, unitPrice);
 
             }
-            GameDriver.DB.updateStudent(student);
+            GameDriver.DB.saveStudent(student);
             new HomePage(student.uName, student.sector);
             setVisible(false);
             dispose();

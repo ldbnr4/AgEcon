@@ -1,12 +1,10 @@
 import org.mongodb.morphia.annotations.Embedded;
 
-import java.io.Serializable;
-
 /**
  * Created by Lorenzo on 10/13/2015.
  */
 @Embedded
-public class Sector implements Serializable {
+public abstract class Sector {
     public String name;
 
     public Sector(String name) {
@@ -15,4 +13,6 @@ public class Sector implements Serializable {
 
     public Sector() {
     }
+
+    abstract boolean checkIfEmpty();
 }

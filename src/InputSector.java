@@ -29,6 +29,7 @@ public class InputSector extends Sector {
         seedTypes.setFullPrice(fullPrice);
     }
 
+    @Override
     public boolean checkIfEmpty() {
         return seedTypes.getEarlyPrice() == 0 && seedTypes.getEarlySale() == 0 && seedTypes.getMidPrice() == 0
                 && seedTypes.getMidSale() == 0 && seedTypes.getFullPrice() == 0 && seedTypes.getFullSale() == 0;

@@ -14,7 +14,14 @@ public class FarmSector extends Sector {
         //farm = new FarmTypes();
     }
 
+    @Override
+    boolean checkIfEmpty() {
+        return farm.size == GameDriver.NO_FARM && farm.acres == 0;
+    }
+
     public void updateSize(char size) {
         farm = new FarmTypes(size);
     }
+
+
 }

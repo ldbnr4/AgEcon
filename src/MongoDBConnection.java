@@ -4,6 +4,7 @@ import org.mongodb.morphia.Morphia;
 import java.net.UnknownHostException;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * Created by Lorenzo on 10/6/2015.
@@ -19,7 +20,7 @@ public class MongoDBConnection {
         return ourInstance;
     }
 
-    public void updateStudent(Student student) {
+    public void saveStudent(Student student) {
         Morphia morphia = new Morphia();
         morphia.map(Student.class).map(Sector.class);
         DB db = openConnection();
@@ -29,6 +30,17 @@ public class MongoDBConnection {
         coll.insert(studentObj);
         closeConnection();
 
+    }
+
+    public void saveGameFlow() {
+        Morphia morphia = new Morphia();
+        morphia.map(GameFlow.class);
+        DB db = openConnection();
+        DBCollection coll = db.getCollection("gameFlow");
+        coll.remove(new BasicDBObject("_id", GameDriver.GAME_FLOW.name));
+        DBObject gameFlowObj = morphia.toDBObject(GameDriver.GAME_FLOW);
+        coll.insert(gameFlowObj);
+        closeConnection();
     }
 
     public Student getStudent(String username) {
@@ -41,6 +53,9 @@ public class MongoDBConnection {
         DBObject person = coll.findOne(query);
         //Map persMap = person.toMap();
         closeConnection();
+        if (person == null) {
+            return null;
+        }
         //Student student = new Student(persMap.get("User Name").toString(),persMap.get("Password").toString(),persMap.get("Salt").toString(), (Sector) persMap.get("Sector"));
         //morphia.fromDBObject()
         //System.out.println(student);
@@ -57,6 +72,9 @@ public class MongoDBConnection {
         DBObject person = coll.findOne(query);
         //Map persMap = person.toMap();
         closeConnection();
+        if (person == null) {
+            return null;
+        }
         //Student student = new Student(persMap.get("User Name").toString(),persMap.get("Password").toString(),persMap.get("Salt").toString(), (Sector) persMap.get("Sector"));
         //morphia.fromDBObject()
         //System.out.println(person.toString());
@@ -64,12 +82,12 @@ public class MongoDBConnection {
         return morphia.fromDBObject(Admin.class, person);
     }
 
-    public GameFlow getGameFlow(String name) {
+    public GameFlow getGameFlow() {
         Morphia morphia = new Morphia();
         morphia.map(GameFlow.class);
         DB db = openConnection();
         DBCollection coll = db.getCollection("gameFlow");
-        BasicDBObject query = new BasicDBObject("_id", name);
+        BasicDBObject query = new BasicDBObject("_id", "GameFlow");
         DBObject person = coll.findOne(query);
         //Map persMap = person.toMap();
         if (person == null) {
@@ -79,6 +97,40 @@ public class MongoDBConnection {
         //Student student = new Student(persMap.get("User Name").toString(),persMap.get("Password").toString(),persMap.get("Salt").toString(), (Sector) persMap.get("Sector"));
         //morphia.fromDBObject()
         return morphia.fromDBObject(GameFlow.class, person);
+    }
+
+    public HashMap<String, Student> getInputSector() {
+        HashMap<String, Student> list = new HashMap<>();
+        Morphia morphia = new Morphia();
+        morphia.map(Student.class).map(Sector.class);
+
+        DB db = openConnection();
+        DBCollection coll = db.getCollection("users");
+        try (DBCursor cursor = coll.find()) {
+            while (cursor.hasNext()) {
+                Student student = morphia.fromDBObject(Student.class, cursor.next());
+                if (Objects.equals(student.sector.name, GameDriver.INPUT_SECTOR_NAME)) {
+                    list.put(student.uName, student);
+                }
+            }
+        }
+        return list;
+    }
+
+    public int getTotalPlayers(int startingYear) {
+        DB db = openConnection();
+        int count = (int) db.getCollection("users").count(new BasicDBObject("startingYear", startingYear));
+        closeConnection();
+
+        return count;
+    }
+
+    public int getCurrentPlayers(int currentYear) {
+        DB db = openConnection();
+        int count = (int) db.getCollection("users").count(new BasicDBObject("currentYear", currentYear));
+        closeConnection();
+
+        return count;
     }
 
     public HashMap<String, Integer> numInSectors() {
@@ -177,86 +229,6 @@ public class MongoDBConnection {
         //db.getCollection("users").save(studentObj);
         coll.insert(gameFlowObj);
         closeConnection();
-    }
-
-    public boolean userInDB(String name) {
-        DB db = openConnection();
-
-        BasicDBObject query = new BasicDBObject("_id", name);
-        DBCollection coll = db.getCollection("users");
-        try (DBCursor cursor = coll.find(query)) {
-            if (cursor.hasNext()) {
-                closeConnection();
-                return true;
-            }
-        }
-        closeConnection();
-
-        return false;
-    }
-
-    public boolean adminInDB(String name) {
-        DB db = openConnection();
-        BasicDBObject query = new BasicDBObject("_id", name);
-        DBCollection coll = db.getCollection("admins");
-        //System.out.println(coll.find(query).hasNext());
-        try (DBCursor cursor = coll.find(query)) {
-            if (cursor.hasNext()) {
-                closeConnection();
-                return true;
-            }
-        }
-        closeConnection();
-
-        return false;
-    }
-
-    public boolean gameFlowInDB(String name) {
-        DB db = openConnection();
-        BasicDBObject query = new BasicDBObject("_id", name);
-        DBCollection coll = db.getCollection("gameFlow");
-        //System.out.println(coll.find(query).hasNext());
-        try (DBCursor cursor = coll.find(query)) {
-            if (cursor.hasNext()) {
-                closeConnection();
-                return true;
-            }
-        }
-        closeConnection();
-
-        return false;
-    }
-
-    public int getTotalPlayers() {
-        DB db = openConnection();
-        int count = (int) db.getCollection("users").count(new BasicDBObject("startingYear", GameDriver.GAME_FLOW.startingYear));
-        closeConnection();
-
-        return count;
-    }
-
-    public int getCurrentPlayers() {
-        DB db = openConnection();
-        int count = (int) db.getCollection("users").count(new BasicDBObject("startingYear", GameDriver.GAME_FLOW.currentYear));
-        closeConnection();
-
-        return count;
-    }
-
-    public void saveGameFlow() {
-        Morphia morphia = new Morphia();
-        morphia.map(GameFlow.class);
-        DB db = openConnection();
-        DBCollection coll = db.getCollection("gameFlow");
-        coll.remove(new BasicDBObject("_id", GameDriver.GAME_FLOW.name));
-        DBObject gameFlowObj = morphia.toDBObject(GameDriver.GAME_FLOW);
-        coll.insert(gameFlowObj);
-        closeConnection();
-    }
-
-    public void updateGameFlowPlayers() {
-        GameDriver.GAME_FLOW.setCurrentPlayers(getCurrentPlayers());
-        GameDriver.GAME_FLOW.setTotalPlayers(getTotalPlayers());
     }
 
     private DB openConnection() {
