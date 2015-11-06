@@ -6,6 +6,7 @@ import java.awt.*;
 
 /**
  * Created by Lorenzo on 9/24/2015.
+ *
  */
 public class UNameVerifier {
     BalloonTip balloonTip;
@@ -19,6 +20,7 @@ public class UNameVerifier {
         String in = tf.getText().trim();
         boolean length = in.length() >= 5 && in.length() <= 10;
         boolean b = in.matches("\\w+");
+        //System.out.println(tf);
         balloonTip.setAttachedComponent(tf);
         Student student = GameDriver.DB.getStudent(in);
         if (!length || !b || student != null) {

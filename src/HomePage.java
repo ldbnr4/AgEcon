@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 /**
  * Created by Lorenzo on 10/1/2015.
+ *
  */
 public class HomePage extends JFrame {
     private JLabel titleLabel;
@@ -45,12 +46,13 @@ public class HomePage extends JFrame {
             }
         });
 
-        DefaultListModel<Object> listModel = new DefaultListModel<>();
+        DefaultListModel listModel = new DefaultListModel();
         HashMap<String, Student> inputSector = GameDriver.DB.getInputSector();
         System.out.println(inputSector.size());
         for (Object student : inputSector.values()) {
             System.out.println(student);
             listModel.addElement(student);
         }
+        list_of_things.setModel(listModel);
     }
 }

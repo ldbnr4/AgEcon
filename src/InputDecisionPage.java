@@ -14,7 +14,9 @@ import java.io.IOException;
 
 /**
  * Created by Lorenzo on 10/8/2015.
+ *
  */
+@SuppressWarnings("ConstantConditions")
 public class InputDecisionPage extends JFrame implements ActionListener {
     private Student student;
     private InputSector studentSector;
@@ -33,8 +35,6 @@ public class InputDecisionPage extends JFrame implements ActionListener {
     private JRadioButton fullButton;
     private JLabel inputSupplyLabel;
     private JButton submitButton;
-    private JPanel decisionsPanel;
-    private JLabel seedMaturityLabel;
     private BalloonTipStyle modern = new MinimalBalloonStyle(Color.white, 5);
     private BalloonTip balloonTip = new BalloonTip(earlyUnitSale, new JLabel(), modern, BalloonTip.Orientation.LEFT_ABOVE, BalloonTip.AttachLocation.ALIGNED, 10, 10, false);
 
@@ -75,6 +75,8 @@ public class InputDecisionPage extends JFrame implements ActionListener {
             e.printStackTrace();
         }
 
+        assert checkedImg != null;
+        assert uncheckedImg != null;
         earlyButton.setSelectedIcon(new ImageIcon(checkedImg));
         midButton.setSelectedIcon(new ImageIcon(checkedImg));
         fullButton.setSelectedIcon(new ImageIcon(checkedImg));

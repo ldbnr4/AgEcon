@@ -12,6 +12,7 @@ import java.util.HashMap;
 
 /**
  * Created by Lorenzo on 9/18/2015.
+ *
  */
 public class CreatePage extends JFrame implements ActionListener/*, Runnable */ {
     private JPanel rootPanel;
@@ -26,43 +27,54 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
     private JLabel farmProductionNumber;
     private JLabel foodMarketingNumber;
     private JButton refreshButton;
-    private BalloonTipStyle modern = new MinimalBalloonStyle(Color.white, 5);
-    private BalloonTip uNameBalloonTip = new BalloonTip(usernameTextField, new JLabel(), modern, BalloonTip.Orientation.RIGHT_ABOVE, BalloonTip.AttachLocation.ALIGNED, 10, 10, false);
-    private BalloonTip passBalloonTip = new BalloonTip(passwordPasswordField, new JLabel(), modern, BalloonTip.Orientation.RIGHT_ABOVE, BalloonTip.AttachLocation.ALIGNED, 10, 10, false);
-    private BalloonTip confPassBalloonTip = new BalloonTip(confirmPasswordPasswordField, new JLabel(), modern, BalloonTip.Orientation.RIGHT_ABOVE, BalloonTip.AttachLocation.ALIGNED, 10, 10, false);
-    private UNameVerifier usernameVerifier = new UNameVerifier(uNameBalloonTip);
-    private PassVerifier passwordVerifier = new PassVerifier(passBalloonTip);
-    private PassVerifier confPassVerifier = new PassVerifier(confPassBalloonTip);
+    private JButton backButton;
+    private JPanel loginPanel;
+    private JLabel loginLabel;
+    private JLabel selectSectLabel;
+    private JPanel createAcntPanel;
+    private JPanel SelectSectPanel;
+    private JPanel buttonsPanel;
+    private BalloonTipStyle modern;
+    private BalloonTip uNameBalloonTip;
+    private BalloonTip passBalloonTip;
+    private BalloonTip confPassBalloonTip;
+    private UNameVerifier usernameVerifier;
+    private PassVerifier passwordVerifier;
+    private PassVerifier confPassVerifier;
     private HashMap<String, Integer> sectorAmounts;
     private volatile boolean isRunning = true;
 
     public CreatePage() {
         super("Create Account");
-
         setContentPane(rootPanel);
-        setResizable(false);
-        pack();
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setVisible(true);
-
+        //SelectSectPanel.setLayout(new GroupLayout(SelectSectPanel));
+        //SelectSectPanel.add(refreshButton);
+        //System.out.println(refreshButton.getLocationOnScreen());
+        //setLayout(rootPanel.getLayout());
+        //this.setLayout(rootPanel.getLayout());
+        //System.out.println(rootPanel.getLayout());
+        //System.out.println(this.getLayout());
         updateBtns();
 
+        //setComponentZOrder(getContentPane(), 1);
+        //System.out.println(uNameBalloonTip.getRootPane());
+        modern = new MinimalBalloonStyle(Color.white, 5);
+        uNameBalloonTip = new BalloonTip(usernameTextField, new JLabel(), modern, BalloonTip.Orientation.RIGHT_ABOVE, BalloonTip.AttachLocation.ALIGNED, 10, 10, false);
         this.uNameBalloonTip.setVisible(false);
+        passBalloonTip = new BalloonTip(passwordPasswordField, new JLabel(), modern, BalloonTip.Orientation.RIGHT_ABOVE, BalloonTip.AttachLocation.ALIGNED, 10, 10, false);
         this.passBalloonTip.setVisible(false);
+        confPassBalloonTip = new BalloonTip(confirmPasswordPasswordField, new JLabel(), modern, BalloonTip.Orientation.RIGHT_ABOVE, BalloonTip.AttachLocation.ALIGNED, 10, 10, false);
         this.confPassBalloonTip.setVisible(false);
 
         inputSupplyButton.addActionListener(this);
         farmProductionButton.addActionListener(this);
         foodMarketingButton.addActionListener(this);
 
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new LoginPage();
-                setVisible(false);
-                dispose();
-            }
+        loginButton.addActionListener((ActionEvent e) -> {
+            LoginPage loginPage = new LoginPage();
+            System.out.println(loginPage.isActive());
+            setVisible(false);
+            dispose();
         });
         refreshButton.addActionListener(new ActionListener() {
             @Override
@@ -71,8 +83,7 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
             }
         });
 
-        //System.out.println(getContentPane().getSize());
-
+        usernameVerifier = new UNameVerifier(uNameBalloonTip);
         usernameTextField.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -83,6 +94,7 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
                 usernameVerifier.verify(usernameTextField);
             }
         });
+        passwordVerifier = new PassVerifier(passBalloonTip);
         passwordPasswordField.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -93,6 +105,7 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
                 passwordVerifier.verifyLive(passwordPasswordField);
             }
         });
+        confPassVerifier = new PassVerifier(confPassBalloonTip);
         confirmPasswordPasswordField.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -109,6 +122,41 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
         inputSupplyButton.setText(GameDriver.INPUT_SECTOR_NAME);
         farmProductionButton.setText(GameDriver.FARM_SECTOR_NAME);
         foodMarketingButton.setText(GameDriver.FOOD_SECTOR_NAME);
+        //this.validate();
+
+        //loginPanel.add(backButton);
+        //backButton.setLocation(100,100);
+        //loginLabel.setLocation(getWidth()/2,getHeight()/2);
+        //loginLabel.setBounds(new Rectangle(new Point(200, 300), loginLabel.getPreferredSize()));
+
+        //setComponentZOrder(createAcntPanel, 1);
+        //rootPanel.setComponentZOrder(backButton,0);
+        //System.out.println(backButton.getLocation());
+        //createAcntPanel.setLocation(getWidth()-createAcntPanel.getWidth()/2,createAcntPanel.getY());
+        //System.out.println(backButton.getLocation());
+        //setComponentZOrder(refreshPanel, 0);
+        //setComponentZOrder(rootPanel, 1);
+        //refreshPanel.setLocation(getWidth(),refreshButton.getY());
+        //setComponentZOrder(backPanel, 0);
+        //System.out.println(rootPanel.getComponentZOrder(loginPanel));
+        //getLayeredPane().setLayer(refreshButton, 0);
+        //getLayeredPane().setLayer(rootPanel, 1);
+
+        pack();
+        //button1.setVisible(false);
+        //setComponentZOrder(getContentPane(), 1);
+        //loginPanel.setLayout(null);
+        //loginPanel.setLocation(rootPanel.getWidth()/2, 0);
+        //System.out.println();
+        //loginPanel.setComponentZOrder(backButton, 0);
+        //backButton.setLocation(500, backButton.getHeight());
+
+
+        //System.out.println(backButton.getLocation());
+        setResizable(false);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setVisible(true);
 
         /*System.out.println(inputSupplyButton.getSize());
         System.out.println(farmProductionButton.getSize());
@@ -119,35 +167,37 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
     public void actionPerformed(ActionEvent e) {
         JButton button = (JButton) e.getSource();
         String selectedSect = button.getText();
-        if (!usernameVerifier.verify(usernameTextField) || !passwordVerifier.verifyLive(passwordPasswordField) ||
-                !passwordVerifier.verifyLive(confirmPasswordPasswordField) ||
-                !passwordVerifier.verifyMatch(passwordPasswordField, confirmPasswordPasswordField)) {
-        } else if (!sectCheck(button.getText())) {
-            button.setEnabled(false);
-        } else {
-            usernameTextField.setBackground(Color.green);
-            confirmPasswordPasswordField.setBackground(Color.GREEN);
-            passwordPasswordField.setBackground(Color.GREEN);
-            button.setEnabled(true);
-            Student student = null;
+        if (usernameVerifier.verify(usernameTextField) && passwordVerifier.verifyLive(passwordPasswordField) &&
+                passwordVerifier.verifyLive(confirmPasswordPasswordField) &&
+                passwordVerifier.verifyMatch(passwordPasswordField, confirmPasswordPasswordField)) {
+            if (!sectCheck(button.getText())) {
+                button.setEnabled(false);
+            } else {
+                usernameTextField.setBackground(Color.green);
+                confirmPasswordPasswordField.setBackground(Color.GREEN);
+                passwordPasswordField.setBackground(Color.GREEN);
+                button.setEnabled(true);
+                Student student = null;
 
-            switch (selectedSect) {
-                case GameDriver.INPUT_SECTOR_NAME:
-                    student = new Student(usernameTextField.getText(), String.valueOf(passwordPasswordField.getPassword()), new InputSector());
-                    new InputDecisionPage(student);
-                    break;
-                case GameDriver.FARM_SECTOR_NAME:
-                    student = new Student(usernameTextField.getText(), String.valueOf(passwordPasswordField.getPassword()), new FarmSector());
-                    new FarmerDecisionPage(student);
-                    break;
-                case GameDriver.FOOD_SECTOR_NAME:
-                    break;
+                switch (selectedSect) {
+                    case GameDriver.INPUT_SECTOR_NAME:
+                        student = new Student(usernameTextField.getText(), String.valueOf(passwordPasswordField.getPassword()), new InputSector());
+                        new InputDecisionPage(student);
+                        break;
+                    case GameDriver.FARM_SECTOR_NAME:
+                        student = new Student(usernameTextField.getText(), String.valueOf(passwordPasswordField.getPassword()), new FarmSector());
+                        new FarmerDecisionPage(student);
+                        break;
+                    case GameDriver.FOOD_SECTOR_NAME:
+                        break;
+                }
+                GameDriver.DB.addUser(student);
+                //new HomePage(student);
+                setVisible(false);
+                dispose();
             }
-            GameDriver.DB.addUser(student);
-            //new HomePage(student);
-            setVisible(false);
-            dispose();
         }
+
     }
 
     private boolean sectCheck(String sector) {
@@ -219,6 +269,8 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
         } else
             label.setForeground(Color.RED);
     }
+
+
 
 /*    @Override
     public void run() {
