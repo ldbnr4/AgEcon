@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<classpath>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="var" path="USER_HOME/Downloads/mongo-java-driver-2.13.3.jar"/>
-	<classpathentry kind="var" path="USER_HOME/Downloads/balloontip_1.2.4.1/balloontip-1.2.4.1.jar"/>
-	<classpathentry kind="var" path="USER_HOME/Downloads/morphia-1.0.1.jar"/>
-	<classpathentry kind="output" path="out/production/AgEcon"/>
-</classpath>
