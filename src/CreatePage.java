@@ -70,12 +70,16 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
         farmProductionButton.addActionListener(this);
         foodMarketingButton.addActionListener(this);
 
-        loginButton.addActionListener((ActionEvent e) -> {
-            LoginPage loginPage = new LoginPage();
-            System.out.println(loginPage.isActive());
-            setVisible(false);
-            dispose();
+        loginButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                LoginPage loginPage = new LoginPage();
+                System.out.println(loginPage.isActive());
+                setVisible(false);
+                dispose();
+            }
         });
+
         refreshButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
