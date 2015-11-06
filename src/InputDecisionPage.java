@@ -14,7 +14,6 @@ import java.io.IOException;
 
 /**
  * Created by Lorenzo on 10/8/2015.
- *
  */
 @SuppressWarnings("ConstantConditions")
 public class InputDecisionPage extends JFrame implements ActionListener {

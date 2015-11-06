@@ -5,7 +5,6 @@ import java.util.HashMap;
 
 /**
  * Created by Lorenzo on 10/1/2015.
- *
  */
 public class HomePage extends JFrame {
     private JLabel titleLabel;

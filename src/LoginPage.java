@@ -5,7 +5,6 @@ import java.awt.event.ActionListener;
 
 /**
  * Created by Lorenzo on 9/29/2015.
- *
  */
 public class LoginPage extends JFrame implements ActionListener {
     private JPasswordField passwordField;

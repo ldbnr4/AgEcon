@@ -12,7 +12,6 @@ import java.util.HashMap;
 
 /**
  * Created by Lorenzo on 9/18/2015.
- *
  */
 public class CreatePage extends JFrame implements ActionListener/*, Runnable */ {
     private JPanel rootPanel;

@@ -1,6 +1,5 @@
 /**
  * Created by Lorenzo on 9/18/2015.
- *
  */
 public class GameDriver {
     public static final String INPUT_SECTOR_NAME = "Input Supply";

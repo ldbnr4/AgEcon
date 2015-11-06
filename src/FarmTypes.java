@@ -57,7 +57,7 @@ public final class FarmTypes {
         costs.put("R&D", GameDriver.round(acres * .1 * yield * (2.5 / 10) * 1.05));
         costs.put("Marketing", GameDriver.round(acres * yield * .2 * (2.5 / 10) * 1.05));
 
-        for(Double cost: costs.values()){
+        for (Double cost : costs.values()) {
             totalCost += cost;
         }
 
