@@ -2,6 +2,7 @@ import java.util.HashMap;
 
 /**
  * Created by Lorenzo on 10/22/2015.
+ *
  */
 public class FarmTypes {
     public char size;
