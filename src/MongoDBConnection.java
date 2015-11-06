@@ -8,7 +8,6 @@ import java.util.Objects;
 
 /**
  * Created by Lorenzo on 10/6/2015.
- *
  */
 public class MongoDBConnection {
     private static MongoDBConnection ourInstance = new MongoDBConnection();
@@ -21,6 +20,14 @@ public class MongoDBConnection {
         return ourInstance;
     }
 
+    public void removeStudent(Student student){
+        Morphia morphia = new Morphia();
+        morphia.map(Student.class).map(Sector.class);
+
+        DB db = openConnection();
+        DBCollection coll = db.getCollection("users");
+        coll.remove(new BasicDBObject("_id", student.uName));
+    }
     public void saveStudent(Student student) {
         Morphia morphia = new Morphia();
         morphia.map(Student.class).map(Sector.class);
@@ -166,6 +173,7 @@ public class MongoDBConnection {
         numRes.put(GameDriver.SMALL_FARM, 0);
         numRes.put(GameDriver.MED_FARM, 0);
         numRes.put(GameDriver.LARGE_FARM, 0);
+        numRes.put(GameDriver.NO_FARM, 0);
         FarmSector studentSector;
         Student student;
         try (DBCursor cursor = coll.find()) {
@@ -174,7 +182,12 @@ public class MongoDBConnection {
                 //System.out.println(student.uName.matches("[a-zA-Z]+"));
                 if (student.sector.name.equals(GameDriver.FARM_SECTOR_NAME)) {
                     studentSector = (FarmSector) student.sector;
-                    numRes.put(studentSector.farm.size, numRes.get(studentSector.farm.size) + 1);
+                    if(studentSector.farm != null) {
+                        numRes.put(studentSector.farm.size, numRes.get(studentSector.farm.size) + 1);
+                    }
+                    else {
+                        System.out.println(student.uName);
+                    }
                 }
                 //numRes.put(student.sector, numRes.get(student.sector.name) + 1);
             }

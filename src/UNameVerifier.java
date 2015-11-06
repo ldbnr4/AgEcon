@@ -6,7 +6,6 @@ import java.awt.*;
 
 /**
  * Created by Lorenzo on 9/24/2015.
- *
  */
 public class UNameVerifier {
     BalloonTip balloonTip;

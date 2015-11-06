@@ -20,9 +20,10 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
     private JLabel smallAmntLbl;
     private JLabel medAmntLbl;
     private JLabel largeAmntLbl;
+    private JButton backBtn;
 
 
-    public FarmerDecisionPage(Student student) {
+    public FarmerDecisionPage(final Student student) {
         super("Input Supply Decisions");
 
         setContentPane(rootPanel);
@@ -46,6 +47,15 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 updateBtns();
+            }
+        });
+        backBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GameDriver.DB.removeStudent(student);
+                new CreatePage();
+                setVisible(false);
+                dispose();
             }
         });
     }

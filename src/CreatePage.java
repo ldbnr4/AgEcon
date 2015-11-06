@@ -12,7 +12,6 @@ import java.util.HashMap;
 
 /**
  * Created by Lorenzo on 9/18/2015.
- *
  */
 public class CreatePage extends JFrame implements ActionListener/*, Runnable */ {
     private JPanel rootPanel;
@@ -27,7 +26,6 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
     private JLabel farmProductionNumber;
     private JLabel foodMarketingNumber;
     private JButton refreshButton;
-    private JButton backButton;
     private JPanel loginPanel;
     private JLabel loginLabel;
     private JLabel selectSectLabel;
@@ -47,17 +45,8 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
     public CreatePage() {
         super("Create Account");
         setContentPane(rootPanel);
-        //SelectSectPanel.setLayout(new GroupLayout(SelectSectPanel));
-        //SelectSectPanel.add(refreshButton);
-        //System.out.println(refreshButton.getLocationOnScreen());
-        //setLayout(rootPanel.getLayout());
-        //this.setLayout(rootPanel.getLayout());
-        //System.out.println(rootPanel.getLayout());
-        //System.out.println(this.getLayout());
         updateBtns();
 
-        //setComponentZOrder(getContentPane(), 1);
-        //System.out.println(uNameBalloonTip.getRootPane());
         modern = new MinimalBalloonStyle(Color.white, 5);
         uNameBalloonTip = new BalloonTip(usernameTextField, new JLabel(), modern, BalloonTip.Orientation.RIGHT_ABOVE, BalloonTip.AttachLocation.ALIGNED, 10, 10, false);
         this.uNameBalloonTip.setVisible(false);
@@ -73,8 +62,7 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                LoginPage loginPage = new LoginPage();
-                System.out.println(loginPage.isActive());
+                new LoginPage();
                 setVisible(false);
                 dispose();
             }
@@ -126,45 +114,12 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
         inputSupplyButton.setText(GameDriver.INPUT_SECTOR_NAME);
         farmProductionButton.setText(GameDriver.FARM_SECTOR_NAME);
         foodMarketingButton.setText(GameDriver.FOOD_SECTOR_NAME);
-        //this.validate();
-
-        //loginPanel.add(backButton);
-        //backButton.setLocation(100,100);
-        //loginLabel.setLocation(getWidth()/2,getHeight()/2);
-        //loginLabel.setBounds(new Rectangle(new Point(200, 300), loginLabel.getPreferredSize()));
-
-        //setComponentZOrder(createAcntPanel, 1);
-        //rootPanel.setComponentZOrder(backButton,0);
-        //System.out.println(backButton.getLocation());
-        //createAcntPanel.setLocation(getWidth()-createAcntPanel.getWidth()/2,createAcntPanel.getY());
-        //System.out.println(backButton.getLocation());
-        //setComponentZOrder(refreshPanel, 0);
-        //setComponentZOrder(rootPanel, 1);
-        //refreshPanel.setLocation(getWidth(),refreshButton.getY());
-        //setComponentZOrder(backPanel, 0);
-        //System.out.println(rootPanel.getComponentZOrder(loginPanel));
-        //getLayeredPane().setLayer(refreshButton, 0);
-        //getLayeredPane().setLayer(rootPanel, 1);
 
         pack();
-        //button1.setVisible(false);
-        //setComponentZOrder(getContentPane(), 1);
-        //loginPanel.setLayout(null);
-        //loginPanel.setLocation(rootPanel.getWidth()/2, 0);
-        //System.out.println();
-        //loginPanel.setComponentZOrder(backButton, 0);
-        //backButton.setLocation(500, backButton.getHeight());
-
-
-        //System.out.println(backButton.getLocation());
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
-
-        /*System.out.println(inputSupplyButton.getSize());
-        System.out.println(farmProductionButton.getSize());
-        System.out.println(foodMarketingButton.getSize());*/
     }
 
     @Override

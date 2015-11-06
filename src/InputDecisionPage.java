@@ -14,7 +14,6 @@ import java.io.IOException;
 
 /**
  * Created by Lorenzo on 10/8/2015.
- *
  */
 @SuppressWarnings("ConstantConditions")
 public class InputDecisionPage extends JFrame implements ActionListener {
@@ -35,10 +34,11 @@ public class InputDecisionPage extends JFrame implements ActionListener {
     private JRadioButton fullButton;
     private JLabel inputSupplyLabel;
     private JButton submitButton;
+    private JButton backBtn;
     private BalloonTipStyle modern = new MinimalBalloonStyle(Color.white, 5);
     private BalloonTip balloonTip = new BalloonTip(earlyUnitSale, new JLabel(), modern, BalloonTip.Orientation.LEFT_ABOVE, BalloonTip.AttachLocation.ALIGNED, 10, 10, false);
 
-    public InputDecisionPage(Student student) {
+    public InputDecisionPage(final Student student) {
         super("Input Supply Decisions");
 
         setContentPane(rootPanel);
@@ -51,6 +51,15 @@ public class InputDecisionPage extends JFrame implements ActionListener {
 
         setUpRadioButtons();
         this.student = student;
+        backBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GameDriver.DB.removeStudent(student);
+                new CreatePage();
+                setVisible(false);
+                dispose();
+            }
+        });
         this.studentSector = (InputSector) this.student.sector;
 
         submitButton.addActionListener(this);
