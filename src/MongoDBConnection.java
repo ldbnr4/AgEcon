@@ -8,6 +8,7 @@ import java.util.Objects;
 
 /**
  * Created by Lorenzo on 10/6/2015.
+ *
  */
 public class MongoDBConnection {
     private static MongoDBConnection ourInstance = new MongoDBConnection();

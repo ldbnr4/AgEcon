@@ -4,7 +4,7 @@ import java.util.HashMap;
  * Created by Lorenzo on 10/22/2015.
  *
  */
-public class FarmTypes {
+public final class FarmTypes {
     public char size;
     public int acres;
     public Double totalCost = (double) 0;
@@ -27,12 +27,16 @@ public class FarmTypes {
     }
 
     public void setAcres() {
-        if (size == GameDriver.SMALL_FARM) {
-            acres = 100;
-        } else if (size == GameDriver.MED_FARM) {
-            acres = 250;
-        } else {
-            acres = 500;
+        switch (size) {
+            case GameDriver.SMALL_FARM:
+                acres = 100;
+                break;
+            case GameDriver.MED_FARM:
+                acres = 250;
+                break;
+            default:
+                acres = 500;
+                break;
         }
     }
 
@@ -53,9 +57,9 @@ public class FarmTypes {
         costs.put("R&D", GameDriver.round(acres * .1 * yield * (2.5 / 10) * 1.05));
         costs.put("Marketing", GameDriver.round(acres * yield * .2 * (2.5 / 10) * 1.05));
 
-        for (Double cost : costs.values()) {
+        costs.values().stream().forEach((cost) -> {
             totalCost += cost;
-        }
+        });
 
         totalCost = GameDriver.round(totalCost);
     }

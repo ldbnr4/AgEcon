@@ -1,5 +1,6 @@
 /**
  * Created by Lorenzo on 9/18/2015.
+ *
  */
 public class GameDriver {
     public static final String INPUT_SECTOR_NAME = "Input Supply";
@@ -31,7 +32,8 @@ public class GameDriver {
             DB.saveGameFlow();
         }
         //new AdminDecisionPage(DB.getAdmin("admin"));
-        new WelcomePage();
+        //new WelcomePage();
+        new CreatePage();
         /*for (int i = 0; i < 3; i++) {
             Student student = new Student("Input"+ String.valueOf(i), "passpass", new InputSector());
             DB.addUser(student);
