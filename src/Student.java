@@ -14,8 +14,7 @@ public class Student {
     public String uName;
     @Embedded
     public Sector sector;
-    public int startingYear;
-    public int currentYear;
+    private int year;
     protected String password;
     protected String salt;
 
@@ -28,11 +27,10 @@ public class Student {
         this.password = passInfo.get("password");
         this.salt = passInfo.get("salt");
         this.sector = sector;
-        this.startingYear = GameDriver.GAME_FLOW.startingYear;
-        this.currentYear = GameDriver.GAME_FLOW.currentYear;
+        this.year = GameDriver.GAME_FLOW.currentYear;
     }
 
-    public void setCurrentYear(int year) {
-        this.currentYear = year;
+    public int getYear(){
+        return this.year;
     }
 }

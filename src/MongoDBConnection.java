@@ -8,8 +8,9 @@ import java.util.Objects;
 
 /**
  * Created by Lorenzo on 10/6/2015.
+ *
  */
-public class MongoDBConnection {
+public class MongoDBConnection{
     private static MongoDBConnection ourInstance = new MongoDBConnection();
     MongoClient mongoClient = null;
 
@@ -20,24 +21,23 @@ public class MongoDBConnection {
         return ourInstance;
     }
 
+    /*public int countFarmPpl(){
+        DB db = openConnection();
+        int count = (int) db.getCollection("users").count(new BasicDBObject("sector.className", FarmSector.class.getName()));
+
+        return count;
+    }*/
+
     public void removeStudent(Student student){
         Morphia morphia = new Morphia();
         morphia.map(Student.class).map(Sector.class);
-
-        DB db = openConnection();
-        DBCollection coll = db.getCollection("users");
-        coll.remove(new BasicDBObject("_id", student.uName));
+        openConnection().getCollection("users").remove(new BasicDBObject("_id", student.uName).append("year", student.getYear()));
     }
     public void saveStudent(Student student) {
         Morphia morphia = new Morphia();
         morphia.map(Student.class).map(Sector.class);
-        DB db = openConnection();
-        DBCollection coll = db.getCollection("users");
-        coll.remove(new BasicDBObject("_id", student.uName));
-        DBObject studentObj = morphia.toDBObject(student);
-        coll.insert(studentObj);
-        closeConnection();
-
+        removeStudent(student);
+        addStudent(student);
     }
 
     public void saveGameFlow() {
@@ -48,25 +48,16 @@ public class MongoDBConnection {
         coll.remove(new BasicDBObject("_id", GameDriver.GAME_FLOW.name));
         DBObject gameFlowObj = morphia.toDBObject(GameDriver.GAME_FLOW);
         coll.insert(gameFlowObj);
-        closeConnection();
     }
 
-    public Student getStudent(String username) {
+    public Student getStudent(String username, int year) {
         Morphia morphia = new Morphia();
         morphia.map(Student.class).map(Sector.class);
 
-        DB db = openConnection();
-        DBCollection coll = db.getCollection("users");
-        BasicDBObject query = new BasicDBObject("_id", username);
-        DBObject person = coll.findOne(query);
-        //Map persMap = person.toMap();
-        closeConnection();
+        DBObject person = openConnection().getCollection("users").findOne(new BasicDBObject("_id", username).append("year", year));
         if (person == null) {
             return null;
         }
-        //Student student = new Student(persMap.get("User Name").toString(),persMap.get("Password").toString(),persMap.get("Salt").toString(), (Sector) persMap.get("Sector"));
-        //morphia.fromDBObject()
-        //System.out.println(student);
         return morphia.fromDBObject(Student.class, person);
     }
 
@@ -79,7 +70,6 @@ public class MongoDBConnection {
         BasicDBObject query = new BasicDBObject("_id", username);
         DBObject person = coll.findOne(query);
         //Map persMap = person.toMap();
-        closeConnection();
         if (person == null) {
             return null;
         }
@@ -101,9 +91,6 @@ public class MongoDBConnection {
         if (person == null) {
             return null;
         }
-        closeConnection();
-        //Student student = new Student(persMap.get("User Name").toString(),persMap.get("Password").toString(),persMap.get("Salt").toString(), (Sector) persMap.get("Sector"));
-        //morphia.fromDBObject()
         return morphia.fromDBObject(GameFlow.class, person);
     }
 
@@ -125,20 +112,44 @@ public class MongoDBConnection {
         return list;
     }
 
-    public int getTotalPlayers(int startingYear) {
+    public int getTotalPlayers(int year) {
         DB db = openConnection();
-        int count = (int) db.getCollection("users").count(new BasicDBObject("startingYear", startingYear));
-        closeConnection();
 
-        return count;
+        return (int) db.getCollection("users").count(new BasicDBObject("year", year));
     }
 
-    public int getCurrentPlayers(int currentYear) {
+    public HashMap<GameDriver.Seed_Name, Integer> getSeedTotals(){
+        Morphia morphia = new Morphia();
+        morphia.map(Student.class).map(Sector.class);
         DB db = openConnection();
-        int count = (int) db.getCollection("users").count(new BasicDBObject("currentYear", currentYear));
-        closeConnection();
+        DBCollection coll = db.getCollection("users");
+        HashMap<GameDriver.Seed_Name, Integer> seedTtls = new HashMap<>();
+        seedTtls.put(GameDriver.Seed_Name.EARLY, 0);
+        seedTtls.put(GameDriver.Seed_Name.MID, 0);
+        seedTtls.put(GameDriver.Seed_Name.FULL, 0);
+        seedTtls.put(GameDriver.Seed_Name.TOTAL, 0);
+        Student student;
+        InputSector studentSector;
+        try (DBCursor cursor = coll.find()) {
+            while (cursor.hasNext()) {
+                student = morphia.fromDBObject(Student.class, cursor.next());
+                if(student.sector instanceof InputSector) {
+                    studentSector = (InputSector) student.sector;
+                    seedTtls.put(GameDriver.Seed_Name.EARLY,
+                            seedTtls.get(GameDriver.Seed_Name.EARLY) + studentSector.getEarlyAmnt());
+                    seedTtls.put(GameDriver.Seed_Name.MID,
+                            seedTtls.get(GameDriver.Seed_Name.MID) + studentSector.getMidAmnt());
+                    seedTtls.put(GameDriver.Seed_Name.FULL,
+                            seedTtls.get(GameDriver.Seed_Name.FULL) + studentSector.getFullAmnt());
+                }
+            }
+        }
 
-        return count;
+        for(int x : seedTtls.values()){
+            seedTtls.put(GameDriver.Seed_Name.TOTAL,
+                    seedTtls.get(GameDriver.Seed_Name.TOTAL) + x);
+        }
+        return seedTtls;
     }
 
     public HashMap<String, Integer> numInSectors() {
@@ -159,7 +170,6 @@ public class MongoDBConnection {
             }
         }
         //System.out.println(numRes);
-        closeConnection();
         return numRes;
     }
 
@@ -193,73 +203,44 @@ public class MongoDBConnection {
             }
         }
         //System.out.println(numRes);
-        closeConnection();
         return numRes;
     }
 
-    public void addUser(Student student) {
+    public void addStudent(Student student) {
         Morphia morphia = new Morphia();
         morphia.map(Student.class).map(Sector.class);
-        //System.out.println(student);
         DB db = openConnection();
-        //Datastore ds = morphia.createDatastore(this.mongoClient, "users");
-        //ds.save(student);
         DBCollection coll = db.getCollection("users");
-        //BasicDBObject doc = new BasicDBObject("Student Name", morphia.toString());
         DBObject studentObj = morphia.toDBObject(student);
-        //morphia.fromDBObject(Student.class,studentObj);
-        //db.getCollection("users").save(studentObj);
         coll.insert(studentObj);
-        closeConnection();
+        GameDriver.GAME_FLOW.setTotalPlayers();
+        saveGameFlow();
     }
 
     public void addAdmin(Admin admin) {
-        Morphia morphia = new Morphia();
-        morphia.map(Admin.class);
-        //System.out.println(student);
-        DB db = openConnection();
-        //Datastore ds = morphia.createDatastore(this.mongoClient, "admins");
-        //ds.save(student);
-        DBCollection coll = db.getCollection("admins");
-        //BasicDBObject doc = new BasicDBObject("Student Name", morphia.toString());
-        DBObject adminObj = morphia.toDBObject(admin);
-        //morphia.fromDBObject(Student.class,studentObj);
-        //db.getCollection("users").save(studentObj);
-        coll.insert(adminObj);
-        closeConnection();
+        DBObject adminObj = new Morphia().map(Admin.class).toDBObject(admin);
+        openConnection().getCollection("admins").insert(adminObj);
     }
 
     public void addGameFlow(GameFlow gameFlow) {
-        Morphia morphia = new Morphia();
-        morphia.map(GameFlow.class);
-        //System.out.println(student);
-        DB db = openConnection();
-        //Datastore ds = morphia.createDatastore(this.mongoClient, "admins");
-        //ds.save(student);
-        DBCollection coll = db.getCollection("gameFlow");
-        //BasicDBObject doc = new BasicDBObject("Student Name", morphia.toString());
-        DBObject gameFlowObj = morphia.toDBObject(gameFlow);
-        //morphia.fromDBObject(Student.class,studentObj);
-        //db.getCollection("users").save(studentObj);
-        coll.insert(gameFlowObj);
-        closeConnection();
+        DBObject gameFlowObj = new Morphia().map(GameFlow.class).toDBObject(gameFlow);
+        openConnection().getCollection("gameFlow").insert(gameFlowObj);
+    }
+
+    public void newYearStudents(int year){
+
     }
 
     private DB openConnection() {
-        String dbuname = "admin";
-        String database = "agdb";
-        String password = "password";
-        MongoCredential credential = MongoCredential.createCredential(dbuname, database, password.toCharArray());
-        try {
-            this.mongoClient = new MongoClient(new ServerAddress("ds051543.mongolab.com", 51543), Collections.singletonList(credential));
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
+        if(mongoClient == null) {
+            String dbuname = "admin", database = "agdb", password = "password";
+            MongoCredential credential = MongoCredential.createCredential(dbuname, database, password.toCharArray());
+            try {
+                this.mongoClient = new MongoClient(new ServerAddress("ds051543.mongolab.com", 51543), Collections.singletonList(credential));
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            }
         }
         return this.mongoClient.getDB("agdb");
-
-    }
-
-    private void closeConnection() {
-        this.mongoClient.close();
     }
 }

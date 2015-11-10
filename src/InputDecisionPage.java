@@ -195,17 +195,17 @@ public class InputDecisionPage extends JFrame implements ActionListener {
                 //System.out.println();
                 unitSale = Integer.parseInt(earlyUnitSale.getText());
                 unitPrice = Integer.parseInt(earlyUnitPrice.getText());
-                studentSector.updateEarly(unitSale, unitPrice);
+                studentSector.setEarlySeeds(unitSale, unitPrice);
             }
             if (midButton.isSelected()) {
                 unitSale = Integer.parseInt(midUnitSale.getText());
                 unitPrice = Integer.parseInt(midUnitPrice.getText());
-                studentSector.updateMid(unitSale, unitPrice);
+                studentSector.setMidSeeds(unitSale, unitPrice);
             }
             if (fullButton.isSelected()) {
                 unitSale = Integer.parseInt(fullUnitSale.getText());
                 unitPrice = Integer.parseInt(fullUnitPrice.getText());
-                studentSector.updateFull(unitSale, unitPrice);
+                studentSector.setFullSeeds(unitSale, unitPrice);
 
             }
             GameDriver.DB.saveStudent(student);

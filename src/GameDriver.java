@@ -1,5 +1,6 @@
 /**
  * Created by Lorenzo on 9/18/2015.
+ *
  */
 public class GameDriver {
     public static final String INPUT_SECTOR_NAME = "Input Supply";
@@ -15,6 +16,9 @@ public class GameDriver {
     public static final int S_FARM_CAP = 5;
     public static final int M_FARM_CAP = 10;
     public static final int L_FARM_CAP = 5;
+    public enum Seed_Name {
+        EARLY, MID, FULL, TOTAL
+    }
     public static final MongoDBConnection DB = MongoDBConnection.getInstance();
     public static GameFlow GAME_FLOW = DB.getGameFlow();
 
@@ -28,20 +32,20 @@ public class GameDriver {
         //DB.addAdmin(admin);
         if (GAME_FLOW == null) {
             GAME_FLOW = new GameFlow();
-            DB.saveGameFlow();
         }
-        //new AdminDecisionPage(DB.getAdmin("admin"));
+        new AdminDecisionPage(DB.getAdmin("admin"));
         //new WelcomePage();
-        new CreatePage();
+        //new CreatePage();
+        //Student student = DB.getStudent("InputIvy");
+        //InputSector stuSect = (InputSector) student.sector;
+        //System.out.println(DB.countFarmPpl());
         /*for (int i = 0; i < 3; i++) {
             Student student = new Student("Input"+ String.valueOf(i), "passpass", new InputSector());
-            DB.addUser(student);
-        }*/
-
-        //new AdminDecisionPage(DB.getAdmin("admin"));
-        /*for (int i = 0; i < 7; i++) {
-            Student student = new Student("Farm"+ String.valueOf(i), "passpass", "salt", new InputSector());
-            db.addUser(student);
+            DB.addStudent(student);
+        }
+        for (int i = 0; i < 7; i++) {
+            Student student = new Student("Farm"+ String.valueOf(i), "passpass", new FarmSector(SMALL_FARM));
+            DB.addStudent(student);
         }*/
     }
 

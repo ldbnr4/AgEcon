@@ -21,7 +21,7 @@ public class UNameVerifier {
         boolean b = in.matches("\\w+");
         //System.out.println(tf);
         balloonTip.setAttachedComponent(tf);
-        Student student = GameDriver.DB.getStudent(in);
+        Student student = GameDriver.DB.getStudent(in, GameDriver.GAME_FLOW.currentYear);
         if (!length || !b || student != null) {
             tf.setBackground(Color.red);
             if (!length) {
@@ -29,7 +29,7 @@ public class UNameVerifier {
             } else if (!b) {
                 balloonTip.setTextContents("Usernames can only contain number and letters.");
             } else {
-                balloonTip.setTextContents("This user already has an account.");
+                balloonTip.setTextContents("This username has already has already been used.");
             }
             TimingUtils.showTimedBalloon(balloonTip, 2500);
             return false;

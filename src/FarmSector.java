@@ -6,12 +6,12 @@ public class FarmSector extends Sector {
 
     public FarmSector(char farmSize) {
         super(GameDriver.FARM_SECTOR_NAME);
-        updateSize(farmSize);
+        farm = new FarmTypes(farmSize);
     }
 
     public FarmSector() {
         super(GameDriver.FARM_SECTOR_NAME);
-        //farm = new FarmTypes();
+        farm = new FarmTypes();
     }
 
     @Override
@@ -19,9 +19,23 @@ public class FarmSector extends Sector {
         return farm.size == GameDriver.NO_FARM && farm.acres == 0;
     }
 
-    public void updateSize(char size) {
-        farm = new FarmTypes(size);
+    public void setFarmSize(char size) {
+        farm.setSize(size);
     }
 
+    public int getFarmAcres(){
+        return farm.getAcres();
+    }
 
+    public char getFarmSize(){
+        return farm.getSize();
+    }
+
+    public double getFarmTtlCost(){
+        return farm.getTotalCost();
+    }
+
+    public int getFarmYld(){
+        return farm.getYield();
+    }
 }

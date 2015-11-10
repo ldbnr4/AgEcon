@@ -5,6 +5,7 @@ import java.util.Calendar;
 
 /**
  * Created by Lorenzo on 10/27/2015.
+ *
  */
 @Entity
 public class GameFlow {
@@ -13,13 +14,12 @@ public class GameFlow {
     public int currentYear;
     public int startingYear;
     public int totalPlayers;
-    public int currentPlayers;
 
     public GameFlow() {
         setCurrentYear(Calendar.getInstance().get(Calendar.YEAR));
         setStartingYear(Calendar.getInstance().get(Calendar.YEAR));
         setTotalPlayers();
-        setCurrentPlayers(this.currentYear);
+        GameDriver.DB.addGameFlow(this);
     }
 
 
@@ -32,23 +32,19 @@ public class GameFlow {
     }
 
     public void setTotalPlayers() {
-        this.totalPlayers = GameDriver.DB.getTotalPlayers(this.startingYear);
-    }
-
-    public void setCurrentPlayers(int currentYear) {
-        this.currentPlayers = GameDriver.DB.getCurrentPlayers(currentYear);
+        this.totalPlayers = GameDriver.DB.getTotalPlayers(currentYear);
     }
 
     public void nextYear() {
         setCurrentYear(this.currentYear + 1);
-        setCurrentPlayers(this.currentYear);
+        GameDriver.DB.saveGameFlow();
     }
 
     public void prevYear() {
         if (this.currentYear > this.startingYear) {
             setCurrentYear(this.currentYear - 1);
-            setCurrentPlayers(this.currentYear);
         }
+        GameDriver.DB.saveGameFlow();
     }
 
 }

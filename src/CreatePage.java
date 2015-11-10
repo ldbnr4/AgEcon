@@ -150,7 +150,7 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
                     case GameDriver.FOOD_SECTOR_NAME:
                         break;
                 }
-                GameDriver.DB.addUser(student);
+                GameDriver.DB.addStudent(student);
                 //new HomePage(student);
                 setVisible(false);
                 dispose();
@@ -228,60 +228,4 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
         } else
             label.setForeground(Color.RED);
     }
-
-
-
-/*    @Override
-    public void run() {
-        while (isRunning) {
-            JFrame frame = new JFrame("Test");
-            try {
-                frame.add(new JComponent() {
-
-                    ClassLoader classLoader = getClass().getClassLoader();
-                    BufferedImage img = ImageIO.read(new File(classLoader.getResource("img/checked.png").getFile()));
-
-                    @Override
-                    protected void paintComponent(Graphics g) {
-                        super.paintComponent(g);
-
-                        // create the transform, note that the transformations happen
-                        // in reversed order (so check them backwards)
-                        AffineTransform at = new AffineTransform();
-
-                        // 4. translate it to the center of the component
-                        at.translate(getWidth() / 2, getHeight() / 2);
-
-                        // 3. do the actual rotation
-                        at.rotate(Math.PI / 4);
-
-                        // 2. just a scale because this image is big
-                        at.scale(0.5, 0.5);
-
-                        // 1. translate the object so that you rotate it around the
-                        //    center (easier :))
-                        at.translate(-img.getWidth() / 2, -img.getHeight() / 2);
-
-                        // draw the image
-                        Graphics2D g2d = (Graphics2D) g;
-                        g2d.drawImage(img, at, null);
-
-                        // continue drawing other stuff (non-transformed)
-                        //...
-
-                    }
-                });
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            frame.setSize(400, 400);
-            frame.setVisible(true);
-            frame.setLocationRelativeTo(null);
-        }
-    }
-    public void kill() {
-        isRunning = false;
-    }*/
 }

@@ -63,4 +63,20 @@ public final class FarmTypes {
 
         totalCost = GameDriver.round(totalCost);
     }
+
+    public char getSize() {
+        return size;
+    }
+
+    public int getAcres() {
+        return acres;
+    }
+
+    public Double getTotalCost() {
+        return totalCost;
+    }
+
+    public int getYield() {
+        return yield;
+    }
 }

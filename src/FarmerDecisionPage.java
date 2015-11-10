@@ -65,11 +65,11 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
         JButton button = (JButton) e.getSource();
         if (farmCheck(button)) {
             if (button.equals(smallFarmBtn)) {
-                studentSector.updateSize(GameDriver.SMALL_FARM);
+                studentSector.setFarmSize(GameDriver.SMALL_FARM);
             } else if (button.equals(medFarmBtn)) {
-                studentSector.updateSize(GameDriver.MED_FARM);
+                studentSector.setFarmSize(GameDriver.MED_FARM);
             } else {
-                studentSector.updateSize(GameDriver.LARGE_FARM);
+                studentSector.setFarmSize(GameDriver.LARGE_FARM);
             }
         }
         GameDriver.DB.saveStudent(student);

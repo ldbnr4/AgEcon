@@ -52,55 +52,65 @@ public class LoginPage extends JFrame implements ActionListener {
         } else if (GameDriver.checkEmpty(inPass)) {
             JOptionPane.showMessageDialog(rootPanel, "You did not enter a password.", "Password error", JOptionPane.ERROR_MESSAGE);
             passwordField.setBackground(Color.RED);
-        } else if (GameDriver.DB.getAdmin(inUse) == null && GameDriver.DB.getStudent(inUse) == null) {
-            JOptionPane.showMessageDialog(rootPanel, "User account not found. Make sure you are registered.", "Username error", JOptionPane.ERROR_MESSAGE);
-            userNameField.setBackground(Color.RED);
-        } else {
+        }else {
             passwordField.setBackground(Color.GREEN);
             userNameField.setBackground(Color.GREEN);
             if (studentRadioButton.isSelected()) {
-                Student grabbedStudent = GameDriver.DB.getStudent(inUse);
-                String salt = grabbedStudent.salt;
-                String inEncrypt = EncryptPassword.encrpyt(inPass, salt);
-                if (inEncrypt.equals(grabbedStudent.password)) {
-                    passwordField.setBackground(Color.GREEN);
-                    //System.out.println(grabbedStudent.sector);
-                    Sector studentSector = grabbedStudent.sector;
-                    boolean emptyStudent = studentSector.checkIfEmpty();
-                    if (emptyStudent) {
-                        switch (grabbedStudent.sector.name) {
-                            case GameDriver.INPUT_SECTOR_NAME:
-                                new InputDecisionPage(grabbedStudent);
-                                break;
-                            case GameDriver.FARM_SECTOR_NAME:
-                                new FarmerDecisionPage(grabbedStudent);
-                                break;
-                            case GameDriver.FOOD_SECTOR_NAME:
+                Student grabbedStudent = GameDriver.DB.getStudent(inUse, GameDriver.GAME_FLOW.currentYear);
+                if(grabbedStudent == null){
+                    JOptionPane.showMessageDialog(rootPanel, "User account not found. Make sure you are registered and selected the correct user type.", "Username error", JOptionPane.ERROR_MESSAGE);
+                    userNameField.setBackground(Color.RED);
+                }
+                else {
+                    String salt = grabbedStudent.salt;
+                    String inEncrypt = EncryptPassword.encrpyt(inPass, salt);
+                    if (inEncrypt.equals(grabbedStudent.password)) {
+                        passwordField.setBackground(Color.GREEN);
+                        //System.out.println(grabbedStudent.sector);
+                        Sector studentSector = grabbedStudent.sector;
+                        boolean emptyStudent = studentSector.checkIfEmpty();
+                        if (emptyStudent) {
+                            switch (grabbedStudent.sector.name) {
+                                case GameDriver.INPUT_SECTOR_NAME:
+                                    new InputDecisionPage(grabbedStudent);
+                                    break;
+                                case GameDriver.FARM_SECTOR_NAME:
+                                    new FarmerDecisionPage(grabbedStudent);
+                                    break;
+                                case GameDriver.FOOD_SECTOR_NAME:
 
-                                break;
-                            default:
-                                break;
+                                    break;
+                                default:
+                                    break;
+                            }
+                            setVisible(false);
+                            dispose();
+                        } else {
+                            new HomePage(grabbedStudent.uName, grabbedStudent.sector);
+                            setVisible(false);
+                            dispose();
                         }
+                    } else {
+                        JOptionPane.showMessageDialog(rootPanel, "Password did not match the account for " + inUse + ".", "Password error", JOptionPane.ERROR_MESSAGE);
+                        passwordField.setBackground(Color.red);
+                    }
+                }
+            }
+            else {
+                Admin grabbedAdmin = GameDriver.DB.getAdmin(inUse);
+                if(grabbedAdmin == null){
+                    JOptionPane.showMessageDialog(rootPanel, "User account not found. Make sure you are registered and selected the correct user type.", "Username error", JOptionPane.ERROR_MESSAGE);
+                    userNameField.setBackground(Color.RED);
+                }
+                else{
+                    if (EncryptPassword.encrpyt(inPass, grabbedAdmin.salt).equals(grabbedAdmin.password)) {
+                        new AdminDecisionPage(grabbedAdmin);
                         setVisible(false);
                         dispose();
                     } else {
-                        new HomePage(grabbedStudent.uName, grabbedStudent.sector);
-                        setVisible(false);
-                        dispose();
+                        JOptionPane.showMessageDialog(rootPanel, "Password did not match the account for " + inUse + ".", "Password error", JOptionPane.ERROR_MESSAGE);
+                        passwordField.setBackground(Color.red);
                     }
-                } else {
-                    JOptionPane.showMessageDialog(rootPanel, "Password did not match the account for " + inUse + ".", "Password error", JOptionPane.ERROR_MESSAGE);
-                    passwordField.setBackground(Color.red);
-                }
-            } else {
-                Admin grabbedAdmin = GameDriver.DB.getAdmin(inUse);
-                if (EncryptPassword.encrpyt(inPass, grabbedAdmin.salt).equals(grabbedAdmin.password)) {
-                    new AdminDecisionPage(grabbedAdmin);
-                    setVisible(false);
-                    dispose();
-                } else {
-                    JOptionPane.showMessageDialog(rootPanel, "Password did not match the account for " + inUse + ".", "Password error", JOptionPane.ERROR_MESSAGE);
-                    passwordField.setBackground(Color.red);
                 }
             }
         }

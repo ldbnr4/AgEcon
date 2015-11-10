@@ -8,6 +8,7 @@ public class SeedTypes {
     public int midPrice;
     public int fullSale;
     public int fullPrice;
+    public int ttlSeeds;
 
     public SeedTypes() {
         this.earlySale = 0;
@@ -16,6 +17,7 @@ public class SeedTypes {
         this.midPrice = 0;
         this.fullSale = 0;
         this.fullPrice = 0;
+        setTtlSeeds();
     }
 
     public SeedTypes(int earlySale, int earlyPrice, int midSale, int midPrice, int fullSale, int fullPrice) {
@@ -25,6 +27,7 @@ public class SeedTypes {
         this.midPrice = midPrice;
         this.fullSale = fullSale;
         this.fullPrice = fullPrice;
+        setTtlSeeds();
     }
 
 
@@ -75,4 +78,10 @@ public class SeedTypes {
     public void setFullSale(int fullSale) {
         this.fullSale = fullSale;
     }
+
+    public void setTtlSeeds(){
+        this.ttlSeeds = getEarlySale()+getMidSale()+getFullSale();
+    }
+
+    public int getTtlSeeds(){return this.ttlSeeds;}
 }
