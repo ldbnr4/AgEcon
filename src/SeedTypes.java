@@ -1,5 +1,6 @@
 /**
  * Created by Lorenzo on 10/13/2015.
+ *
  */
 public class SeedTypes {
     public int earlySale;

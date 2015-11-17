@@ -111,9 +111,9 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
             }
         });
 
-        inputSupplyButton.setText(GameDriver.INPUT_SECTOR_NAME);
-        farmProductionButton.setText(GameDriver.FARM_SECTOR_NAME);
-        foodMarketingButton.setText(GameDriver.FOOD_SECTOR_NAME);
+        inputSupplyButton.setText(Consts.INPUT_SECTOR_NAME);
+        farmProductionButton.setText(Consts.FARM_SECTOR_NAME);
+        foodMarketingButton.setText(Consts.FOOD_SECTOR_NAME);
 
         pack();
         setResizable(false);
@@ -139,18 +139,18 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
                 Student student = null;
 
                 switch (selectedSect) {
-                    case GameDriver.INPUT_SECTOR_NAME:
+                    case Consts.INPUT_SECTOR_NAME:
                         student = new Student(usernameTextField.getText(), String.valueOf(passwordPasswordField.getPassword()), new InputSector());
                         new InputDecisionPage(student);
                         break;
-                    case GameDriver.FARM_SECTOR_NAME:
+                    case Consts.FARM_SECTOR_NAME:
                         student = new Student(usernameTextField.getText(), String.valueOf(passwordPasswordField.getPassword()), new FarmSector());
                         new FarmerDecisionPage(student);
                         break;
-                    case GameDriver.FOOD_SECTOR_NAME:
+                    case Consts.FOOD_SECTOR_NAME:
                         break;
                 }
-                GameDriver.DB.addStudent(student);
+                Consts.DB.addStudent(student);
                 //new HomePage(student);
                 setVisible(false);
                 dispose();
@@ -162,14 +162,14 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
     private boolean sectCheck(String sector) {
         int sectLimit;
         switch (sector) {
-            case GameDriver.INPUT_SECTOR_NAME:
-                sectLimit = GameDriver.SUPPLY_CAP;
+            case Consts.INPUT_SECTOR_NAME:
+                sectLimit = Consts.SUPPLY_CAP;
                 break;
-            case GameDriver.FARM_SECTOR_NAME:
-                sectLimit = GameDriver.FARM_CAP;
+            case Consts.FARM_SECTOR_NAME:
+                sectLimit = Consts.FARM_CAP;
                 break;
-            case GameDriver.FOOD_SECTOR_NAME:
-                sectLimit = GameDriver.FOOD_CAP;
+            case Consts.FOOD_SECTOR_NAME:
+                sectLimit = Consts.FOOD_CAP;
                 break;
             default:
                 sectLimit = 0;
@@ -186,28 +186,29 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
 
     private void updateBtns() {
         //(new Thread(new CreatePage())).start();
-        sectorAmounts = GameDriver.DB.numInSectors();
-        //System.out.println(sectorAmounts);
-        int dbNumInputSupply = sectorAmounts.get(GameDriver.INPUT_SECTOR_NAME);
-        setAvailableLabel(inputSupplyNumber, dbNumInputSupply, GameDriver.SUPPLY_CAP);
+        //System.out.println(Consts.GAME_FLOW.currentYear);
+        sectorAmounts = Consts.DB.numInSectors(Consts.GAME_FLOW.currentYear);
+        System.out.println(sectorAmounts);
+        int dbNumInputSupply = sectorAmounts.get(Consts.INPUT_SECTOR_NAME);
+        setAvailableLabel(inputSupplyNumber, dbNumInputSupply, Consts.SUPPLY_CAP);
 
-        int dbNumFarmProduction = sectorAmounts.get(GameDriver.FARM_SECTOR_NAME);
-        setAvailableLabel(farmProductionNumber, dbNumFarmProduction, GameDriver.FARM_CAP);
+        int dbNumFarmProduction = sectorAmounts.get(Consts.FARM_SECTOR_NAME);
+        setAvailableLabel(farmProductionNumber, dbNumFarmProduction, Consts.FARM_CAP);
 
-        int dbNumFoodMarketing = sectorAmounts.get(GameDriver.FOOD_SECTOR_NAME);
-        setAvailableLabel(foodMarketingNumber, dbNumFoodMarketing, GameDriver.FOOD_CAP);
+        int dbNumFoodMarketing = sectorAmounts.get(Consts.FOOD_SECTOR_NAME);
+        setAvailableLabel(foodMarketingNumber, dbNumFoodMarketing, Consts.FOOD_CAP);
 
-        if (dbNumInputSupply >= GameDriver.SUPPLY_CAP) {
+        if (dbNumInputSupply >= Consts.SUPPLY_CAP) {
             inputSupplyButton.setEnabled(false);
         } else
             inputSupplyButton.setEnabled(true);
 
-        if (dbNumFarmProduction >= GameDriver.FARM_CAP) {
+        if (dbNumFarmProduction >= Consts.FARM_CAP) {
             farmProductionButton.setEnabled(false);
         } else
             farmProductionButton.setEnabled(true);
 
-        if (dbNumFoodMarketing >= GameDriver.FOOD_CAP) {
+        if (dbNumFoodMarketing >= Consts.FOOD_CAP) {
             foodMarketingButton.setEnabled(false);
         } else
             foodMarketingButton.setEnabled(true);

@@ -54,7 +54,7 @@ public class InputDecisionPage extends JFrame implements ActionListener {
         backBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GameDriver.DB.removeStudent(student);
+                Consts.DB.removeStudent(student);
                 new CreatePage();
                 setVisible(false);
                 dispose();
@@ -208,7 +208,7 @@ public class InputDecisionPage extends JFrame implements ActionListener {
                 studentSector.setFullSeeds(unitSale, unitPrice);
 
             }
-            GameDriver.DB.saveStudent(student);
+            Consts.DB.saveStudent(student);
             new HomePage(student.uName, student.sector);
             setVisible(false);
             dispose();

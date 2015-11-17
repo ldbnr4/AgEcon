@@ -4,6 +4,7 @@ import java.awt.event.ActionListener;
 
 /**
  * Created by Lorenzo on 10/27/2015.
+ *
  */
 public class AdminDecisionPage extends JFrame implements ActionListener {
     private JLabel nameLabel;
@@ -19,9 +20,9 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
         setContentPane(rootPanel);
         setResizable(false);
         nameLabel.setText("Welcome " + admin.name + "!");
-        //GameDriver.DB.saveGameFlow();
-        numOfPlayersLabel.setText(String.valueOf(GameDriver.GAME_FLOW.totalPlayers));
-        startingYearLabel.setText(String.valueOf(GameDriver.GAME_FLOW.startingYear));
+        //Consts.DB.saveGameFlow();
+        numOfPlayersLabel.setText(String.valueOf(Consts.GAME_FLOW.totalPlayers));
+        startingYearLabel.setText(String.valueOf(Consts.GAME_FLOW.startingYear));
         setLabels();
         rootPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         pack();
@@ -38,9 +39,11 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         JButton button = (JButton) e.getSource();
         if (button.getText().equals(nextYearBtn.getText())) {
-            GameDriver.GAME_FLOW.nextYear();
+            Consts.GAME_FLOW.nextYear();
+            Consts.DB.yearChange(Consts.FORWARD);
         } else {
-            GameDriver.GAME_FLOW.prevYear();
+            Consts.GAME_FLOW.prevYear();
+            Consts.DB.yearChange(Consts.BACK);
         }
         setGameYearLabel();
     }
@@ -50,7 +53,7 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
     }
 
     private void setGameYearLabel() {
-        gameYearLabel.setText(String.valueOf(GameDriver.GAME_FLOW.currentYear));
+        gameYearLabel.setText(String.valueOf(Consts.GAME_FLOW.currentYear));
     }
 
 }

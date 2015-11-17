@@ -9,7 +9,11 @@ public final class FarmTypes {
     public int acres;
     public Double totalCost = (double) 0;
     HashMap<String, Double> costs = new HashMap<>();
-    int yield = 4000;
+    int acreYield = 3990;
+    int ttlYield = acres * acreYield;
+    double bushels = acreYield / 56;
+    double ttlBushels = ttlYield / 56;
+    int lostYield = 10 * acres;
 
     public FarmTypes(char size) {
         setSize(size);
@@ -18,20 +22,16 @@ public final class FarmTypes {
     }
 
     public FarmTypes() {
-        size = GameDriver.NO_FARM;
+        size = Consts.NO_FARM;
         acres = 0;
-    }
-
-    public void setSize(char size) {
-        this.size = size;
     }
 
     public void setAcres() {
         switch (size) {
-            case GameDriver.SMALL_FARM:
+            case Consts.SMALL_FARM:
                 acres = 100;
                 break;
-            case GameDriver.MED_FARM:
+            case Consts.MED_FARM:
                 acres = 250;
                 break;
             default:
@@ -41,31 +41,44 @@ public final class FarmTypes {
     }
 
     public void setCosts() {
-        costs.put("Nitrogen", GameDriver.round(acres * 130 * 0.68 * 1.05));
-        costs.put("Phosphate", GameDriver.round(acres * 50 * 0.9 * 1.05));
-        costs.put("Potash", GameDriver.round(acres * 30 * 0.72 * 1.05));
-        costs.put("Lime", GameDriver.round(acres * .25 * 14 * 1.05));
-        costs.put("Pesticides", GameDriver.round(acres * 20 * 1.05));
-        costs.put("Fuel", GameDriver.round((double) (acres * 20)));
-        costs.put("Repairs", GameDriver.round(acres * 15.23 * 1.05));
-        costs.put("Misc", GameDriver.round(acres * 9 * 1.05));
-        costs.put("InterestOnOperCap", GameDriver.round(acres * 0.09 * 1.05));
-        costs.put("OperLaborCharge", GameDriver.round(acres * 11 * 1.05 * 4));
-        costs.put("Equipment", GameDriver.round(acres * 40 * 1.05));
-        costs.put("LandRent", GameDriver.round(acres * 175 * 1.05));
-        costs.put("GA", GameDriver.round(acres * .05 * (2.5 / 10) * 1.05 * yield));
-        costs.put("R&D", GameDriver.round(acres * .1 * yield * (2.5 / 10) * 1.05));
-        costs.put("Marketing", GameDriver.round(acres * yield * .2 * (2.5 / 10) * 1.05));
-
+        if (size == Consts.SMALL_FARM) {
+            costs.put("Chemicals", Consts.round((0.68 * Consts.INFLATION) * acres * 10));
+            costs.put("Labor", Consts.round((0.9 * Consts.INFLATION) * acres * 10));
+            costs.put("FuelUtils", Consts.round((0.72 * Consts.INFLATION) * acres * 10));
+            costs.put("Cap Equipmnt", Consts.round((14 * Consts.INFLATION) * acres * 10));
+            costs.put("GA", Consts.round((double) (acres * 20)));
+            costs.put("R&D", Consts.round(acres * .1 * ttlYield * (2.5 / 10) * 1.05));
+            costs.put("Marketing", Consts.round(acres * ttlYield * .2 * (2.5 / 10) * 1.05));
+        } else if (size == Consts.MED_FARM) {
+            costs.put("Chemicals", Consts.round((0.68 * Consts.INFLATION * 0.96) * acres * 10));
+            costs.put("Labor", Consts.round((0.9 * Consts.INFLATION * 0.96) * acres * 10));
+            costs.put("FuelUtils", Consts.round((0.72 * Consts.INFLATION * 0.96) * acres * 10));
+            costs.put("Cap Equipmnt", Consts.round((14 * Consts.INFLATION * 0.96) * acres * 10));
+            costs.put("GA", Consts.round((double) (acres * 20)));
+            costs.put("R&D", Consts.round(acres * .1 * ttlYield * (2.5 / 10) * 1.05));
+            costs.put("Marketing", Consts.round(acres * ttlYield * .2 * (2.5 / 10) * 1.05));
+        } else {
+            costs.put("Chemicals", Consts.round((0.68 * Consts.INFLATION * 0.94) * acres * 10));
+            costs.put("Labor", Consts.round((0.9 * Consts.INFLATION * 0.94) * acres * 10));
+            costs.put("FuelUtils", Consts.round((0.72 * Consts.INFLATION * 0.94) * acres * 10));
+            costs.put("Cap Equipmnt", Consts.round((14 * Consts.INFLATION * 0.94) * acres * 10));
+            costs.put("GA", Consts.round((double) (acres * 20)));
+            costs.put("R&D", Consts.round(acres * .1 * ttlYield * (2.5 / 10) * 1.05));
+            costs.put("Marketing", Consts.round(acres * ttlYield * .2 * (2.5 / 10) * 1.05));
+        }
         for (Double cost : costs.values()) {
             totalCost += cost;
         }
 
-        totalCost = GameDriver.round(totalCost);
+        totalCost = Consts.round(totalCost);
     }
 
     public char getSize() {
         return size;
+    }
+
+    public void setSize(char size) {
+        this.size = size;
     }
 
     public int getAcres() {
@@ -77,6 +90,6 @@ public final class FarmTypes {
     }
 
     public int getYield() {
-        return yield;
+        return ttlYield;
     }
 }

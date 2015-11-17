@@ -46,17 +46,17 @@ public class LoginPage extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         String inUse = userNameField.getText();
         String inPass = String.valueOf(passwordField.getPassword());
-        if (GameDriver.checkEmpty(inUse)) {
+        if (Consts.checkEmpty(inUse)) {
             JOptionPane.showMessageDialog(rootPanel, "You did not enter a username.", "Username error", JOptionPane.ERROR_MESSAGE);
             userNameField.setBackground(Color.RED);
-        } else if (GameDriver.checkEmpty(inPass)) {
+        } else if (Consts.checkEmpty(inPass)) {
             JOptionPane.showMessageDialog(rootPanel, "You did not enter a password.", "Password error", JOptionPane.ERROR_MESSAGE);
             passwordField.setBackground(Color.RED);
         }else {
             passwordField.setBackground(Color.GREEN);
             userNameField.setBackground(Color.GREEN);
             if (studentRadioButton.isSelected()) {
-                Student grabbedStudent = GameDriver.DB.getStudent(inUse, GameDriver.GAME_FLOW.currentYear);
+                Student grabbedStudent = Consts.DB.getStudent(inUse, Consts.GAME_FLOW.currentYear);
                 if(grabbedStudent == null){
                     JOptionPane.showMessageDialog(rootPanel, "User account not found. Make sure you are registered and selected the correct user type.", "Username error", JOptionPane.ERROR_MESSAGE);
                     userNameField.setBackground(Color.RED);
@@ -71,13 +71,13 @@ public class LoginPage extends JFrame implements ActionListener {
                         boolean emptyStudent = studentSector.checkIfEmpty();
                         if (emptyStudent) {
                             switch (grabbedStudent.sector.name) {
-                                case GameDriver.INPUT_SECTOR_NAME:
+                                case Consts.INPUT_SECTOR_NAME:
                                     new InputDecisionPage(grabbedStudent);
                                     break;
-                                case GameDriver.FARM_SECTOR_NAME:
+                                case Consts.FARM_SECTOR_NAME:
                                     new FarmerDecisionPage(grabbedStudent);
                                     break;
-                                case GameDriver.FOOD_SECTOR_NAME:
+                                case Consts.FOOD_SECTOR_NAME:
 
                                     break;
                                 default:
@@ -97,7 +97,7 @@ public class LoginPage extends JFrame implements ActionListener {
                 }
             }
             else {
-                Admin grabbedAdmin = GameDriver.DB.getAdmin(inUse);
+                Admin grabbedAdmin = Consts.DB.getAdmin(inUse);
                 if(grabbedAdmin == null){
                     JOptionPane.showMessageDialog(rootPanel, "User account not found. Make sure you are registered and selected the correct user type.", "Username error", JOptionPane.ERROR_MESSAGE);
                     userNameField.setBackground(Color.RED);

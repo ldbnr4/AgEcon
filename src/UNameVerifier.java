@@ -21,7 +21,7 @@ public class UNameVerifier {
         boolean b = in.matches("\\w+");
         //System.out.println(tf);
         balloonTip.setAttachedComponent(tf);
-        Student student = GameDriver.DB.getStudent(in, GameDriver.GAME_FLOW.currentYear);
+        Student student = Consts.DB.getStudent(in, Consts.GAME_FLOW.currentYear);
         if (!length || !b || student != null) {
             tf.setBackground(Color.red);
             if (!length) {

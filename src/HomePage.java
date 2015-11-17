@@ -46,7 +46,7 @@ public class HomePage extends JFrame {
         });
 
         DefaultListModel listModel = new DefaultListModel();
-        HashMap<String, Student> inputSector = GameDriver.DB.getInputSector();
+        HashMap<String, Student> inputSector = Consts.DB.getInputSectorStudents(Consts.GAME_FLOW.currentYear);
         System.out.println(inputSector.size());
         for (Object student : inputSector.values()) {
             System.out.println(student);

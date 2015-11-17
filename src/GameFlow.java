@@ -19,7 +19,6 @@ public class GameFlow {
         setCurrentYear(Calendar.getInstance().get(Calendar.YEAR));
         setStartingYear(Calendar.getInstance().get(Calendar.YEAR));
         setTotalPlayers();
-        GameDriver.DB.addGameFlow(this);
     }
 
 
@@ -32,19 +31,19 @@ public class GameFlow {
     }
 
     public void setTotalPlayers() {
-        this.totalPlayers = GameDriver.DB.getTotalPlayers(currentYear);
+        this.totalPlayers = Consts.DB.getTotalPlayers(currentYear);
     }
 
     public void nextYear() {
         setCurrentYear(this.currentYear + 1);
-        GameDriver.DB.saveGameFlow();
+        Consts.DB.saveGameFlow();
     }
 
     public void prevYear() {
         if (this.currentYear > this.startingYear) {
             setCurrentYear(this.currentYear - 1);
         }
-        GameDriver.DB.saveGameFlow();
+        Consts.DB.saveGameFlow();
     }
 
 }

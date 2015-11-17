@@ -5,16 +5,26 @@ import java.util.HashMap;
  *
  */
 public class InputSector extends Sector {
+    public char size;
     SeedTypes seedTypes;
 
-    public InputSector(int earlySale, int earlyPrice, int midSale, int midPrice, int fullSale, int fullPrice) {
-        super(GameDriver.INPUT_SECTOR_NAME);
-        this.seedTypes = new SeedTypes(earlySale, earlyPrice, midSale, midPrice, fullSale, fullPrice);
+    public InputSector(SeedTypes seeds, char size) {
+        super(Consts.INPUT_SECTOR_NAME);
+        setSeedTypes(seeds);
+        setSize(size);
     }
 
     public InputSector() {
-        super(GameDriver.INPUT_SECTOR_NAME);
+        super(Consts.INPUT_SECTOR_NAME);
         this.seedTypes = new SeedTypes();
+    }
+
+    public void setSize(char size) {
+        this.size = size;
+    }
+
+    public void setSeedTypes(SeedTypes seedTypes) {
+        this.seedTypes = seedTypes;
     }
 
     public void setEarlySeeds(int earlySale, int earlyPrice) {
@@ -48,14 +58,14 @@ public class InputSector extends Sector {
         return seedTypes.getTtlSeeds();
     }
 
-    public HashMap<GameDriver.Seed_Name, Double> getVarietyMarketShare(){
-        HashMap<GameDriver.Seed_Name, Integer> db_ttls = GameDriver.DB.getSeedTotals();
-        HashMap<GameDriver.Seed_Name, Double> sect_shares = new HashMap<>();
+    public HashMap<Consts.Seed_Name, Double> getVarietyMarketShare() {
+        HashMap<Consts.Seed_Name, Integer> db_ttls = Consts.DB.getSeedTotals(Consts.GAME_FLOW.currentYear);
+        HashMap<Consts.Seed_Name, Double> sect_shares = new HashMap<>();
 
-        sect_shares.put(GameDriver.Seed_Name.EARLY, GameDriver.round(((double)getEarlyAmnt()/(double)db_ttls.get(GameDriver.Seed_Name.EARLY))*100));
-        sect_shares.put(GameDriver.Seed_Name.MID, GameDriver.round(((double)getMidAmnt()/(double)db_ttls.get(GameDriver.Seed_Name.MID))*100));
-        sect_shares.put(GameDriver.Seed_Name.FULL, GameDriver.round(((double)getFullAmnt()/(double)db_ttls.get(GameDriver.Seed_Name.FULL))*100));
-        sect_shares.put(GameDriver.Seed_Name.TOTAL, GameDriver.round(((double)getTtlSeedAmnt()/(double)db_ttls.get(GameDriver.Seed_Name.TOTAL))*100));
+        sect_shares.put(Consts.Seed_Name.EARLY, Consts.round(((double) getEarlyAmnt() / (double) db_ttls.get(Consts.Seed_Name.EARLY)) * 100));
+        sect_shares.put(Consts.Seed_Name.MID, Consts.round(((double) getMidAmnt() / (double) db_ttls.get(Consts.Seed_Name.MID)) * 100));
+        sect_shares.put(Consts.Seed_Name.FULL, Consts.round(((double) getFullAmnt() / (double) db_ttls.get(Consts.Seed_Name.FULL)) * 100));
+        sect_shares.put(Consts.Seed_Name.TOTAL, Consts.round(((double) getTtlSeedAmnt() / (double) db_ttls.get(Consts.Seed_Name.TOTAL)) * 100));
 
         return sect_shares;
     }

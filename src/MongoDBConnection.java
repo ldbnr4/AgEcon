@@ -4,7 +4,6 @@ import org.mongodb.morphia.Morphia;
 import java.net.UnknownHostException;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Objects;
 
 /**
  * Created by Lorenzo on 10/6/2015.
@@ -45,8 +44,8 @@ public class MongoDBConnection{
         morphia.map(GameFlow.class);
         DB db = openConnection();
         DBCollection coll = db.getCollection("gameFlow");
-        coll.remove(new BasicDBObject("_id", GameDriver.GAME_FLOW.name));
-        DBObject gameFlowObj = morphia.toDBObject(GameDriver.GAME_FLOW);
+        coll.remove(new BasicDBObject("_id", Consts.GAME_FLOW.name));
+        DBObject gameFlowObj = morphia.toDBObject(Consts.GAME_FLOW);
         coll.insert(gameFlowObj);
     }
 
@@ -94,115 +93,81 @@ public class MongoDBConnection{
         return morphia.fromDBObject(GameFlow.class, person);
     }
 
-    public HashMap<String, Student> getInputSector() {
+    public HashMap<String, Student> getInputSectorStudents(int year) {
         HashMap<String, Student> list = new HashMap<>();
-        Morphia morphia = new Morphia();
-        morphia.map(Student.class).map(Sector.class);
+        Morphia morphia = new Morphia().map(Student.class).map(Sector.class);
+        Student student;
 
-        DB db = openConnection();
-        DBCollection coll = db.getCollection("users");
-        try (DBCursor cursor = coll.find()) {
+        try (DBCursor cursor = openConnection().getCollection("users").find(querySector(Consts.INPUT_SECTOR_NAME, year))) {
             while (cursor.hasNext()) {
-                Student student = morphia.fromDBObject(Student.class, cursor.next());
-                if (Objects.equals(student.sector.name, GameDriver.INPUT_SECTOR_NAME)) {
+                student = morphia.fromDBObject(Student.class, cursor.next());
                     list.put(student.uName, student);
-                }
             }
         }
         return list;
     }
 
     public int getTotalPlayers(int year) {
-        DB db = openConnection();
-
-        return (int) db.getCollection("users").count(new BasicDBObject("year", year));
+        return (int) openConnection().getCollection("users").count(new BasicDBObject("year", year));
     }
 
-    public HashMap<GameDriver.Seed_Name, Integer> getSeedTotals(){
-        Morphia morphia = new Morphia();
-        morphia.map(Student.class).map(Sector.class);
-        DB db = openConnection();
-        DBCollection coll = db.getCollection("users");
-        HashMap<GameDriver.Seed_Name, Integer> seedTtls = new HashMap<>();
-        seedTtls.put(GameDriver.Seed_Name.EARLY, 0);
-        seedTtls.put(GameDriver.Seed_Name.MID, 0);
-        seedTtls.put(GameDriver.Seed_Name.FULL, 0);
-        seedTtls.put(GameDriver.Seed_Name.TOTAL, 0);
+    public HashMap<Consts.Seed_Name, Integer> getSeedTotals(int year) {
+        Morphia morphia = new Morphia().map(Student.class).map(Sector.class);
+        HashMap<Consts.Seed_Name, Integer> seedTtls = new HashMap<>();
+        seedTtls.put(Consts.Seed_Name.EARLY, 0);
+        seedTtls.put(Consts.Seed_Name.MID, 0);
+        seedTtls.put(Consts.Seed_Name.FULL, 0);
+        seedTtls.put(Consts.Seed_Name.TOTAL, 0);
         Student student;
         InputSector studentSector;
-        try (DBCursor cursor = coll.find()) {
+        try (DBCursor cursor = openConnection().getCollection("users").find(querySector(Consts.INPUT_SECTOR_NAME, year))) {
             while (cursor.hasNext()) {
                 student = morphia.fromDBObject(Student.class, cursor.next());
-                if(student.sector instanceof InputSector) {
-                    studentSector = (InputSector) student.sector;
-                    seedTtls.put(GameDriver.Seed_Name.EARLY,
-                            seedTtls.get(GameDriver.Seed_Name.EARLY) + studentSector.getEarlyAmnt());
-                    seedTtls.put(GameDriver.Seed_Name.MID,
-                            seedTtls.get(GameDriver.Seed_Name.MID) + studentSector.getMidAmnt());
-                    seedTtls.put(GameDriver.Seed_Name.FULL,
-                            seedTtls.get(GameDriver.Seed_Name.FULL) + studentSector.getFullAmnt());
-                }
+                studentSector = (InputSector) student.sector;
+                seedTtls.put(Consts.Seed_Name.EARLY,
+                        seedTtls.get(Consts.Seed_Name.EARLY) + studentSector.getEarlyAmnt());
+                seedTtls.put(Consts.Seed_Name.MID,
+                        seedTtls.get(Consts.Seed_Name.MID) + studentSector.getMidAmnt());
+                seedTtls.put(Consts.Seed_Name.FULL,
+                        seedTtls.get(Consts.Seed_Name.FULL) + studentSector.getFullAmnt());
             }
         }
 
         for(int x : seedTtls.values()){
-            seedTtls.put(GameDriver.Seed_Name.TOTAL,
-                    seedTtls.get(GameDriver.Seed_Name.TOTAL) + x);
+            seedTtls.put(Consts.Seed_Name.TOTAL,
+                    seedTtls.get(Consts.Seed_Name.TOTAL) + x);
         }
         return seedTtls;
     }
 
-    public HashMap<String, Integer> numInSectors() {
-        Morphia morphia = new Morphia();
-        morphia.map(Student.class).map(Sector.class);
-
-        DB db = openConnection();
-        DBCollection coll = db.getCollection("users");
+    public HashMap<String, Integer> numInSectors(int year) {
         HashMap<String, Integer> numRes = new HashMap<>();
-        numRes.put(GameDriver.INPUT_SECTOR_NAME, 0);
-        numRes.put(GameDriver.FARM_SECTOR_NAME, 0);
-        numRes.put(GameDriver.FOOD_SECTOR_NAME, 0);
-        try (DBCursor cursor = coll.find()) {
-            while (cursor.hasNext()) {
-                Student student = morphia.fromDBObject(Student.class, cursor.next());
-                //System.out.println(student.uName.matches("[a-zA-Z]+"));
-                numRes.put(student.sector.name, numRes.get(student.sector.name) + 1);
-            }
-        }
-        //System.out.println(numRes);
+
+        numRes.put(Consts.INPUT_SECTOR_NAME,
+                (int) openConnection().getCollection("users").count(querySector(Consts.INPUT_SECTOR_NAME, year)));
+        numRes.put(Consts.FARM_SECTOR_NAME,
+                (int) openConnection().getCollection("users").count(querySector(Consts.FARM_SECTOR_NAME, year)));
+        numRes.put(Consts.FOOD_SECTOR_NAME,
+                (int) openConnection().getCollection("users").count(querySector(Consts.FOOD_SECTOR_NAME, year)));
+
         return numRes;
     }
 
-    public HashMap<Character, Integer> numInFarms() {
-        Morphia morphia = new Morphia();
-        morphia.map(Student.class).map(Sector.class);
-
-        DB db = openConnection();
-        DBCollection coll = db.getCollection("users");
+    public HashMap<Character, Integer> numInEachFarm(int year) {
         HashMap<Character, Integer> numRes = new HashMap<>();
-        numRes.put(GameDriver.SMALL_FARM, 0);
-        numRes.put(GameDriver.MED_FARM, 0);
-        numRes.put(GameDriver.LARGE_FARM, 0);
-        numRes.put(GameDriver.NO_FARM, 0);
-        FarmSector studentSector;
-        Student student;
-        try (DBCursor cursor = coll.find()) {
-            while (cursor.hasNext()) {
-                student = morphia.fromDBObject(Student.class, cursor.next());
-                //System.out.println(student.uName.matches("[a-zA-Z]+"));
-                if (student.sector.name.equals(GameDriver.FARM_SECTOR_NAME)) {
-                    studentSector = (FarmSector) student.sector;
-                    if(studentSector.farm != null) {
-                        numRes.put(studentSector.farm.size, numRes.get(studentSector.farm.size) + 1);
-                    }
-                    else {
-                        System.out.println(student.uName);
-                    }
-                }
-                //numRes.put(student.sector, numRes.get(student.sector.name) + 1);
-            }
-        }
-        //System.out.println(numRes);
+
+        numRes.put(Consts.SMALL_FARM,
+                (int) openConnection().getCollection("users")
+                        .count(querySector(Consts.FARM_SECTOR_NAME, year).append("sector.farm", Consts.SMALL_FARM)));
+        numRes.put(Consts.MED_FARM,
+                (int) openConnection().getCollection("users")
+                        .count(querySector(Consts.FARM_SECTOR_NAME, year).append("sector.farm", Consts.MED_FARM)));
+        numRes.put(Consts.LARGE_FARM,
+                (int) openConnection().getCollection("users")
+                        .count(querySector(Consts.FARM_SECTOR_NAME, year).append("sector.farm", Consts.LARGE_FARM)));
+        numRes.put(Consts.NO_FARM,
+                (int) openConnection().getCollection("users")
+                        .count(querySector(Consts.FARM_SECTOR_NAME, year).append("sector.farm", Consts.NO_FARM)));
         return numRes;
     }
 
@@ -213,7 +178,7 @@ public class MongoDBConnection{
         DBCollection coll = db.getCollection("users");
         DBObject studentObj = morphia.toDBObject(student);
         coll.insert(studentObj);
-        GameDriver.GAME_FLOW.setTotalPlayers();
+        Consts.GAME_FLOW.setTotalPlayers();
         saveGameFlow();
     }
 
@@ -227,8 +192,39 @@ public class MongoDBConnection{
         openConnection().getCollection("gameFlow").insert(gameFlowObj);
     }
 
-    public void newYearStudents(int year){
+    public void yearChange(int dir) {
+        int newYr = Consts.GAME_FLOW.currentYear;
+        int oldYr = newYr + dir;
+        int newTtl = getTotalPlayers(newYr);
+        int oldTtl = getTotalPlayers(oldYr);
 
+        if (oldTtl > newTtl) {
+            try (DBCursor users = openConnection().getCollection("users").find(new BasicDBObject("year", oldYr))) {
+                Student student;
+                while (users.hasNext()) {
+                    if (getStudent((String) users.next().get("_id"), newYr) == null) {
+                        student = getStudent((String) users.next().get("_id"), oldYr);
+                        student.setYear(newYr);
+                        addStudent(student);
+                    }
+                }
+            }
+        } else if (oldTtl < newTtl) {
+            try (DBCursor users = openConnection().getCollection("users").find(new BasicDBObject("year", newYr))) {
+                Student student;
+                while (users.hasNext()) {
+                    if (getStudent((String) users.next().get("_id"), oldYr) == null) {
+                        student = getStudent((String) users.next().get("_id"), newYr);
+                        student.setYear(oldYr);
+                        addStudent(student);
+                    }
+                }
+            }
+        }
+    }
+
+    private BasicDBObject querySector(String sector, int year) {
+        return new BasicDBObject("year", year).append("sector.name", sector);
     }
 
     private DB openConnection() {

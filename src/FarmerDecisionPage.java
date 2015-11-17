@@ -52,7 +52,7 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
         backBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GameDriver.DB.removeStudent(student);
+                Consts.DB.removeStudent(student);
                 new CreatePage();
                 setVisible(false);
                 dispose();
@@ -65,41 +65,41 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
         JButton button = (JButton) e.getSource();
         if (farmCheck(button)) {
             if (button.equals(smallFarmBtn)) {
-                studentSector.setFarmSize(GameDriver.SMALL_FARM);
+                studentSector.setFarmSize(Consts.SMALL_FARM);
             } else if (button.equals(medFarmBtn)) {
-                studentSector.setFarmSize(GameDriver.MED_FARM);
+                studentSector.setFarmSize(Consts.MED_FARM);
             } else {
-                studentSector.setFarmSize(GameDriver.LARGE_FARM);
+                studentSector.setFarmSize(Consts.LARGE_FARM);
             }
         }
-        GameDriver.DB.saveStudent(student);
+        Consts.DB.saveStudent(student);
         new HomePage(student.uName, student.sector);
         setVisible(false);
         dispose();
     }
 
     private void updateBtns() {
-        farmSizeAmounts = GameDriver.DB.numInFarms();
-        int dbNumOfSmall = farmSizeAmounts.get(GameDriver.SMALL_FARM);
-        setAvailableLabel(smallAmntLbl, dbNumOfSmall, GameDriver.S_FARM_CAP);
+        farmSizeAmounts = Consts.DB.numInEachFarm(Consts.GAME_FLOW.currentYear);
+        int dbNumOfSmall = farmSizeAmounts.get(Consts.SMALL_FARM);
+        setAvailableLabel(smallAmntLbl, dbNumOfSmall, Consts.S_FARM_CAP);
 
-        int dbNumOfMed = farmSizeAmounts.get(GameDriver.MED_FARM);
-        setAvailableLabel(medAmntLbl, dbNumOfMed, GameDriver.M_FARM_CAP);
+        int dbNumOfMed = farmSizeAmounts.get(Consts.MED_FARM);
+        setAvailableLabel(medAmntLbl, dbNumOfMed, Consts.M_FARM_CAP);
 
-        int dbNumOfLrg = farmSizeAmounts.get(GameDriver.LARGE_FARM);
-        setAvailableLabel(largeAmntLbl, dbNumOfLrg, GameDriver.L_FARM_CAP);
+        int dbNumOfLrg = farmSizeAmounts.get(Consts.LARGE_FARM);
+        setAvailableLabel(largeAmntLbl, dbNumOfLrg, Consts.L_FARM_CAP);
 
-        if (dbNumOfSmall >= GameDriver.S_FARM_CAP) {
+        if (dbNumOfSmall >= Consts.S_FARM_CAP) {
             smallFarmBtn.setEnabled(false);
         } else
             smallFarmBtn.setEnabled(true);
 
-        if (dbNumOfMed >= GameDriver.M_FARM_CAP) {
+        if (dbNumOfMed >= Consts.M_FARM_CAP) {
             medFarmBtn.setEnabled(false);
         } else
             medFarmBtn.setEnabled(true);
 
-        if (dbNumOfLrg >= GameDriver.L_FARM_CAP) {
+        if (dbNumOfLrg >= Consts.L_FARM_CAP) {
             largeFarmBtn.setEnabled(false);
         } else
             largeFarmBtn.setEnabled(true);
@@ -123,15 +123,15 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
         int farmLimit;
         char farmSize;
         if (farm.equals(smallFarmBtn)) {
-            farmLimit = GameDriver.S_FARM_CAP;
-            farmSize = GameDriver.SMALL_FARM;
+            farmLimit = Consts.S_FARM_CAP;
+            farmSize = Consts.SMALL_FARM;
 
         } else if (farm.equals(medFarmBtn)) {
-            farmLimit = GameDriver.M_FARM_CAP;
-            farmSize = GameDriver.MED_FARM;
+            farmLimit = Consts.M_FARM_CAP;
+            farmSize = Consts.MED_FARM;
         } else {
-            farmLimit = GameDriver.L_FARM_CAP;
-            farmSize = GameDriver.LARGE_FARM;
+            farmLimit = Consts.L_FARM_CAP;
+            farmSize = Consts.LARGE_FARM;
         }
 
         if (farmSizeAmounts.get(farmSize) >= farmLimit) {
