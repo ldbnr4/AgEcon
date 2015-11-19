@@ -17,7 +17,6 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
     JButton smallFarmBtn;
     JButton medFarmBtn;
     JButton largeFarmBtn;
-    JButton refreshBtn;
     JLabel smallAmntLbl;
     JLabel medAmntLbl;
     JLabel largeAmntLbl;
@@ -52,12 +51,6 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
 
         new Thread(r).start();
 
-        refreshBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                updateBtns();
-            }
-        });
         backBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
