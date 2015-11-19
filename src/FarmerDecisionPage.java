@@ -53,7 +53,7 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Consts.DB.removeStudent(student);
-                new CreatePage();
+                new CreatePage(student.uName);
                 setVisible(false);
                 dispose();
             }

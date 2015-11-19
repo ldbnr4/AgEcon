@@ -94,7 +94,9 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
 
             @Override
             public void focusLost(FocusEvent e) {
-                passwordVerifier.verifyLive(passwordPasswordField);
+                if (usernameTextField.getBackground() == Color.green) {
+                    passwordVerifier.verifyLive(passwordPasswordField);
+                }
             }
         });
         confPassVerifier = new PassVerifier(confPassBalloonTip);
@@ -105,8 +107,10 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
 
             @Override
             public void focusLost(FocusEvent e) {
-                if (!confPassVerifier.verifyLive(confirmPasswordPasswordField)) {
-                } else confPassVerifier.verifyMatch(passwordPasswordField, confirmPasswordPasswordField);
+                if (usernameTextField.getBackground() == Color.green && passwordPasswordField.getBackground() == Color.green) {
+                    if (!confPassVerifier.verifyLive(confirmPasswordPasswordField)) {
+                    } else confPassVerifier.verifyMatch(passwordPasswordField, confirmPasswordPasswordField);
+                }
 
             }
         });
@@ -114,6 +118,92 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
         inputSupplyButton.setText(Consts.INPUT_SECTOR_NAME);
         farmProductionButton.setText(Consts.FARM_SECTOR_NAME);
         foodMarketingButton.setText(Consts.FOOD_SECTOR_NAME);
+
+        pack();
+        setResizable(false);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setVisible(true);
+    }
+
+    public CreatePage(String username) {
+        super("Create Account");
+        setContentPane(rootPanel);
+        updateBtns();
+
+        modern = new MinimalBalloonStyle(Color.white, 5);
+        uNameBalloonTip = new BalloonTip(usernameTextField, new JLabel(), modern, BalloonTip.Orientation.RIGHT_ABOVE, BalloonTip.AttachLocation.ALIGNED, 10, 10, false);
+        this.uNameBalloonTip.setVisible(false);
+        passBalloonTip = new BalloonTip(passwordPasswordField, new JLabel(), modern, BalloonTip.Orientation.RIGHT_ABOVE, BalloonTip.AttachLocation.ALIGNED, 10, 10, false);
+        this.passBalloonTip.setVisible(false);
+        confPassBalloonTip = new BalloonTip(confirmPasswordPasswordField, new JLabel(), modern, BalloonTip.Orientation.RIGHT_ABOVE, BalloonTip.AttachLocation.ALIGNED, 10, 10, false);
+        this.confPassBalloonTip.setVisible(false);
+
+        inputSupplyButton.addActionListener(this);
+        farmProductionButton.addActionListener(this);
+        foodMarketingButton.addActionListener(this);
+
+        loginButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new LoginPage();
+                setVisible(false);
+                dispose();
+            }
+        });
+
+        refreshButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateBtns();
+            }
+        });
+
+        usernameVerifier = new UNameVerifier(uNameBalloonTip);
+        usernameTextField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                usernameVerifier.verify(usernameTextField);
+            }
+        });
+        passwordVerifier = new PassVerifier(passBalloonTip);
+        passwordPasswordField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (usernameTextField.getBackground() == Color.green) {
+                    passwordVerifier.verifyLive(passwordPasswordField);
+                }
+            }
+        });
+        confPassVerifier = new PassVerifier(confPassBalloonTip);
+        confirmPasswordPasswordField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (usernameTextField.getBackground() == Color.green && passwordPasswordField.getBackground() == Color.green) {
+                    if (!confPassVerifier.verifyLive(confirmPasswordPasswordField)) {
+                    } else confPassVerifier.verifyMatch(passwordPasswordField, confirmPasswordPasswordField);
+                }
+
+            }
+        });
+
+        inputSupplyButton.setText(Consts.INPUT_SECTOR_NAME);
+        farmProductionButton.setText(Consts.FARM_SECTOR_NAME);
+        foodMarketingButton.setText(Consts.FOOD_SECTOR_NAME);
+
+        usernameTextField.setText(username);
 
         pack();
         setResizable(false);
@@ -188,7 +278,7 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
         //(new Thread(new CreatePage())).start();
         //System.out.println(Consts.GAME_FLOW.currentYear);
         sectorAmounts = Consts.DB.numInSectors(Consts.GAME_FLOW.currentYear);
-        System.out.println(sectorAmounts);
+        //System.out.println(sectorAmounts);
         int dbNumInputSupply = sectorAmounts.get(Consts.INPUT_SECTOR_NAME);
         setAvailableLabel(inputSupplyNumber, dbNumInputSupply, Consts.SUPPLY_CAP);
 

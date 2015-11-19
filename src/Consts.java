@@ -1,5 +1,6 @@
 /**
  * Created by Lorenzo on 11/12/2015.
+ *
  */
 public class Consts {
     public static final String INPUT_SECTOR_NAME = "Input Supply";
