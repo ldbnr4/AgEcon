@@ -6,21 +6,22 @@ import java.util.HashMap;
 
 /**
  * Created by Lorenzo on 10/22/2015.
+ *
  */
 public class FarmerDecisionPage extends JFrame implements ActionListener {
     Student student;
     FarmSector studentSector;
     HashMap<Character, Integer> farmSizeAmounts;
-    private JPanel rootPanel;
-    private JLabel farmerLabel;
-    private JButton smallFarmBtn;
-    private JButton medFarmBtn;
-    private JButton largeFarmBtn;
-    private JButton refreshBtn;
-    private JLabel smallAmntLbl;
-    private JLabel medAmntLbl;
-    private JLabel largeAmntLbl;
-    private JButton backBtn;
+    JPanel rootPanel;
+    JLabel farmerLabel;
+    JButton smallFarmBtn;
+    JButton medFarmBtn;
+    JButton largeFarmBtn;
+    JButton refreshBtn;
+    JLabel smallAmntLbl;
+    JLabel medAmntLbl;
+    JLabel largeAmntLbl;
+    JButton backBtn;
 
 
     public FarmerDecisionPage(final Student student) {
@@ -41,7 +42,15 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
         medFarmBtn.addActionListener(this);
         largeFarmBtn.addActionListener(this);
 
-        updateBtns();
+        Runnable r = new Runnable() {
+            public void run() {
+                while (isVisible()) {
+                    updateBtns();
+                }
+            }
+        };
+
+        new Thread(r).start();
 
         refreshBtn.addActionListener(new ActionListener() {
             @Override
@@ -80,6 +89,7 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
 
     private void updateBtns() {
         farmSizeAmounts = Consts.DB.numInEachFarm(Consts.GAME_FLOW.currentYear);
+        System.out.println(farmSizeAmounts);
         int dbNumOfSmall = farmSizeAmounts.get(Consts.SMALL_FARM);
         setAvailableLabel(smallAmntLbl, dbNumOfSmall, Consts.S_FARM_CAP);
 

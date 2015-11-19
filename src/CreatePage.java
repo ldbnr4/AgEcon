@@ -109,7 +109,7 @@ public class CreatePage extends JFrame implements ActionListener {
 
         Runnable r = new Runnable() {
             public void run() {
-                while (true) {
+                while (isVisible()) {
                     updateBtns();
                 }
             }
@@ -190,7 +190,7 @@ public class CreatePage extends JFrame implements ActionListener {
 
         Runnable r = new Runnable() {
             public void run() {
-                while (true) {
+                while (isVisible()) {
                     updateBtns();
                 }
             }

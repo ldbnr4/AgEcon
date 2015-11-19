@@ -156,16 +156,16 @@ public class MongoDBConnection{
 
         numRes.put(Consts.SMALL_FARM,
                 (int) openConnection().getCollection("users")
-                        .count(querySector(Consts.FARM_SECTOR_NAME, year).append("sector.farm", Consts.SMALL_FARM)));
+                        .count(querySector(Consts.FARM_SECTOR_NAME, year).append("sector.farm.size", Consts.SMALL_FARM)));
         numRes.put(Consts.MED_FARM,
                 (int) openConnection().getCollection("users")
-                        .count(querySector(Consts.FARM_SECTOR_NAME, year).append("sector.farm", Consts.MED_FARM)));
+                        .count(querySector(Consts.FARM_SECTOR_NAME, year).append("sector.farm.size", Consts.MED_FARM)));
         numRes.put(Consts.LARGE_FARM,
                 (int) openConnection().getCollection("users")
-                        .count(querySector(Consts.FARM_SECTOR_NAME, year).append("sector.farm", Consts.LARGE_FARM)));
+                        .count(querySector(Consts.FARM_SECTOR_NAME, year).append("sector.farm.size", Consts.LARGE_FARM)));
         numRes.put(Consts.NO_FARM,
                 (int) openConnection().getCollection("users")
-                        .count(querySector(Consts.FARM_SECTOR_NAME, year).append("sector.farm", Consts.NO_FARM)));
+                        .count(querySector(Consts.FARM_SECTOR_NAME, year).append("sector.farm.size", Consts.NO_FARM)));
         return numRes;
     }
 
