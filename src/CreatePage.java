@@ -12,26 +12,23 @@ import java.util.HashMap;
 
 /**
  * Created by Lorenzo on 9/18/2015.
+ *
  */
-public class CreatePage extends JFrame implements ActionListener/*, Runnable */ {
-    private JPanel rootPanel;
-    private JButton foodMarketingButton;
-    private JButton inputSupplyButton;
-    private JButton farmProductionButton;
-    private JTextField usernameTextField;
-    private JPasswordField passwordPasswordField;
-    private JPasswordField confirmPasswordPasswordField;
-    private JButton loginButton;
-    private JLabel inputSupplyNumber;
-    private JLabel farmProductionNumber;
-    private JLabel foodMarketingNumber;
-    private JButton refreshButton;
-    private JPanel loginPanel;
-    private JLabel loginLabel;
-    private JLabel selectSectLabel;
-    private JPanel createAcntPanel;
-    private JPanel SelectSectPanel;
-    private JPanel buttonsPanel;
+public class CreatePage extends JFrame implements ActionListener {
+    JPanel rootPanel;
+    JButton foodMarketingButton;
+    JButton farmProductionButton;
+    JTextField usernameTextField;
+    JPasswordField passwordPasswordField;
+    JPasswordField confirmPasswordPasswordField;
+    JButton loginButton;
+    JLabel farmProductionNumber;
+    JLabel foodMarketingNumber;
+    JPanel loginPanel;
+    JLabel loginLabel;
+    JLabel selectSectLabel;
+    JPanel createAcntPanel;
+    JPanel buttonsPanel;
     private BalloonTipStyle modern;
     private BalloonTip uNameBalloonTip;
     private BalloonTip passBalloonTip;
@@ -40,12 +37,11 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
     private PassVerifier passwordVerifier;
     private PassVerifier confPassVerifier;
     private HashMap<String, Integer> sectorAmounts;
-    private volatile boolean isRunning = true;
+    //private volatile boolean isRunning = true;
 
     public CreatePage() {
         super("Create Account");
         setContentPane(rootPanel);
-        updateBtns();
 
         modern = new MinimalBalloonStyle(Color.white, 5);
         uNameBalloonTip = new BalloonTip(usernameTextField, new JLabel(), modern, BalloonTip.Orientation.RIGHT_ABOVE, BalloonTip.AttachLocation.ALIGNED, 10, 10, false);
@@ -55,7 +51,6 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
         confPassBalloonTip = new BalloonTip(confirmPasswordPasswordField, new JLabel(), modern, BalloonTip.Orientation.RIGHT_ABOVE, BalloonTip.AttachLocation.ALIGNED, 10, 10, false);
         this.confPassBalloonTip.setVisible(false);
 
-        inputSupplyButton.addActionListener(this);
         farmProductionButton.addActionListener(this);
         foodMarketingButton.addActionListener(this);
 
@@ -68,12 +63,6 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
             }
         });
 
-        refreshButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                updateBtns();
-            }
-        });
 
         usernameVerifier = new UNameVerifier(uNameBalloonTip);
         usernameTextField.addFocusListener(new FocusListener() {
@@ -115,9 +104,18 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
             }
         });
 
-        inputSupplyButton.setText(Consts.INPUT_SECTOR_NAME);
         farmProductionButton.setText(Consts.FARM_SECTOR_NAME);
         foodMarketingButton.setText(Consts.FOOD_SECTOR_NAME);
+
+        Runnable r = new Runnable() {
+            public void run() {
+                while (true) {
+                    updateBtns();
+                }
+            }
+        };
+
+        new Thread(r).start();
 
         pack();
         setResizable(false);
@@ -129,7 +127,6 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
     public CreatePage(String username) {
         super("Create Account");
         setContentPane(rootPanel);
-        updateBtns();
 
         modern = new MinimalBalloonStyle(Color.white, 5);
         uNameBalloonTip = new BalloonTip(usernameTextField, new JLabel(), modern, BalloonTip.Orientation.RIGHT_ABOVE, BalloonTip.AttachLocation.ALIGNED, 10, 10, false);
@@ -139,7 +136,6 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
         confPassBalloonTip = new BalloonTip(confirmPasswordPasswordField, new JLabel(), modern, BalloonTip.Orientation.RIGHT_ABOVE, BalloonTip.AttachLocation.ALIGNED, 10, 10, false);
         this.confPassBalloonTip.setVisible(false);
 
-        inputSupplyButton.addActionListener(this);
         farmProductionButton.addActionListener(this);
         foodMarketingButton.addActionListener(this);
 
@@ -149,13 +145,6 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
                 new LoginPage();
                 setVisible(false);
                 dispose();
-            }
-        });
-
-        refreshButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                updateBtns();
             }
         });
 
@@ -199,7 +188,16 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
             }
         });
 
-        inputSupplyButton.setText(Consts.INPUT_SECTOR_NAME);
+        Runnable r = new Runnable() {
+            public void run() {
+                while (true) {
+                    updateBtns();
+                }
+            }
+        };
+
+        new Thread(r).start();
+
         farmProductionButton.setText(Consts.FARM_SECTOR_NAME);
         foodMarketingButton.setText(Consts.FOOD_SECTOR_NAME);
 
@@ -229,10 +227,6 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
                 Student student = null;
 
                 switch (selectedSect) {
-                    case Consts.INPUT_SECTOR_NAME:
-                        student = new Student(usernameTextField.getText(), String.valueOf(passwordPasswordField.getPassword()), new InputSector());
-                        new InputDecisionPage(student);
-                        break;
                     case Consts.FARM_SECTOR_NAME:
                         student = new Student(usernameTextField.getText(), String.valueOf(passwordPasswordField.getPassword()), new FarmSector());
                         new FarmerDecisionPage(student);
@@ -252,9 +246,6 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
     private boolean sectCheck(String sector) {
         int sectLimit;
         switch (sector) {
-            case Consts.INPUT_SECTOR_NAME:
-                sectLimit = Consts.SUPPLY_CAP;
-                break;
             case Consts.FARM_SECTOR_NAME:
                 sectLimit = Consts.FARM_CAP;
                 break;
@@ -275,23 +266,13 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
     }
 
     private void updateBtns() {
-        //(new Thread(new CreatePage())).start();
-        //System.out.println(Consts.GAME_FLOW.currentYear);
         sectorAmounts = Consts.DB.numInSectors(Consts.GAME_FLOW.currentYear);
-        //System.out.println(sectorAmounts);
-        int dbNumInputSupply = sectorAmounts.get(Consts.INPUT_SECTOR_NAME);
-        setAvailableLabel(inputSupplyNumber, dbNumInputSupply, Consts.SUPPLY_CAP);
 
         int dbNumFarmProduction = sectorAmounts.get(Consts.FARM_SECTOR_NAME);
         setAvailableLabel(farmProductionNumber, dbNumFarmProduction, Consts.FARM_CAP);
 
         int dbNumFoodMarketing = sectorAmounts.get(Consts.FOOD_SECTOR_NAME);
         setAvailableLabel(foodMarketingNumber, dbNumFoodMarketing, Consts.FOOD_CAP);
-
-        if (dbNumInputSupply >= Consts.SUPPLY_CAP) {
-            inputSupplyButton.setEnabled(false);
-        } else
-            inputSupplyButton.setEnabled(true);
 
         if (dbNumFarmProduction >= Consts.FARM_CAP) {
             farmProductionButton.setEnabled(false);
@@ -302,8 +283,6 @@ public class CreatePage extends JFrame implements ActionListener/*, Runnable */ 
             foodMarketingButton.setEnabled(false);
         } else
             foodMarketingButton.setEnabled(true);
-
-        //kill();
     }
 
     private void setAvailableLabel(JLabel label, int num, int limit) {

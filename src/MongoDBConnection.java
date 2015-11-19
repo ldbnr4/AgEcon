@@ -143,8 +143,6 @@ public class MongoDBConnection{
     public HashMap<String, Integer> numInSectors(int year) {
         HashMap<String, Integer> numRes = new HashMap<>();
 
-        numRes.put(Consts.INPUT_SECTOR_NAME,
-                (int) openConnection().getCollection("users").count(querySector(Consts.INPUT_SECTOR_NAME, year)));
         numRes.put(Consts.FARM_SECTOR_NAME,
                 (int) openConnection().getCollection("users").count(querySector(Consts.FARM_SECTOR_NAME, year)));
         numRes.put(Consts.FOOD_SECTOR_NAME,
