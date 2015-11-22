@@ -101,8 +101,9 @@ public class CreatePage extends JFrame implements ActionListener {
             @Override
             public void focusLost(FocusEvent e) {
                 if (usernameTextField.getBackground() == Color.green && passwordPasswordField.getBackground() == Color.green) {
-                    if (!confPassVerifier.verifyLive(confirmPasswordPasswordField)) {
-                    } else confPassVerifier.verifyMatch(passwordPasswordField, confirmPasswordPasswordField);
+                    if (confPassVerifier.verifyLive(confirmPasswordPasswordField)) {
+                        confPassVerifier.verifyMatch(passwordPasswordField, confirmPasswordPasswordField);
+                    }
                 }
 
             }
@@ -183,8 +184,9 @@ public class CreatePage extends JFrame implements ActionListener {
             @Override
             public void focusLost(FocusEvent e) {
                 if (usernameTextField.getBackground() == Color.green && passwordPasswordField.getBackground() == Color.green) {
-                    if (!confPassVerifier.verifyLive(confirmPasswordPasswordField)) {
-                    } else confPassVerifier.verifyMatch(passwordPasswordField, confirmPasswordPasswordField);
+                    if (confPassVerifier.verifyLive(confirmPasswordPasswordField)) {
+                        confPassVerifier.verifyMatch(passwordPasswordField, confirmPasswordPasswordField);
+                    }
                 }
 
             }

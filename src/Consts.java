@@ -10,9 +10,6 @@ public class Consts {
     public static final String INPUT_SECTOR_NAME = "Input Supply";
     public static final String FARM_SECTOR_NAME = "Farm Production";
     public static final String FOOD_SECTOR_NAME = "Food Marketing";
-    public static final int SUPPLY_CAP = 5;
-    public static final int FARM_CAP = 20;
-    public static final int FOOD_CAP = 5;
     public static final char SMALL_FARM = 'S';
     public static final char MED_FARM = 'M';
     public static final char LARGE_FARM = 'L';

@@ -36,7 +36,7 @@ public class FarmSector extends Sector {
         return farm.getTotalCost();
     }
 
-    public int getFarmYld(){
-        return farm.getYield();
+    public int getTTLFarmYld() {
+        return farm.getTtlYield();
     }
 }
