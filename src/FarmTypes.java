@@ -16,17 +16,7 @@ public final class FarmTypes {
 
     public FarmTypes(char size) {
         setSize(size);
-        switch (size) {
-            case Consts.SMALL_FARM:
-                setAcres(100);
-                break;
-            case Consts.MED_FARM:
-                setAcres(250);
-                break;
-            default:
-                setAcres(500);
-                break;
-        }
+        setAcres(size);
         setCosts();
         setTtlYield(acreYield * acres);
         setTtlBushels(ttlYield / 56);
@@ -121,14 +111,25 @@ public final class FarmTypes {
 
     public void setSize(char size) {
         this.size = size;
+        setAcres(size);
     }
 
     public int getAcres() {
         return acres;
     }
 
-    public void setAcres(int acres) {
-        this.acres = acres;
+    public void setAcres(char size) {
+        switch (size) {
+            case Consts.SMALL_FARM:
+                acres = 100;
+                break;
+            case Consts.MED_FARM:
+                acres = 250;
+                break;
+            default:
+                acres = 500;
+                break;
+        }
     }
 
     public Double getTotalCost() {

@@ -12,7 +12,7 @@ public class HomePage extends JFrame {
     private JPanel rootPanel;
     private JButton logoutButton;
     private JPanel titlePanel;
-    private JList list_of_things;
+    private JList<Object> list_of_things;
     //private Student student;
 
     public HomePage(String name, Sector sector) {
@@ -45,7 +45,7 @@ public class HomePage extends JFrame {
             }
         });
 
-        DefaultListModel listModel = new DefaultListModel();
+        DefaultListModel<Object> listModel = new DefaultListModel<>();
         HashMap<String, Student> inputSector = Consts.DB.getInputSectorStudents(Consts.GAME_FLOW.currentYear);
         System.out.println(inputSector.size());
         for (Object student : inputSector.values()) {

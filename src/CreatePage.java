@@ -66,7 +66,7 @@ public class CreatePage extends JFrame implements ActionListener {
 
             @Override
             public void focusLost(FocusEvent e) {
-                usernameVerifier.verify(usernameTextField);
+                usernameVerifier.verify(usernameTextField, Student.class);
             }
         });
         passwordVerifier = new PassVerifier(passBalloonTip);
@@ -149,7 +149,7 @@ public class CreatePage extends JFrame implements ActionListener {
 
             @Override
             public void focusLost(FocusEvent e) {
-                usernameVerifier.verify(usernameTextField);
+                usernameVerifier.verify(usernameTextField, Student.class);
             }
         });
         passwordVerifier = new PassVerifier(passBalloonTip);
@@ -204,7 +204,7 @@ public class CreatePage extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (usernameVerifier.verify(usernameTextField) && passwordVerifier.verifyLive(passwordPasswordField) &&
+        if (usernameVerifier.verify(usernameTextField, Student.class) && passwordVerifier.verifyLive(passwordPasswordField) &&
                 passwordVerifier.verifyLive(confirmPasswordPasswordField) &&
                 passwordVerifier.verifyMatch(passwordPasswordField, confirmPasswordPasswordField)) {
 
@@ -213,10 +213,10 @@ public class CreatePage extends JFrame implements ActionListener {
                 passwordPasswordField.setBackground(Color.GREEN);
             Student student = new Student(usernameTextField.getText(), String.valueOf(passwordPasswordField.getPassword()), new FarmSector());
             new FarmerDecisionPage(student);
-                Consts.DB.addStudent(student);
-                //new HomePage(student);
-                setVisible(false);
-                dispose();
+            Consts.DB.addStudent(student);
+            //new HomePage(student);
+            setVisible(false);
+            dispose();
         }
     }
 

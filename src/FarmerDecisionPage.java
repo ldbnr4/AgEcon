@@ -82,7 +82,7 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
 
     private void updateBtns() {
         farmSizeAmounts = Consts.DB.numInEachFarm(Consts.GAME_FLOW.currentYear);
-        System.out.println(farmSizeAmounts);
+        //System.out.println(farmSizeAmounts);
         int dbNumOfSmall = farmSizeAmounts.get(Consts.SMALL_FARM);
         setAvailableLabel(smallAmntLbl, dbNumOfSmall, Consts.S_FARM_CAP);
 

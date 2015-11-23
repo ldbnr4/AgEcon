@@ -13,19 +13,23 @@ public class GameDriver {
             Consts.DB.addGameFlow(Consts.GAME_FLOW);
         }
         //DB.yearChange(1);
-        //new AdminDecisionPage(DB.getAdmin("admin"));
+        new AdminDecisionPage(Consts.DB.getAdmin("admin"));
         //new WelcomePage();
-        new CreatePage();
+        //new CreatePage();
         //Student student = DB.getStudent("InputIvy");
         //InputSector stuSect = (InputSector) student.sector;
         //System.out.println(DB.countFarmPpl());
         /*for (int i = 0; i < 3; i++) {
             Student student = new Student("Input"+ String.valueOf(i), "passpass", new InputSector());
             DB.addStudent(student);
+        }*/
+        /*for (int i = 0; i < 5; i++) {
+            Student student = new Student("FarmersYo"+ String.valueOf(i), "passpass", new FarmSector(Consts.SMALL_FARM));
+            Consts.DB.addStudent(student);
         }
-        for (int i = 0; i < 7; i++) {
-            Student student = new Student("Farm"+ String.valueOf(i), "passpass", new FarmSector(SMALL_FARM));
-            DB.addStudent(student);
+        for (int i = 0; i < 3; i++) {
+            Student student = new Student("Farmers"+ String.valueOf(i), "passpass", new FarmSector(Consts.LARGE_FARM));
+            Consts.DB.addStudent(student);
         }*/
     }
 }

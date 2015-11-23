@@ -2,6 +2,7 @@ import com.mongodb.*;
 import org.mongodb.morphia.Morphia;
 
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
@@ -32,6 +33,11 @@ public class MongoDBConnection{
         morphia.map(Student.class).map(Sector.class);
         openConnection().getCollection("users").remove(new BasicDBObject("_id", student.uName).append("year", student.getYear()));
     }
+
+    public void removeAdmin(String admin) {
+        openConnection().getCollection("admins").remove(new BasicDBObject("_id", admin));
+    }
+
     public void saveStudent(Student student) {
         Morphia morphia = new Morphia();
         morphia.map(Student.class).map(Sector.class);
@@ -111,6 +117,10 @@ public class MongoDBConnection{
         return (int) openConnection().getCollection("users").count(new BasicDBObject("year", year));
     }
 
+    public int getTotalAdmins() {
+        return (int) openConnection().getCollection("admins").count();
+    }
+
     public HashMap<Consts.Seed_Name, Integer> getSeedTotals(int year) {
         Morphia morphia = new Morphia().map(Student.class).map(Sector.class);
         HashMap<Consts.Seed_Name, Integer> seedTtls = new HashMap<>();
@@ -138,17 +148,6 @@ public class MongoDBConnection{
                     seedTtls.get(Consts.Seed_Name.TOTAL) + x);
         }
         return seedTtls;
-    }
-
-    public HashMap<String, Integer> numInSectors(int year) {
-        HashMap<String, Integer> numRes = new HashMap<>();
-
-        numRes.put(Consts.FARM_SECTOR_NAME,
-                (int) openConnection().getCollection("users").count(querySector(Consts.FARM_SECTOR_NAME, year)));
-        numRes.put(Consts.FOOD_SECTOR_NAME,
-                (int) openConnection().getCollection("users").count(querySector(Consts.FOOD_SECTOR_NAME, year)));
-
-        return numRes;
     }
 
     public HashMap<Character, Integer> numInEachFarm(int year) {
@@ -219,6 +218,34 @@ public class MongoDBConnection{
                 }
             }
         }
+    }
+
+    ArrayList<Student> getAllStudents(int year) {
+        ArrayList<Student> list = new ArrayList<>();
+        Morphia morphia = new Morphia().map(Student.class).map(Sector.class);
+        Student student;
+
+        try (DBCursor cursor = openConnection().getCollection("users").find(new BasicDBObject("year", year))) {
+            while (cursor.hasNext()) {
+                student = morphia.fromDBObject(Student.class, cursor.next());
+                list.add(student);
+            }
+        }
+        return list;
+    }
+
+    ArrayList<Admin> getAllAdmins() {
+        ArrayList<Admin> list = new ArrayList<>();
+        Morphia morphia = new Morphia().map(Admin.class);
+        Admin admin;
+
+        try (DBCursor cursor = openConnection().getCollection("admins").find()) {
+            while (cursor.hasNext()) {
+                admin = morphia.fromDBObject(Admin.class, cursor.next());
+                list.add(admin);
+            }
+        }
+        return list;
     }
 
     private BasicDBObject querySector(String sector, int year) {

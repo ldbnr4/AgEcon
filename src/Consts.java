@@ -38,6 +38,19 @@ public class Consts {
         return (double) tmp / factor;
     }
 
+    public static ListCellRenderer<? super String> getRenderer() {
+        return new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list,
+                                                          Object value, int index, boolean isSelected,
+                                                          boolean cellHasFocus) {
+                JLabel listCellRendererComponent = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                listCellRendererComponent.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
+                return listCellRendererComponent;
+            }
+        };
+    }
+
     public enum Seed_Name {
         EARLY, MID, FULL, TOTAL
     }
