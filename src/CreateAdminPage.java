@@ -11,6 +11,7 @@ import java.awt.event.FocusListener;
 
 /**
  * Created by Lorenzo on 11/22/2015.
+ *
  */
 public class CreateAdminPage extends JFrame implements ActionListener {
     JPanel rootPanel;
@@ -56,10 +57,6 @@ public class CreateAdminPage extends JFrame implements ActionListener {
         username_tf.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                System.out.println("USERNAME RED:" + username_tf.getBackground().equals(Color.RED));
-                System.out.println("USERNAME GREEN:" + username_tf.getBackground().equals(Color.GREEN));
-                //System.out.println("GREEN"+Color.GREEN);
-                //System.out.println("RED"+Color.RED+"\n");
                 if (!username_tf.getBackground().equals(Color.GREEN)) {
                     username_tf.setText("");
                     username_tf.setForeground(Color.BLACK);
@@ -69,7 +66,6 @@ public class CreateAdminPage extends JFrame implements ActionListener {
             @Override
             public void focusLost(FocusEvent e) {
                 usernameVerifier.verify(username_tf, admin);
-                //System.out.println(username_tf.getBackground());
             }
         });
 

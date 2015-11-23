@@ -22,6 +22,8 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
     JTable studentTable;
     JTable adminTbl;
     JLabel numOfAdminsLabel;
+    private JButton generateInputSectorButton;
+    private JButton generateMarketingSectorButton;
 
     public AdminDecisionPage(final Admin admin) {
         super("Admin Page");

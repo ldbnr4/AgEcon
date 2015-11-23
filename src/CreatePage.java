@@ -73,7 +73,7 @@ public class CreatePage extends JFrame implements ActionListener {
         passwordPasswordField.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                if (passwordPasswordField.getBackground() != Color.GREEN || passwordPasswordField.getBackground() != Color.RED) {
+                if (passwordPasswordField.getBackground() != Color.GREEN) {
                     passwordPasswordField.setEchoChar('•');
                     passwordPasswordField.setText("");
                     passwordPasswordField.setForeground(Color.BLACK);
@@ -91,7 +91,7 @@ public class CreatePage extends JFrame implements ActionListener {
         confirmPasswordPasswordField.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                if (confirmPasswordPasswordField.getBackground() != Color.GREEN || confirmPasswordPasswordField.getBackground() != Color.RED) {
+                if (confirmPasswordPasswordField.getBackground() != Color.GREEN) {
                     confirmPasswordPasswordField.setEchoChar('•');
                     confirmPasswordPasswordField.setText("");
                     confirmPasswordPasswordField.setForeground(Color.BLACK);
@@ -156,7 +156,7 @@ public class CreatePage extends JFrame implements ActionListener {
         passwordPasswordField.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                if (passwordPasswordField.getBackground() != Color.GREEN || passwordPasswordField.getBackground() != Color.RED) {
+                if (passwordPasswordField.getBackground() != Color.GREEN) {
                     passwordPasswordField.setEchoChar('•');
                     passwordPasswordField.setText("");
                     passwordPasswordField.setForeground(Color.BLACK);
@@ -174,7 +174,7 @@ public class CreatePage extends JFrame implements ActionListener {
         confirmPasswordPasswordField.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                if (confirmPasswordPasswordField.getBackground() != Color.GREEN || confirmPasswordPasswordField.getBackground() != Color.RED) {
+                if (confirmPasswordPasswordField.getBackground() != Color.GREEN) {
                     confirmPasswordPasswordField.setEchoChar('•');
                     confirmPasswordPasswordField.setText("");
                     confirmPasswordPasswordField.setForeground(Color.BLACK);
