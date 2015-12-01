@@ -5,15 +5,16 @@ import java.awt.event.ActionListener;
 
 /**
  * Created by Lorenzo on 9/29/2015.
+ *
  */
 public class LoginPage extends JFrame implements ActionListener {
-    private JPasswordField passwordField;
-    private JTextField userNameField;
-    private JButton loginButton;
-    private JButton registerButton;
-    private JPanel rootPanel;
-    private JRadioButton studentRadioButton;
-    private JRadioButton instructorRadioButton;
+    JPasswordField passwordField;
+    JTextField userNameField;
+    JButton loginButton;
+    JButton registerButton;
+    JPanel rootPanel;
+    JRadioButton studentRadioButton;
+    JRadioButton instructorRadioButton;
 
     public LoginPage() {
         super("Login Page");
@@ -67,29 +68,14 @@ public class LoginPage extends JFrame implements ActionListener {
                     if (inEncrypt.equals(grabbedStudent.password)) {
                         passwordField.setBackground(Color.GREEN);
                         //System.out.println(grabbedStudent.sector);
-                        Sector studentSector = grabbedStudent.sector;
-                        boolean emptyStudent = studentSector.checkIfEmpty();
+                        boolean emptyStudent = grabbedStudent.sector.checkIfEmpty();
                         if (emptyStudent) {
-                            switch (grabbedStudent.sector.name) {
-                                case Consts.INPUT_SECTOR_NAME:
-                                    new InputDecisionPage(grabbedStudent);
-                                    break;
-                                case Consts.FARM_SECTOR_NAME:
-                                    new FarmerDecisionPage(grabbedStudent);
-                                    break;
-                                case Consts.FOOD_SECTOR_NAME:
-
-                                    break;
-                                default:
-                                    break;
-                            }
-                            setVisible(false);
-                            dispose();
+                            new FarmerDecisionPage(grabbedStudent);
                         } else {
                             new HomePage(grabbedStudent.uName, grabbedStudent.sector);
-                            setVisible(false);
-                            dispose();
                         }
+                        setVisible(false);
+                        dispose();
                     } else {
                         JOptionPane.showMessageDialog(rootPanel, "Password did not match the account for " + inUse + ".", "Password error", JOptionPane.ERROR_MESSAGE);
                         passwordField.setBackground(Color.red);

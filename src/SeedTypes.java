@@ -4,11 +4,11 @@
  */
 public class SeedTypes {
     public int earlySale;
-    public int earlyPrice;
+    public double earlyPrice;
     public int midSale;
-    public int midPrice;
+    public double midPrice;
     public int fullSale;
-    public int fullPrice;
+    public double fullPrice;
     public int ttlSeeds;
 
     public SeedTypes() {
@@ -21,7 +21,7 @@ public class SeedTypes {
         setTtlSeeds();
     }
 
-    public SeedTypes(int earlySale, int earlyPrice, int midSale, int midPrice, int fullSale, int fullPrice) {
+    public SeedTypes(int earlySale, double earlyPrice, int midSale, double midPrice, int fullSale, double fullPrice) {
         this.earlySale = earlySale;
         this.earlyPrice = earlyPrice;
         this.midSale = midSale;
@@ -37,14 +37,18 @@ public class SeedTypes {
     }
 
     public void setEarlySale(int earlySale) {
+        if (ttlSeeds > 0)
+            ttlSeeds -= this.earlySale;
         this.earlySale = earlySale;
+        ttlSeeds += earlySale;
+
     }
 
-    public int getEarlyPrice() {
+    public double getEarlyPrice() {
         return earlyPrice;
     }
 
-    public void setEarlyPrice(int earlyPrice) {
+    public void setEarlyPrice(double earlyPrice) {
         this.earlyPrice = earlyPrice;
     }
 
@@ -53,22 +57,25 @@ public class SeedTypes {
     }
 
     public void setMidSale(int midSale) {
+        if (ttlSeeds > 0)
+            ttlSeeds -= this.midSale;
         this.midSale = midSale;
+        ttlSeeds += midSale;
     }
 
-    public int getMidPrice() {
+    public double getMidPrice() {
         return midPrice;
     }
 
-    public void setMidPrice(int midPrice) {
+    public void setMidPrice(double midPrice) {
         this.midPrice = midPrice;
     }
 
-    public int getFullPrice() {
+    public double getFullPrice() {
         return fullPrice;
     }
 
-    public void setFullPrice(int fullPrice) {
+    public void setFullPrice(double fullPrice) {
         this.fullPrice = fullPrice;
     }
 
@@ -77,7 +84,10 @@ public class SeedTypes {
     }
 
     public void setFullSale(int fullSale) {
+        if (ttlSeeds > 0)
+            ttlSeeds -= this.fullSale;
         this.fullSale = fullSale;
+        ttlSeeds += fullSale;
     }
 
     public void setTtlSeeds(){

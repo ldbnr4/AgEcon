@@ -13,8 +13,15 @@ import java.util.HashMap;
 public class MongoDBConnection{
     private static MongoDBConnection ourInstance = new MongoDBConnection();
     MongoClient mongoClient = null;
+    Morphia morphia = new Morphia();
+    DB db = openConnection();
+    DBCollection gameFlowColl = db.getCollection("gameFlow");
+    DBCollection adminsColl = db.getCollection("admins");
+    DBCollection usersColl = db.getCollection("users");
+    DBCollection inputColl = db.getCollection("inputSector");
 
     private MongoDBConnection() {
+        morphia.map(Student.class).map(FarmSector.class).map(GameFlow.class).map(Admin.class).map(InputSector.class);
     }
 
     public static MongoDBConnection getInstance() {
@@ -29,37 +36,29 @@ public class MongoDBConnection{
     }*/
 
     public void removeStudent(Student student){
-        Morphia morphia = new Morphia();
-        morphia.map(Student.class).map(Sector.class);
-        openConnection().getCollection("users").remove(new BasicDBObject("_id", student.uName).append("year", student.getYear()));
+        usersColl.remove(new BasicDBObject("_id", student.id));
+        Consts.GAME_FLOW.setTotalPlayers();
+        saveGameFlow();
     }
 
     public void removeAdmin(String admin) {
-        openConnection().getCollection("admins").remove(new BasicDBObject("_id", admin));
+        adminsColl.remove(new BasicDBObject("_id", admin));
     }
 
     public void saveStudent(Student student) {
-        Morphia morphia = new Morphia();
-        morphia.map(Student.class).map(Sector.class);
         removeStudent(student);
         addStudent(student);
     }
 
     public void saveGameFlow() {
-        Morphia morphia = new Morphia();
-        morphia.map(GameFlow.class);
-        DB db = openConnection();
-        DBCollection coll = db.getCollection("gameFlow");
-        coll.remove(new BasicDBObject("_id", Consts.GAME_FLOW.name));
-        DBObject gameFlowObj = morphia.toDBObject(Consts.GAME_FLOW);
-        coll.insert(gameFlowObj);
+        gameFlowColl.remove(new BasicDBObject("_id", Consts.GAME_FLOW.name));
+        addGameFlow(Consts.GAME_FLOW);
     }
 
     public Student getStudent(String username, int year) {
-        Morphia morphia = new Morphia();
-        morphia.map(Student.class).map(Sector.class);
-
-        DBObject person = openConnection().getCollection("users").findOne(new BasicDBObject("_id", username).append("year", year));
+        HashMap<String, Integer> id = new HashMap<>();
+        id.put(username, year);
+        DBObject person = usersColl.findOne(new BasicDBObject("_id", id));
         if (person == null) {
             return null;
         }
@@ -67,62 +66,43 @@ public class MongoDBConnection{
     }
 
     public Admin getAdmin(String username) {
-        Morphia morphia = new Morphia();
-        morphia.map(Admin.class);
-
-        DB db = openConnection();
-        DBCollection coll = db.getCollection("admins");
-        BasicDBObject query = new BasicDBObject("_id", username);
-        DBObject person = coll.findOne(query);
-        //Map persMap = person.toMap();
+        DBObject person = adminsColl.findOne(new BasicDBObject("_id", username));
         if (person == null) {
             return null;
         }
-        //Student student = new Student(persMap.get("User Name").toString(),persMap.get("Password").toString(),persMap.get("Salt").toString(), (Sector) persMap.get("Sector"));
-        //morphia.fromDBObject()
-        //System.out.println(person.toString());
-
         return morphia.fromDBObject(Admin.class, person);
     }
 
     public GameFlow getGameFlow() {
-        Morphia morphia = new Morphia();
-        morphia.map(GameFlow.class);
-        DB db = openConnection();
-        DBCollection coll = db.getCollection("gameFlow");
-        BasicDBObject query = new BasicDBObject("_id", "GameFlow");
-        DBObject person = coll.findOne(query);
-        //Map persMap = person.toMap();
+        DBObject person = gameFlowColl.findOne(new BasicDBObject("_id", "GameFlow"));
         if (person == null) {
             return null;
         }
         return morphia.fromDBObject(GameFlow.class, person);
     }
 
-    public HashMap<String, Student> getInputSectorStudents(int year) {
-        HashMap<String, Student> list = new HashMap<>();
-        Morphia morphia = new Morphia().map(Student.class).map(Sector.class);
-        Student student;
-
-        try (DBCursor cursor = openConnection().getCollection("users").find(querySector(Consts.INPUT_SECTOR_NAME, year))) {
+    public HashMap<String, InputSector> getInputSectorSellers(int year) {
+        HashMap<String, InputSector> list = new HashMap<>();
+        try (DBCursor cursor = inputColl.find(new BasicDBObject("year", year))) {
+            InputSector inputSector;
             while (cursor.hasNext()) {
-                student = morphia.fromDBObject(Student.class, cursor.next());
-                    list.put(student.uName, student);
+                inputSector = morphia.fromDBObject(InputSector.class, cursor.next());
+                list.put(inputSector.name, inputSector);
             }
         }
         return list;
     }
 
     public int getTotalPlayers(int year) {
-        return (int) openConnection().getCollection("users").count(new BasicDBObject("year", year));
+        return (int) usersColl.count(new BasicDBObject("year", year));
     }
 
     public int getTotalAdmins() {
-        return (int) openConnection().getCollection("admins").count();
+        return (int) adminsColl.count();
     }
 
-    public HashMap<Consts.Seed_Name, Integer> getSeedTotals(int year) {
-        Morphia morphia = new Morphia().map(Student.class).map(Sector.class);
+   /* public HashMap<Consts.Seed_Name, Integer> getSeedTotals(int year) {
+
         HashMap<Consts.Seed_Name, Integer> seedTtls = new HashMap<>();
         seedTtls.put(Consts.Seed_Name.EARLY, 0);
         seedTtls.put(Consts.Seed_Name.MID, 0);
@@ -148,45 +128,52 @@ public class MongoDBConnection{
                     seedTtls.get(Consts.Seed_Name.TOTAL) + x);
         }
         return seedTtls;
+    }*/
+
+    public int getSeedsNeeded(int year) {
+        int seed_total = 0;
+        try (DBCursor cursor = usersColl.find(new BasicDBObject("year", year), new BasicDBObject("sector.farm.seedsNeeded", true))) {
+            while (cursor.hasNext()) {
+                seed_total += morphia.fromDBObject(Student.class, cursor.next()).sector.getSeedsNeeded();
+            }
+        }
+        return seed_total;
     }
 
     public HashMap<Character, Integer> numInEachFarm(int year) {
         HashMap<Character, Integer> numRes = new HashMap<>();
 
         numRes.put(Consts.SMALL_FARM,
-                (int) openConnection().getCollection("users")
-                        .count(querySector(Consts.FARM_SECTOR_NAME, year).append("sector.farm.size", Consts.SMALL_FARM)));
+                (int) usersColl
+                        .count(new BasicDBObject("year", year).append("sector.farm.size", Consts.SMALL_FARM)));
         numRes.put(Consts.MED_FARM,
-                (int) openConnection().getCollection("users")
-                        .count(querySector(Consts.FARM_SECTOR_NAME, year).append("sector.farm.size", Consts.MED_FARM)));
+                (int) usersColl
+                        .count(new BasicDBObject("year", year).append("sector.farm.size", Consts.MED_FARM)));
         numRes.put(Consts.LARGE_FARM,
-                (int) openConnection().getCollection("users")
-                        .count(querySector(Consts.FARM_SECTOR_NAME, year).append("sector.farm.size", Consts.LARGE_FARM)));
+                (int) usersColl
+                        .count(new BasicDBObject("year", year).append("sector.farm.size", Consts.LARGE_FARM)));
         numRes.put(Consts.NO_FARM,
-                (int) openConnection().getCollection("users")
-                        .count(querySector(Consts.FARM_SECTOR_NAME, year).append("sector.farm.size", Consts.NO_FARM)));
+                (int) usersColl
+                        .count(new BasicDBObject("year", year).append("sector.farm.size", Consts.NO_FARM)));
         return numRes;
     }
 
     public void addStudent(Student student) {
-        Morphia morphia = new Morphia();
-        morphia.map(Student.class).map(Sector.class);
-        DB db = openConnection();
-        DBCollection coll = db.getCollection("users");
-        DBObject studentObj = morphia.toDBObject(student);
-        coll.insert(studentObj);
+        usersColl.insert(morphia.toDBObject(student));
         Consts.GAME_FLOW.setTotalPlayers();
         saveGameFlow();
     }
 
     public void addAdmin(Admin admin) {
-        DBObject adminObj = new Morphia().map(Admin.class).toDBObject(admin);
-        openConnection().getCollection("admins").insert(adminObj);
+        adminsColl.insert(morphia.toDBObject(admin));
     }
 
     public void addGameFlow(GameFlow gameFlow) {
-        DBObject gameFlowObj = new Morphia().map(GameFlow.class).toDBObject(gameFlow);
-        openConnection().getCollection("gameFlow").insert(gameFlowObj);
+        gameFlowColl.insert(morphia.toDBObject(gameFlow));
+    }
+
+    public void addInputComp(InputSector inputComp) {
+        inputColl.insert(morphia.toDBObject(inputComp));
     }
 
     public void yearChange(int dir) {
@@ -196,23 +183,23 @@ public class MongoDBConnection{
         int oldTtl = getTotalPlayers(oldYr);
 
         if (oldTtl > newTtl) {
-            try (DBCursor users = openConnection().getCollection("users").find(new BasicDBObject("year", oldYr))) {
+            try (DBCursor users = usersColl.find(new BasicDBObject("year", oldYr))) {
                 Student student;
                 while (users.hasNext()) {
-                    if (getStudent((String) users.next().get("_id"), newYr) == null) {
-                        student = getStudent((String) users.next().get("_id"), oldYr);
-                        student.setYear(newYr);
+                    if (getStudent((String) users.next().get("uName"), newYr) == null) {
+                        student = getStudent((String) users.next().get("uName"), oldYr);
+                        student.setId(newYr);
                         addStudent(student);
                     }
                 }
             }
         } else if (oldTtl < newTtl) {
-            try (DBCursor users = openConnection().getCollection("users").find(new BasicDBObject("year", newYr))) {
+            try (DBCursor users = usersColl.find(new BasicDBObject("year", newYr))) {
                 Student student;
                 while (users.hasNext()) {
-                    if (getStudent((String) users.next().get("_id"), oldYr) == null) {
-                        student = getStudent((String) users.next().get("_id"), newYr);
-                        student.setYear(oldYr);
+                    if (getStudent((String) users.next().get("uName"), oldYr) == null) {
+                        student = getStudent((String) users.next().get("uName"), newYr);
+                        student.setId(oldYr);
                         addStudent(student);
                     }
                 }
@@ -222,10 +209,10 @@ public class MongoDBConnection{
 
     ArrayList<Student> getAllStudents(int year) {
         ArrayList<Student> list = new ArrayList<>();
-        Morphia morphia = new Morphia().map(Student.class).map(Sector.class);
+        Morphia morphia = new Morphia().map(Student.class).map(FarmSector.class);
         Student student;
 
-        try (DBCursor cursor = openConnection().getCollection("users").find(new BasicDBObject("year", year))) {
+        try (DBCursor cursor = usersColl.find(new BasicDBObject("year", year))) {
             while (cursor.hasNext()) {
                 student = morphia.fromDBObject(Student.class, cursor.next());
                 list.add(student);
@@ -236,13 +223,9 @@ public class MongoDBConnection{
 
     ArrayList<Admin> getAllAdmins() {
         ArrayList<Admin> list = new ArrayList<>();
-        Morphia morphia = new Morphia().map(Admin.class);
-        Admin admin;
-
-        try (DBCursor cursor = openConnection().getCollection("admins").find()) {
+        try (DBCursor cursor = adminsColl.find()) {
             while (cursor.hasNext()) {
-                admin = morphia.fromDBObject(Admin.class, cursor.next());
-                list.add(admin);
+                list.add(morphia.fromDBObject(Admin.class, cursor.next()));
             }
         }
         return list;

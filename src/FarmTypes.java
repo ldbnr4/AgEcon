@@ -12,7 +12,7 @@ public final class FarmTypes {
     int acreYield = 3500;
     int ttlYield;
     double ttlBushels;
-    int maxSeeds;
+    int seedsNeeded;
 
     public FarmTypes(char size) {
         setSize(size);
@@ -20,7 +20,7 @@ public final class FarmTypes {
         setCosts();
         setTtlYield(acreYield * acres);
         setTtlBushels(ttlYield / 56);
-        setMaxSeeds(10 * acres);
+        setSeedsNeeded(10 * acres);
 
     }
 
@@ -29,12 +29,12 @@ public final class FarmTypes {
         acres = 0;
     }
 
-    public int getMaxSeeds() {
-        return maxSeeds;
+    public int getSeedsNeeded() {
+        return seedsNeeded;
     }
 
-    public void setMaxSeeds(int maxSeeds) {
-        this.maxSeeds = maxSeeds;
+    public void setSeedsNeeded(int seedsNeeded) {
+        this.seedsNeeded = seedsNeeded;
     }
 
     public int getTtlYield() {

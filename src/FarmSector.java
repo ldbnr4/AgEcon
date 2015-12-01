@@ -1,21 +1,22 @@
+import org.mongodb.morphia.annotations.Embedded;
+
 /**
  * Created by Lorenzo on 10/22/2015.
  *
  */
-public class FarmSector extends Sector {
+
+@Embedded
+public class FarmSector {
     FarmTypes farm;
 
     public FarmSector(char farmSize) {
-        super(Consts.FARM_SECTOR_NAME);
         farm = new FarmTypes(farmSize);
     }
 
     public FarmSector() {
-        super(Consts.FARM_SECTOR_NAME);
         farm = new FarmTypes();
     }
 
-    @Override
     boolean checkIfEmpty() {
         return farm.size == Consts.NO_FARM && farm.acres == 0;
     }
@@ -38,5 +39,9 @@ public class FarmSector extends Sector {
 
     public int getTTLFarmYld() {
         return farm.getTtlYield();
+    }
+
+    public int getSeedsNeeded() {
+        return farm.getSeedsNeeded();
     }
 }

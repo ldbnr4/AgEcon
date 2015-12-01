@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 /**
  * Created by Lorenzo on 10/1/2015.
+ *
  */
 public class HomePage extends JFrame {
     private JLabel titleLabel;
@@ -15,7 +16,7 @@ public class HomePage extends JFrame {
     private JList<Object> list_of_things;
     //private Student student;
 
-    public HomePage(String name, Sector sector) {
+    public HomePage(String name, FarmSector sector) {
         super("Welcome Page");
         setContentPane(rootPanel);
         setResizable(false);
@@ -34,7 +35,7 @@ public class HomePage extends JFrame {
         setComponentZOrder(getContentPane(), 1);
         //System.out.println(logoutButton.getLocation());
 
-        sectorLabel.setText(sector.name);
+        sectorLabel.setText("FARM SECTOR");
 
         logoutButton.addActionListener(new ActionListener() {
             @Override
@@ -46,7 +47,7 @@ public class HomePage extends JFrame {
         });
 
         DefaultListModel<Object> listModel = new DefaultListModel<>();
-        HashMap<String, Student> inputSector = Consts.DB.getInputSectorStudents(Consts.GAME_FLOW.currentYear);
+        HashMap<String, InputSector> inputSector = Consts.DB.getInputSectorSellers(Consts.GAME_FLOW.currentYear);
         System.out.println(inputSector.size());
         for (Object student : inputSector.values()) {
             System.out.println(student);

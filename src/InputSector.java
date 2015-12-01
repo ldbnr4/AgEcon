@@ -1,42 +1,59 @@
-import java.util.HashMap;
+import org.mongodb.morphia.annotations.Embedded;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
 
 /**
  * Created by Lorenzo on 10/13/2015.
  *
  */
-public class InputSector extends Sector {
-    public char size;
-    SeedTypes seedTypes;
 
-    public InputSector(SeedTypes seeds, char size) {
-        super(Consts.INPUT_SECTOR_NAME);
-        setSeedTypes(seeds);
-        setSize(size);
-    }
+@Entity
+public class InputSector {
+    @Embedded
+    SeedTypes seedTypes;
+    @Id
+    String name;
+    int year;
 
     public InputSector() {
-        super(Consts.INPUT_SECTOR_NAME);
-        this.seedTypes = new SeedTypes();
+        setSeedTypes(new SeedTypes());
+        setYear(Consts.GAME_FLOW.currentYear);
+        setName("");
     }
 
-    public void setSize(char size) {
-        this.size = size;
+    public InputSector(String name, int earlyAmnt, double earlyCost, int midAmnt, double midCost, int fullAmnt,
+                       double fullCost) {
+        setName(name);
+        setYear(Consts.GAME_FLOW.currentYear);
+        setSeedTypes(new SeedTypes(earlyAmnt, earlyCost, midAmnt, midCost, fullAmnt, fullCost));
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setSeedTypes(SeedTypes seedTypes) {
         this.seedTypes = seedTypes;
     }
 
-    public void setEarlySeeds(int earlySale, int earlyPrice) {
+    public void setEarlySeeds(int earlySale, double earlyPrice) {
         seedTypes.setEarlySale(earlySale);
         seedTypes.setEarlyPrice(earlyPrice);
+    }
+
+    public void setYear(int year) {
+        this.year = year;
     }
 
     public int getEarlyAmnt(){
         return seedTypes.getEarlySale();
     }
 
-    public void setMidSeeds(int midSale, int midPrice) {
+    public void setMidSeeds(int midSale, double midPrice) {
         seedTypes.setMidSale(midSale);
         seedTypes.setMidPrice(midPrice);
     }
@@ -45,7 +62,7 @@ public class InputSector extends Sector {
         return seedTypes.getMidSale();
     }
 
-    public void setFullSeeds(int fullSale, int fullPrice) {
+    public void setFullSeeds(int fullSale, double fullPrice) {
         seedTypes.setFullSale(fullSale);
         seedTypes.setFullPrice(fullPrice);
     }
@@ -58,7 +75,7 @@ public class InputSector extends Sector {
         return seedTypes.getTtlSeeds();
     }
 
-    public HashMap<Consts.Seed_Name, Double> getVarietyMarketShare() {
+    /*public HashMap<Consts.Seed_Name, Double> getVarietyMarketShare() {
         HashMap<Consts.Seed_Name, Integer> db_ttls = Consts.DB.getSeedTotals(Consts.GAME_FLOW.currentYear);
         HashMap<Consts.Seed_Name, Double> sect_shares = new HashMap<>();
 
@@ -68,9 +85,8 @@ public class InputSector extends Sector {
         sect_shares.put(Consts.Seed_Name.TOTAL, Consts.round(((double) getTtlSeedAmnt() / (double) db_ttls.get(Consts.Seed_Name.TOTAL)) * 100));
 
         return sect_shares;
-    }
+    }*/
 
-    @Override
     public boolean checkIfEmpty() {
         return seedTypes.getEarlyPrice() == 0 && seedTypes.getEarlySale() == 0 && seedTypes.getMidPrice() == 0
                 && seedTypes.getMidSale() == 0 && seedTypes.getFullPrice() == 0 && seedTypes.getFullSale() == 0;
