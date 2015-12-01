@@ -1,7 +1,3 @@
-import java.util.Random;
-
-import static java.lang.Math.ceil;
-
 /**
  * Created by Lorenzo on 9/18/2015.
  *
@@ -19,6 +15,7 @@ public class GameDriver {
         //DB.yearChange(1);
         //new WelcomePage();
         //new CreatePage();
+        new HomePage(Consts.DB.getStudent("ldbnr4", 2015).uName, Consts.DB.getStudent("ldbnr4", 2015).sector);
         //Student student = DB.getStudent("InputIvy");
         //InputSector stuSect = (InputSector) student.sector;
         //System.out.println(DB.countFarmPpl());
@@ -41,6 +38,7 @@ public class GameDriver {
         //new AdminDecisionPage(Consts.DB.getAdmin("admin"));
         //System.out.println(Consts.DB.getSeedsNeeded(Consts.GAME_FLOW.currentYear));
         //System.out.println();
+/*
         int compMax = 0, early = 0, mid = 0, full = 0, rn = 0, var = 0;
         Double maxPrice = 3.50, minPrice = 1.50;
         for (int i = 1; i < 6; i++) {
@@ -67,7 +65,6 @@ public class GameDriver {
             Consts.DB.addInputComp(new InputSector("Company" + i, early, Consts.round(minPrice + new Random().nextDouble() * (maxPrice - minPrice)),
                     mid, Consts.round(minPrice + new Random().nextDouble() * (maxPrice - minPrice)),
                     full, Consts.round(minPrice + new Random().nextDouble() * (maxPrice - minPrice))));
-        }
-
+        }*/
     }
 }

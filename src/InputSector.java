@@ -53,6 +53,18 @@ public class InputSector {
         return seedTypes.getEarlySale();
     }
 
+    public double getEarlyPrice() {
+        return seedTypes.getEarlyPrice();
+    }
+
+    public double getMidPrice() {
+        return seedTypes.getMidPrice();
+    }
+
+    public double getFullPrice() {
+        return seedTypes.getFullPrice();
+    }
+
     public void setMidSeeds(int midSale, double midPrice) {
         seedTypes.setMidSale(midSale);
         seedTypes.setMidPrice(midPrice);

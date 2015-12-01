@@ -97,10 +97,8 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
         };
 
         studentTable = new JTable(tableModel);
-        FarmSector sector;
         for (Student student : students) {
-            sector = (FarmSector) student.sector;
-            Object[] objs = {student.uName, sector.getFarmSize(), sector.getFarmAcres()};
+            Object[] objs = {student.uName, student.sector.getFarmSize(), student.sector.getFarmAcres()};
             tableModel.addRow(objs);
         }
         studentTable.setPreferredScrollableViewportSize(new Dimension(300, 200));
