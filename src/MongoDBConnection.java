@@ -93,6 +93,14 @@ public class MongoDBConnection{
         return list;
     }
 
+    public InputSector getInputSeller(String name, int year) {
+        DBObject one = inputColl.findOne(new BasicDBObject("_id", name).append("year", year));
+        if (one == null) {
+            return null;
+        }
+        return morphia.fromDBObject(InputSector.class, one);
+    }
+
     public int getTotalPlayers(int year) {
         return (int) usersColl.count(new BasicDBObject("year", year));
     }
