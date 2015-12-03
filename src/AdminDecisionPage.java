@@ -1,3 +1,5 @@
+import com.mongodb.MongoException;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -5,6 +7,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Random;
+
+import static java.lang.Math.ceil;
 
 /**
  * Created by Lorenzo on 10/27/2015.
@@ -22,8 +27,8 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
     JTable studentTable;
     JTable adminTbl;
     JLabel numOfAdminsLabel;
-    private JButton generateInputSectorButton;
-    private JButton generateMarketingSectorButton;
+    JButton generateInputSectorButton;
+    JButton generateMarketingSectorButton;
 
     public AdminDecisionPage(final Admin admin) {
         super("Admin Page");
@@ -51,8 +56,42 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
             }
         });
 
-        //DefaultListModel<Object> listModel = new DefaultListModel<>();
-        // studentList.setCellRenderer((ListCellRenderer<? super Object>) Consts.getRenderer());
+        generateInputSectorButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int compMax = 0, early = 0, mid = 0, full = 0, rn = 0, var = 0;
+                Double maxPrice = 3.50, minPrice = 1.50;
+                for (int i = 1; i < 6; i++) {
+                    compMax = (int) ceil((double) Consts.DB.getSeedsNeeded(Consts.GAME_FLOW.currentYear) / 5);
+                    early = 0;
+                    mid = 0;
+                    full = 0;
+                    while (compMax > 0) {
+                        rn = new Random().nextInt(compMax) + 1;
+                        var = new Random().nextInt(3);
+                        switch (var) {
+                            case 0:
+                                early += rn;
+                                break;
+                            case 1:
+                                mid += rn;
+                                break;
+                            case 2:
+                                full += rn;
+                                break;
+                        }
+                        compMax -= rn;
+                    }
+                    try {
+                        Consts.DB.addInputComp(new InputSector("Company" + i, early, Consts.round(minPrice + new Random().nextDouble() * (maxPrice - minPrice)),
+                                mid, Consts.round(minPrice + new Random().nextDouble() * (maxPrice - minPrice)),
+                                full, Consts.round(minPrice + new Random().nextDouble() * (maxPrice - minPrice))));
+                    } catch (MongoException v) {
+                        System.out.println(v.getLocalizedMessage());
+                    }
+                }
+            }
+        });
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
