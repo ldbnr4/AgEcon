@@ -211,7 +211,7 @@ public class CreatePage extends JFrame implements ActionListener {
                 usernameTextField.setBackground(Color.green);
                 confirmPasswordPasswordField.setBackground(Color.GREEN);
                 passwordPasswordField.setBackground(Color.GREEN);
-            Student student = new Student(usernameTextField.getText(), String.valueOf(passwordPasswordField.getPassword()), new FarmSector());
+            Student student = new Student(usernameTextField.getText(), String.valueOf(passwordPasswordField.getPassword()), new FarmTypes());
             new FarmerDecisionPage(student);
             Consts.DB.addStudent(student);
             //new HomePage(student);

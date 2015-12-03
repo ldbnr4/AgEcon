@@ -21,7 +21,7 @@ public class MongoDBConnection{
     DBCollection inputColl = db.getCollection("inputSector");
 
     private MongoDBConnection() {
-        morphia.map(Student.class).map(FarmSector.class).map(GameFlow.class).map(Admin.class).map(InputSector.class);
+        morphia.map(Student.class).map(FarmTypes.class).map(GameFlow.class).map(Admin.class).map(InputSector.class);
     }
 
     public static MongoDBConnection getInstance() {
@@ -45,6 +45,10 @@ public class MongoDBConnection{
         adminsColl.remove(new BasicDBObject("_id", admin));
     }
 
+    public void removeInput(String input) {
+        inputColl.remove(new BasicDBObject("_id", input).append("year", Consts.GAME_FLOW.currentYear));
+    }
+
     public void saveStudent(Student student) {
         removeStudent(student);
         addStudent(student);
@@ -53,6 +57,21 @@ public class MongoDBConnection{
     public void saveGameFlow() {
         gameFlowColl.remove(new BasicDBObject("_id", Consts.GAME_FLOW.name));
         addGameFlow(Consts.GAME_FLOW);
+    }
+
+    public void saveInput(InputSector inputSector) {
+        removeInput(inputSector.getName());
+        addInputComp(inputSector);
+    }
+
+    public Student getStudent(String username) {
+        HashMap<String, Integer> id = new HashMap<>();
+        id.put(username, Consts.GAME_FLOW.currentYear);
+        DBObject person = usersColl.findOne(new BasicDBObject("_id", id));
+        if (person == null) {
+            return null;
+        }
+        return morphia.fromDBObject(Student.class, person);
     }
 
     public Student getStudent(String username, int year) {
@@ -81,9 +100,9 @@ public class MongoDBConnection{
         return morphia.fromDBObject(GameFlow.class, person);
     }
 
-    public HashMap<String, InputSector> getInputSectorSellers(int year) {
+    public HashMap<String, InputSector> getInputSectorSellers() {
         HashMap<String, InputSector> list = new HashMap<>();
-        try (DBCursor cursor = inputColl.find(new BasicDBObject("year", year))) {
+        try (DBCursor cursor = inputColl.find(new BasicDBObject("year", Consts.GAME_FLOW.currentYear))) {
             InputSector inputSector;
             while (cursor.hasNext()) {
                 inputSector = morphia.fromDBObject(InputSector.class, cursor.next());
@@ -93,12 +112,16 @@ public class MongoDBConnection{
         return list;
     }
 
-    public InputSector getInputSeller(String name, int year) {
-        DBObject one = inputColl.findOne(new BasicDBObject("_id", name).append("year", year));
+    public InputSector getInputSeller(String name) {
+        DBObject one = inputColl.findOne(new BasicDBObject("_id", name).append("year", Consts.GAME_FLOW.currentYear));
         if (one == null) {
             return null;
         }
         return morphia.fromDBObject(InputSector.class, one);
+    }
+
+    public int getTotalPlayers() {
+        return (int) usersColl.count(new BasicDBObject("year", Consts.GAME_FLOW.currentYear));
     }
 
     public int getTotalPlayers(int year) {
@@ -138,31 +161,31 @@ public class MongoDBConnection{
         return seedTtls;
     }*/
 
-    public int getSeedsNeeded(int year) {
+    public int getSeedsNeeded() {
         int seed_total = 0;
-        try (DBCursor cursor = usersColl.find(new BasicDBObject("year", year), new BasicDBObject("sector.farm.seedsNeeded", true))) {
+        try (DBCursor cursor = usersColl.find(new BasicDBObject("year", Consts.GAME_FLOW.currentYear), new BasicDBObject("farm.seedsNeeded", true))) {
             while (cursor.hasNext()) {
-                seed_total += morphia.fromDBObject(Student.class, cursor.next()).sector.getSeedsNeeded();
+                seed_total += morphia.fromDBObject(Student.class, cursor.next()).farm.getSeedsNeeded();
             }
         }
         return seed_total;
     }
 
-    public HashMap<Character, Integer> numInEachFarm(int year) {
+    public HashMap<Character, Integer> numInEachFarm() {
         HashMap<Character, Integer> numRes = new HashMap<>();
 
         numRes.put(Consts.SMALL_FARM,
                 (int) usersColl
-                        .count(new BasicDBObject("year", year).append("sector.farm.size", Consts.SMALL_FARM)));
+                        .count(new BasicDBObject("year", Consts.GAME_FLOW.currentYear).append("farm.size", Consts.SMALL_FARM)));
         numRes.put(Consts.MED_FARM,
                 (int) usersColl
-                        .count(new BasicDBObject("year", year).append("sector.farm.size", Consts.MED_FARM)));
+                        .count(new BasicDBObject("year", Consts.GAME_FLOW.currentYear).append("farm.size", Consts.MED_FARM)));
         numRes.put(Consts.LARGE_FARM,
                 (int) usersColl
-                        .count(new BasicDBObject("year", year).append("sector.farm.size", Consts.LARGE_FARM)));
+                        .count(new BasicDBObject("year", Consts.GAME_FLOW.currentYear).append("farm.size", Consts.LARGE_FARM)));
         numRes.put(Consts.NO_FARM,
                 (int) usersColl
-                        .count(new BasicDBObject("year", year).append("sector.farm.size", Consts.NO_FARM)));
+                        .count(new BasicDBObject("year", Consts.GAME_FLOW.currentYear).append("farm.size", Consts.NO_FARM)));
         return numRes;
     }
 
@@ -215,15 +238,11 @@ public class MongoDBConnection{
         }
     }
 
-    ArrayList<Student> getAllStudents(int year) {
+    ArrayList<Student> getAllStudents() {
         ArrayList<Student> list = new ArrayList<>();
-        Morphia morphia = new Morphia().map(Student.class).map(FarmSector.class);
-        Student student;
-
-        try (DBCursor cursor = usersColl.find(new BasicDBObject("year", year))) {
+        try (DBCursor cursor = usersColl.find(new BasicDBObject("year", Consts.GAME_FLOW.currentYear))) {
             while (cursor.hasNext()) {
-                student = morphia.fromDBObject(Student.class, cursor.next());
-                list.add(student);
+                list.add(morphia.fromDBObject(Student.class, cursor.next()));
             }
         }
         return list;
@@ -237,10 +256,6 @@ public class MongoDBConnection{
             }
         }
         return list;
-    }
-
-    private BasicDBObject querySector(String sector, int year) {
-        return new BasicDBObject("year", year).append("sector.name", sector);
     }
 
     private DB openConnection() {

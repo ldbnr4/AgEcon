@@ -1,9 +1,14 @@
+import org.jetbrains.annotations.Contract;
+import org.mongodb.morphia.annotations.Embedded;
+
 import java.util.HashMap;
 
 /**
  * Created by Lorenzo on 10/22/2015.
  *
  */
+
+@Embedded
 public final class FarmTypes {
     public char size;
     public int acres;
@@ -13,6 +18,8 @@ public final class FarmTypes {
     int ttlYield;
     double ttlBushels;
     int seedsNeeded;
+    HashMap<Consts.Seed_Name, Integer> seedsOwned;
+    int ttlSeedsOwned;
 
     public FarmTypes(char size) {
         setSize(size);
@@ -21,12 +28,15 @@ public final class FarmTypes {
         setTtlYield(acreYield * acres);
         setTtlBushels(ttlYield / 56);
         setSeedsNeeded(10 * acres);
-
+        setSeedsOwned(new HashMap<Consts.Seed_Name, Integer>());
+        setTtlSeedsOwned(0);
     }
 
     public FarmTypes() {
         size = Consts.NO_FARM;
         acres = 0;
+        setSeedsOwned(new HashMap<Consts.Seed_Name, Integer>());
+        setTtlSeedsOwned(0);
     }
 
     public int getSeedsNeeded() {
@@ -130,9 +140,51 @@ public final class FarmTypes {
                 acres = 500;
                 break;
         }
+        setSeedsNeeded(10 * acres);
     }
 
     public Double getTotalCost() {
         return totalCost;
+    }
+
+    @Contract(pure = true)
+    boolean checkIfEmpty() {
+        return size == Consts.NO_FARM && acres == 0;
+    }
+
+    public HashMap<Consts.Seed_Name, Integer> getSeedsOwned() {
+        return seedsOwned;
+    }
+
+    public void setSeedsOwned(HashMap<Consts.Seed_Name, Integer> seedsOwned) {
+        if (seedsOwned.isEmpty()) {
+            seedsOwned.put(Consts.Seed_Name.EARLY, 0);
+            seedsOwned.put(Consts.Seed_Name.MID, 0);
+            seedsOwned.put(Consts.Seed_Name.FULL, 0);
+        }
+        this.seedsOwned = seedsOwned;
+    }
+
+    public void updateSeedsOwned(int early, int mid, int full) {
+        seedsOwned.put(Consts.Seed_Name.EARLY, seedsOwned.get(Consts.Seed_Name.EARLY) + early);
+        seedsOwned.put(Consts.Seed_Name.MID, seedsOwned.get(Consts.Seed_Name.MID) + mid);
+        seedsOwned.put(Consts.Seed_Name.FULL, seedsOwned.get(Consts.Seed_Name.FULL) + full);
+
+        updateTtlSeedsOwned();
+    }
+
+    public int getTtlSeedsOwned() {
+        return ttlSeedsOwned;
+    }
+
+    public void setTtlSeedsOwned(int ttlSeedsOwned) {
+        this.ttlSeedsOwned = ttlSeedsOwned;
+    }
+
+    public void updateTtlSeedsOwned() {
+        ttlSeedsOwned = 0;
+        for (int amount : seedsOwned.values()) {
+            ttlSeedsOwned += amount;
+        }
     }
 }

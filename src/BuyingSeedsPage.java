@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 
 /**
  * Created by Lorenzo on 12/3/2015.
+ *
  */
 public class BuyingSeedsPage extends JFrame implements ActionListener {
     private final MinimalBalloonStyle modern;
@@ -51,7 +52,11 @@ public class BuyingSeedsPage extends JFrame implements ActionListener {
         Runnable r = new Runnable() {
             public void run() {
                 while (isVisible()) {
-                    updateLabels();
+                    try {
+                        updateLabels();
+                    } catch (Exception ignored) {
+                        continue;
+                    }
                 }
             }
         };
@@ -75,6 +80,9 @@ public class BuyingSeedsPage extends JFrame implements ActionListener {
                 } else {
                     earlyTF.setBackground(Color.GREEN);
                     balloonTip.setVisible(false);
+                    input.setEarlyAmnt(input.getEarlyAmnt() - Integer.valueOf(earlyTF.getText()));
+                    stu.farm.updateSeedsOwned(Integer.valueOf(earlyTF.getText()), 0, 0);
+                    Consts.DB.saveStudent(stu);
                 }
             }
         });
@@ -95,6 +103,9 @@ public class BuyingSeedsPage extends JFrame implements ActionListener {
                 } else {
                     midTF.setBackground(Color.GREEN);
                     balloonTip.setVisible(false);
+                    input.setMidAmnt(input.getMidAmnt() - Integer.valueOf(midTF.getText()));
+                    stu.farm.updateSeedsOwned(0, Integer.valueOf(midTF.getText()), 0);
+                    Consts.DB.saveStudent(stu);
                 }
             }
         });
@@ -115,13 +126,16 @@ public class BuyingSeedsPage extends JFrame implements ActionListener {
                 } else {
                     fullTF.setBackground(Color.GREEN);
                     balloonTip.setVisible(false);
+                    input.setFullAmnt(input.getFullAmnt() - Integer.valueOf(fullTF.getText()));
+                    stu.farm.updateSeedsOwned(0, 0, Integer.valueOf(fullTF.getText()));
+                    Consts.DB.saveStudent(stu);
                 }
             }
         });
     }
 
     private void updateLabels() {
-        input = Consts.DB.getInputSeller(input.getName(), Consts.GAME_FLOW.currentYear);
+        input = Consts.DB.getInputSeller(input.getName());
         earlyAmntLabel.setText(String.valueOf(input.getEarlyAmnt()));
         earlyPriceLabel.setText(String.valueOf(input.getEarlyPrice()));
         midAmntLabel.setText(String.valueOf(input.getMidAmnt()));

@@ -10,7 +10,6 @@ import java.util.HashMap;
  */
 public class FarmerDecisionPage extends JFrame implements ActionListener {
     Student student;
-    FarmSector studentSector;
     HashMap<Character, Integer> farmSizeAmounts;
     JPanel rootPanel;
     JLabel farmerLabel;
@@ -35,7 +34,6 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
         farmerLabel.setText("Hey " + student.uName + "!");
 
         this.student = student;
-        this.studentSector = this.student.sector;
 
         smallFarmBtn.addActionListener(this);
         medFarmBtn.addActionListener(this);
@@ -67,11 +65,11 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
         JButton button = (JButton) e.getSource();
         if (farmCheck(button)) {
             if (button.equals(smallFarmBtn)) {
-                studentSector.setFarmSize(Consts.SMALL_FARM);
+                student.farm = new FarmTypes(Consts.SMALL_FARM);
             } else if (button.equals(medFarmBtn)) {
-                studentSector.setFarmSize(Consts.MED_FARM);
+                student.farm = new FarmTypes(Consts.MED_FARM);
             } else {
-                studentSector.setFarmSize(Consts.LARGE_FARM);
+                student.farm = new FarmTypes(Consts.LARGE_FARM);
             }
         }
         Consts.DB.saveStudent(student);
@@ -81,7 +79,7 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
     }
 
     private void updateBtns() {
-        farmSizeAmounts = Consts.DB.numInEachFarm(Consts.GAME_FLOW.currentYear);
+        farmSizeAmounts = Consts.DB.numInEachFarm();
         //System.out.println(farmSizeAmounts);
         int dbNumOfSmall = farmSizeAmounts.get(Consts.SMALL_FARM);
         setAvailableLabel(smallAmntLbl, dbNumOfSmall, Consts.S_FARM_CAP);

@@ -62,7 +62,7 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
                 int compMax = 0, early = 0, mid = 0, full = 0, rn = 0, var = 0;
                 Double maxPrice = 3.50, minPrice = 1.50;
                 for (char i = 'A'; i <= 'E'; i++) {
-                    compMax = (int) ceil((double) Consts.DB.getSeedsNeeded(Consts.GAME_FLOW.currentYear) / 5);
+                    compMax = (int) ceil((double) Consts.DB.getSeedsNeeded() / 5);
                     early = 0;
                     mid = 0;
                     full = 0;
@@ -126,7 +126,7 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
         // TODO: place custom component creation code here
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        ArrayList<Student> students = Consts.DB.getAllStudents(Consts.GAME_FLOW.currentYear);
+        ArrayList<Student> students = Consts.DB.getAllStudents();
         String[] columnNames = {"Name", "Farm Size", "Acres"};
 
         DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0) {
@@ -137,7 +137,7 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
 
         studentTable = new JTable(tableModel);
         for (Student student : students) {
-            Object[] objs = {student.uName, student.sector.getFarmSize(), student.sector.getFarmAcres()};
+            Object[] objs = {student.uName, student.farm.getSize(), student.farm.getAcres()};
             tableModel.addRow(objs);
         }
         studentTable.setPreferredScrollableViewportSize(new Dimension(300, 200));

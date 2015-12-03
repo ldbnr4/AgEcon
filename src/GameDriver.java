@@ -14,8 +14,8 @@ public class GameDriver {
         }
         //DB.yearChange(1);
         //new WelcomePage();
-        //new CreatePage();
-        new HomePage(Consts.DB.getStudent("ldbnr4", 2015));
+        new CreatePage();
+        //new HomePage(Consts.DB.getStudent("ldbnr4"));
         //Student student = DB.getStudent("InputIvy");
         //InputSector stuSect = (InputSector) student.sector;
         //System.out.println(DB.countFarmPpl());
@@ -23,16 +23,16 @@ public class GameDriver {
             Student student = new Student("Input"+ String.valueOf(i), "passpass", new InputSector());
             DB.addStudent(student);
         }*/
-        /*for (int i = 0; i < 5; i++) {
-            Student student = new Student("SmallFarmer"+ String.valueOf(i), "passpass", new FarmSector(Consts.SMALL_FARM));
+       /* for (int i = 0; i < 5; i++) {
+            Student student = new Student("SmallFarmer"+ String.valueOf(i), "passpass", new FarmTypes(Consts.SMALL_FARM));
+            Consts.DB.addStudent(student);
+        }
+        for (int i = 0; i < 4; i++) {
+            Student student = new Student("LargeFarmer"+ String.valueOf(i), "passpass", new FarmTypes(Consts.LARGE_FARM));
             Consts.DB.addStudent(student);
         }
         for (int i = 0; i < 10; i++) {
-            Student student = new Student("LargeFarmer"+ String.valueOf(i), "passpass", new FarmSector(Consts.LARGE_FARM));
-            Consts.DB.addStudent(student);
-        }
-        for (int i = 0; i < 5; i++) {
-            Student student = new Student("MedFarmers"+ String.valueOf(i), "passpass", new FarmSector(Consts.MED_FARM));
+            Student student = new Student("MedFarmers"+ String.valueOf(i), "passpass", new FarmTypes(Consts.MED_FARM));
             Consts.DB.addStudent(student);
         }*/
         //new AdminDecisionPage(Consts.DB.getAdmin("admin"));

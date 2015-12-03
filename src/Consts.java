@@ -52,7 +52,7 @@ public class Consts {
     }
 
     public enum Seed_Name {
-        EARLY, MID, FULL, TOTAL
+        EARLY, MID, FULL
     }
 
     public static class RoundJTextField extends JTextField {

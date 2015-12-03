@@ -57,7 +57,7 @@ public class LoginPage extends JFrame implements ActionListener {
             passwordField.setBackground(Color.GREEN);
             userNameField.setBackground(Color.GREEN);
             if (studentRadioButton.isSelected()) {
-                Student grabbedStudent = Consts.DB.getStudent(inUse, Consts.GAME_FLOW.currentYear);
+                Student grabbedStudent = Consts.DB.getStudent(inUse);
                 if(grabbedStudent == null){
                     JOptionPane.showMessageDialog(rootPanel, "User account not found. Make sure you are registered and selected the correct user type.", "Username error", JOptionPane.ERROR_MESSAGE);
                     userNameField.setBackground(Color.RED);
@@ -68,7 +68,7 @@ public class LoginPage extends JFrame implements ActionListener {
                     if (inEncrypt.equals(grabbedStudent.password)) {
                         passwordField.setBackground(Color.GREEN);
                         //System.out.println(grabbedStudent.sector);
-                        boolean emptyStudent = grabbedStudent.sector.checkIfEmpty();
+                        boolean emptyStudent = grabbedStudent.farm.checkIfEmpty();
                         if (emptyStudent) {
                             new FarmerDecisionPage(grabbedStudent);
                         } else {

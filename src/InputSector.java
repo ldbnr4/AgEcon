@@ -53,6 +53,11 @@ public class InputSector {
         return seedTypes.getEarlySale();
     }
 
+    public void setEarlyAmnt(int amnt) {
+        seedTypes.setEarlySale(amnt);
+        Consts.DB.saveInput(this);
+    }
+
     public double getEarlyPrice() {
         return seedTypes.getEarlyPrice();
     }
@@ -74,6 +79,11 @@ public class InputSector {
         return seedTypes.getMidSale();
     }
 
+    public void setMidAmnt(int amnt) {
+        seedTypes.setMidSale(amnt);
+        Consts.DB.saveInput(this);
+    }
+
     public void setFullSeeds(int fullSale, double fullPrice) {
         seedTypes.setFullSale(fullSale);
         seedTypes.setFullPrice(fullPrice);
@@ -81,6 +91,12 @@ public class InputSector {
 
     public int getFullAmnt(){
         return seedTypes.getFullSale();
+    }
+
+    public void setFullAmnt(int amnt) {
+        seedTypes.setFullSale(amnt);
+        Consts.DB.saveInput(this);
+
     }
 
     public int getTtlSeedAmnt(){

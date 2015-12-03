@@ -45,6 +45,8 @@ public class HomePage extends JFrame {
     JLabel earlyPriceLabelE;
     JLabel midPriceLabelE;
     JLabel fullPriceLabelE;
+    JLabel neededLabel;
+    JLabel onHandLabel;
 
     Student stu;
 
@@ -66,6 +68,22 @@ public class HomePage extends JFrame {
                 dispose();
             }
         });
+
+        neededLabel.setText(String.valueOf(stu.farm.getSeedsNeeded()));
+        Runnable t = new Runnable() {
+            @Override
+            public void run() {
+                while (isVisible()) {
+                    try {
+                        onHandLabel.setText(String.valueOf(Consts.DB.getStudent(stu.uName).farm.getTtlSeedsOwned()));
+                    } catch (Exception ignored) {
+                        continue;
+                    }
+                }
+            }
+        };
+        new Thread(t).start();
+
         Thread thread1 = new Thread(new CompanyThread("CompanyA", earlyAmntLabelA, earlyPriceLabelA, midAmntLabelA, midPriceLabelA, fullAmntLabelA,
                 fullPriceLabelA));
         thread1.start();
@@ -88,15 +106,15 @@ public class HomePage extends JFrame {
                 JButton btn = (JButton) e.getSource();
                 String btnTxt = btn.getText();
                 if (btnTxt.contains("CompanyA")) {
-                    new BuyingSeedsPage(stu, Consts.DB.getInputSeller("CompanyA", Consts.GAME_FLOW.currentYear));
+                    new BuyingSeedsPage(stu, Consts.DB.getInputSeller("CompanyA"));
                 } else if (btnTxt.contains("CompanyB")) {
-                    new BuyingSeedsPage(stu, Consts.DB.getInputSeller("CompanyB", Consts.GAME_FLOW.currentYear));
+                    new BuyingSeedsPage(stu, Consts.DB.getInputSeller("CompanyB"));
                 } else if (btnTxt.contains("CompanyC")) {
-                    new BuyingSeedsPage(stu, Consts.DB.getInputSeller("CompanyC", Consts.GAME_FLOW.currentYear));
+                    new BuyingSeedsPage(stu, Consts.DB.getInputSeller("CompanyC"));
                 } else if (btnTxt.contains("CompanyD")) {
-                    new BuyingSeedsPage(stu, Consts.DB.getInputSeller("CompanyD", Consts.GAME_FLOW.currentYear));
+                    new BuyingSeedsPage(stu, Consts.DB.getInputSeller("CompanyD"));
                 } else if (btnTxt.contains("CompanyE")) {
-                    new BuyingSeedsPage(stu, Consts.DB.getInputSeller("CompanyE", Consts.GAME_FLOW.currentYear));
+                    new BuyingSeedsPage(stu, Consts.DB.getInputSeller("CompanyE"));
                 } else {
                     System.out.println(btn.getName() + " does not have a case.");
                 }
@@ -124,20 +142,23 @@ public class HomePage extends JFrame {
             this.fullA = fAmnt;
             this.fullP = fPrice;
             this.name = name;
-            this.DBinput = Consts.DB.getInputSeller(name, Consts.GAME_FLOW.currentYear);
+            this.DBinput = Consts.DB.getInputSeller(name);
         }
 
         @Override
         public void run() {
             //System.out.println(Consts.DB.getInputSeller(name, Consts.GAME_FLOW.currentYear));
             while (true) {
-                erlA.setText(String.valueOf(DBinput.getEarlyAmnt()));
-                erlP.setText(String.valueOf(DBinput.getEarlyPrice()));
-                midA.setText(String.valueOf(DBinput.getMidAmnt()));
-                midP.setText(String.valueOf(DBinput.getMidPrice()));
-                fullA.setText(String.valueOf(DBinput.getFullAmnt()));
-                fullP.setText(String.valueOf(DBinput.getFullPrice()));
-                DBinput = Consts.DB.getInputSeller(name, Consts.GAME_FLOW.currentYear);
+                try {
+                    erlA.setText(String.valueOf(DBinput.getEarlyAmnt()));
+                    erlP.setText(String.valueOf(DBinput.getEarlyPrice()));
+                    midA.setText(String.valueOf(DBinput.getMidAmnt()));
+                    midP.setText(String.valueOf(DBinput.getMidPrice()));
+                    fullA.setText(String.valueOf(DBinput.getFullAmnt()));
+                    fullP.setText(String.valueOf(DBinput.getFullPrice()));
+                    DBinput = Consts.DB.getInputSeller(name);
+                } catch (Exception ignored) {
+                }
             }
         }
     }

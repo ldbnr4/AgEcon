@@ -15,7 +15,7 @@ public class Student {
     public HashMap<String, Integer> id;
     public String uName;
     @Embedded
-    public FarmSector sector;
+    public FarmTypes farm;
     protected String password;
     protected String salt;
     private int year;
@@ -23,12 +23,12 @@ public class Student {
     public Student() {
     }
 
-    public Student(String name, String pass, FarmSector sector) {
+    public Student(String name, String pass, FarmTypes farm) {
         this.uName = name;
         HashMap<String, String> passInfo = EncryptPassword.encrypt(pass);
         this.password = passInfo.get("password");
         this.salt = passInfo.get("salt");
-        this.sector = sector;
+        this.farm = farm;
         this.year = Consts.GAME_FLOW.currentYear;
         setId(this.year);
     }

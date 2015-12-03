@@ -27,7 +27,7 @@ public class UNameVerifier {
         //System.out.println(tf);
         balloonTip.setAttachedComponent(tf);
         if (!adminFlag) {
-            Student student = Consts.DB.getStudent(in, Consts.GAME_FLOW.currentYear);
+            Student student = Consts.DB.getStudent(in);
             if (!length || !b || student != null) {
                 tf.setBackground(Color.red);
                 if (!length) {
