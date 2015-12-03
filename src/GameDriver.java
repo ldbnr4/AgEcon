@@ -15,7 +15,7 @@ public class GameDriver {
         //DB.yearChange(1);
         //new WelcomePage();
         //new CreatePage();
-        //new HomePage(Consts.DB.getStudent("ldbnr4", 2015).uName, Consts.DB.getStudent("ldbnr4", 2015).sector);
+        new HomePage(Consts.DB.getStudent("ldbnr4", 2015));
         //Student student = DB.getStudent("InputIvy");
         //InputSector stuSect = (InputSector) student.sector;
         //System.out.println(DB.countFarmPpl());
@@ -35,7 +35,7 @@ public class GameDriver {
             Student student = new Student("MedFarmers"+ String.valueOf(i), "passpass", new FarmSector(Consts.MED_FARM));
             Consts.DB.addStudent(student);
         }*/
-        new AdminDecisionPage(Consts.DB.getAdmin("admin"));
+        //new AdminDecisionPage(Consts.DB.getAdmin("admin"));
         //System.out.println(Consts.DB.getSeedsNeeded(Consts.GAME_FLOW.currentYear));
         //System.out.println();
     }

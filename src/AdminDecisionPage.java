@@ -61,7 +61,7 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
             public void actionPerformed(ActionEvent e) {
                 int compMax = 0, early = 0, mid = 0, full = 0, rn = 0, var = 0;
                 Double maxPrice = 3.50, minPrice = 1.50;
-                for (int i = 1; i < 6; i++) {
+                for (char i = 'A'; i <= 'E'; i++) {
                     compMax = (int) ceil((double) Consts.DB.getSeedsNeeded(Consts.GAME_FLOW.currentYear) / 5);
                     early = 0;
                     mid = 0;
@@ -95,7 +95,7 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     @Override

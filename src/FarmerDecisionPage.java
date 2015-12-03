@@ -35,7 +35,7 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
         farmerLabel.setText("Hey " + student.uName + "!");
 
         this.student = student;
-        this.studentSector = (FarmSector) this.student.sector;
+        this.studentSector = this.student.sector;
 
         smallFarmBtn.addActionListener(this);
         medFarmBtn.addActionListener(this);
@@ -75,7 +75,7 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
             }
         }
         Consts.DB.saveStudent(student);
-        new HomePage(student.uName, student.sector);
+        new HomePage(student);
         setVisible(false);
         dispose();
     }

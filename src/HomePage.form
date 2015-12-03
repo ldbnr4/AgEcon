@@ -370,7 +370,7 @@
                             </constraints>
                             <properties>
                               <font name="Perpetua" size="22" style="1"/>
-                              <text value="Buy Now!"/>
+                              <text value="Order from CompanyA"/>
                             </properties>
                           </component>
                         </children>
@@ -648,7 +648,7 @@
                             </constraints>
                             <properties>
                               <font name="Perpetua" size="22" style="1"/>
-                              <text value="Buy Now!"/>
+                              <text value="Order from CompanyB"/>
                             </properties>
                           </component>
                         </children>
@@ -926,7 +926,7 @@
                             </constraints>
                             <properties>
                               <font name="Perpetua" size="22" style="1"/>
-                              <text value="Buy Now!"/>
+                              <text value="Order from CompanyC"/>
                             </properties>
                           </component>
                         </children>
@@ -1204,7 +1204,7 @@
                             </constraints>
                             <properties>
                               <font name="Perpetua" size="22" style="1"/>
-                              <text value="Buy Now!"/>
+                              <text value="Order from CompanyD"/>
                             </properties>
                           </component>
                         </children>
@@ -1482,7 +1482,7 @@
                             </constraints>
                             <properties>
                               <font name="Perpetua" size="22" style="1"/>
-                              <text value="Buy Now!"/>
+                              <text value="Order from CompanyE"/>
                             </properties>
                           </component>
                         </children>

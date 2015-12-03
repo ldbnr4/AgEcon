@@ -72,7 +72,7 @@ public class LoginPage extends JFrame implements ActionListener {
                         if (emptyStudent) {
                             new FarmerDecisionPage(grabbedStudent);
                         } else {
-                            new HomePage(grabbedStudent.uName, grabbedStudent.sector);
+                            new HomePage(grabbedStudent);
                         }
                         setVisible(false);
                         dispose();

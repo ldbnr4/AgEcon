@@ -46,15 +46,18 @@ public class HomePage extends JFrame {
     JLabel midPriceLabelE;
     JLabel fullPriceLabelE;
 
-    public HomePage(String name, FarmSector sector) {
-        super("Welcome Page");
+    Student stu;
+
+    public HomePage(Student student) {
+        super("Home Page");
         setContentPane(rootPanel);
         setResizable(false);
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        welcomeLabel.setText("Welcome " + name + "!");
+        this.stu = student;
+        welcomeLabel.setText("Welcome " + stu.uName + "!");
         logoutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -63,22 +66,48 @@ public class HomePage extends JFrame {
                 dispose();
             }
         });
-
-        Thread thread1 = new Thread(new CompanyThread("Company1", earlyAmntLabelA, earlyPriceLabelA, midAmntLabelA, midPriceLabelA, fullAmntLabelA,
+        Thread thread1 = new Thread(new CompanyThread("CompanyA", earlyAmntLabelA, earlyPriceLabelA, midAmntLabelA, midPriceLabelA, fullAmntLabelA,
                 fullPriceLabelA));
         thread1.start();
-        Thread thread2 = new Thread(new CompanyThread("Company2", earlyAmntLabelB, earlyPriceLabelB, midAmntLabelB, midPriceLabelB, fullAmntLabelB,
+        Thread thread2 = new Thread(new CompanyThread("CompanyB", earlyAmntLabelB, earlyPriceLabelB, midAmntLabelB, midPriceLabelB, fullAmntLabelB,
                 fullPriceLabelB));
         thread2.start();
-        Thread thread3 = new Thread(new CompanyThread("Company3", earlyAmntLabelC, earlyPriceLabelC, midAmntLabelC, midPriceLabelC, fullAmntLabelC,
+        Thread thread3 = new Thread(new CompanyThread("CompanyC", earlyAmntLabelC, earlyPriceLabelC, midAmntLabelC, midPriceLabelC, fullAmntLabelC,
                 fullPriceLabelC));
         thread3.start();
-        Thread thread4 = new Thread(new CompanyThread("Company4", earlyAmntLabelD, earlyPriceLabelD, midAmntLabelD, midPriceLabelD, fullAmntLabelD,
+        Thread thread4 = new Thread(new CompanyThread("CompanyD", earlyAmntLabelD, earlyPriceLabelD, midAmntLabelD, midPriceLabelD, fullAmntLabelD,
                 fullPriceLabelD));
         thread4.start();
-        Thread thread5 = new Thread(new CompanyThread("Company5", earlyAmntLabelE, earlyPriceLabelE, midAmntLabelE, midPriceLabelE, fullAmntLabelE,
+        Thread thread5 = new Thread(new CompanyThread("CompanyE", earlyAmntLabelE, earlyPriceLabelE, midAmntLabelE, midPriceLabelE, fullAmntLabelE,
                 fullPriceLabelE));
         thread5.start();
+
+        final ActionListener buyNowAction = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JButton btn = (JButton) e.getSource();
+                String btnTxt = btn.getText();
+                if (btnTxt.contains("CompanyA")) {
+                    new BuyingSeedsPage(stu, Consts.DB.getInputSeller("CompanyA", Consts.GAME_FLOW.currentYear));
+                } else if (btnTxt.contains("CompanyB")) {
+                    new BuyingSeedsPage(stu, Consts.DB.getInputSeller("CompanyB", Consts.GAME_FLOW.currentYear));
+                } else if (btnTxt.contains("CompanyC")) {
+                    new BuyingSeedsPage(stu, Consts.DB.getInputSeller("CompanyC", Consts.GAME_FLOW.currentYear));
+                } else if (btnTxt.contains("CompanyD")) {
+                    new BuyingSeedsPage(stu, Consts.DB.getInputSeller("CompanyD", Consts.GAME_FLOW.currentYear));
+                } else if (btnTxt.contains("CompanyE")) {
+                    new BuyingSeedsPage(stu, Consts.DB.getInputSeller("CompanyE", Consts.GAME_FLOW.currentYear));
+                } else {
+                    System.out.println(btn.getName() + " does not have a case.");
+                }
+            }
+        };
+
+        buyNowButtonA.addActionListener(buyNowAction);
+        buyNowButtonB.addActionListener(buyNowAction);
+        buyNowButtonC.addActionListener(buyNowAction);
+        buyNowButtonD.addActionListener(buyNowAction);
+        buyNowButtonE.addActionListener(buyNowAction);
     }
 
     public static class CompanyThread implements Runnable {
