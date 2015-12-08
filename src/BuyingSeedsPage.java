@@ -33,6 +33,7 @@ public class BuyingSeedsPage extends JFrame implements ActionListener {
     InputSector input;
     String inName;
     Student stu;
+    String stuName;
 
     public BuyingSeedsPage(Student student, InputSector inputSector) {
         super("Company Page");
@@ -46,6 +47,7 @@ public class BuyingSeedsPage extends JFrame implements ActionListener {
         input = inputSector;
         inName = input.name;
         stu = student;
+        stuName = student.uName;
         modern = new MinimalBalloonStyle(Color.yellow, 5);
         balloonTip = new BalloonTip(earlyTF, new JLabel(), modern, BalloonTip.Orientation.RIGHT_ABOVE,
                 BalloonTip.AttachLocation.ALIGNED, 10, 10, false);
@@ -61,75 +63,9 @@ public class BuyingSeedsPage extends JFrame implements ActionListener {
         new Thread(r).start();
 
         doneButton.addActionListener(this);
-
-        earlyBuyBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (!earlyTF.getText().matches("\\d+")) {
-                    balloonTip.setAttachedComponent(earlyTF);
-                    balloonTip.setTextContents("Please enter a positive number order.");
-                    TimingUtils.showTimedBalloon(balloonTip, 2500);
-                    earlyTF.setBackground(Color.RED);
-                } else if (earlyAmntLabel.getText().equals("SOLD OUT")) {
-                    balloonTip.setAttachedComponent(earlyTF);
-                    balloonTip.setTextContents("The input supplier is sold out of this variety.");
-                    TimingUtils.showTimedBalloon(balloonTip, 2500);
-                    earlyTF.setBackground(Color.RED);
-                } else {
-                    earlyTF.setBackground(Color.GREEN);
-                    balloonTip.setVisible(false);
-                    input.setEarlyAmnt(input.getEarlyAmnt() - Integer.valueOf(earlyTF.getText()));
-                    stu.farm.updateSeedsOwned(Integer.valueOf(earlyTF.getText()), 0, 0);
-                    Consts.DB.saveStudent(stu);
-                }
-            }
-        });
-
-        midBuyBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (!midTF.getText().matches("\\d+")) {
-                    balloonTip.setAttachedComponent(midTF);
-                    balloonTip.setTextContents("Please enter a positive number order.");
-                    TimingUtils.showTimedBalloon(balloonTip, 2500);
-                    midTF.setBackground(Color.RED);
-                } else if (midAmntLabel.getText().equals("SOLD OUT")) {
-                    balloonTip.setAttachedComponent(midTF);
-                    balloonTip.setTextContents("The input supplier is sold out of this variety.");
-                    TimingUtils.showTimedBalloon(balloonTip, 2500);
-                    midTF.setBackground(Color.RED);
-                } else {
-                    midTF.setBackground(Color.GREEN);
-                    balloonTip.setVisible(false);
-                    input.setMidAmnt(input.getMidAmnt() - Integer.valueOf(midTF.getText()));
-                    stu.farm.updateSeedsOwned(0, Integer.valueOf(midTF.getText()), 0);
-                    Consts.DB.saveStudent(stu);
-                }
-            }
-        });
-
-        fullBuyBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (!fullTF.getText().matches("\\d+")) {
-                    balloonTip.setAttachedComponent(fullTF);
-                    balloonTip.setTextContents("Please enter a positive number to order.");
-                    TimingUtils.showTimedBalloon(balloonTip, 2500);
-                    fullTF.setBackground(Color.RED);
-                } else if (fullAmntLabel.getText().equals("SOLD OUT")) {
-                    balloonTip.setAttachedComponent(fullTF);
-                    balloonTip.setTextContents("The input supplier is sold out of this variety.");
-                    TimingUtils.showTimedBalloon(balloonTip, 2500);
-                    fullTF.setBackground(Color.RED);
-                } else {
-                    fullTF.setBackground(Color.GREEN);
-                    balloonTip.setVisible(false);
-                    input.setFullAmnt(input.getFullAmnt() - Integer.valueOf(fullTF.getText()));
-                    stu.farm.updateSeedsOwned(0, 0, Integer.valueOf(fullTF.getText()));
-                    Consts.DB.saveStudent(stu);
-                }
-            }
-        });
+        earlyBuyBtn.addActionListener(this);
+        midBuyBtn.addActionListener(this);
+        fullBuyBtn.addActionListener(this);
     }
 
     private void updateLabels() {
@@ -145,7 +81,85 @@ public class BuyingSeedsPage extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        setVisible(false);
-        dispose();
+        JButton btn = (JButton) e.getSource();
+        if (btn.equals(doneButton)) {
+            setVisible(false);
+            dispose();
+        } else if (btn.equals(earlyBuyBtn)) {
+            if (!earlyTF.getText().matches("\\d+")) {
+                balloonTip.setAttachedComponent(earlyTF);
+                balloonTip.setTextContents("Please enter a positive number order.");
+                TimingUtils.showTimedBalloon(balloonTip, 2500);
+                earlyTF.setBackground(Color.RED);
+            } else if (earlyAmntLabel.getText().equals("SOLD OUT")) {
+                balloonTip.setAttachedComponent(earlyTF);
+                balloonTip.setTextContents("The input supplier is sold out of this variety.");
+                TimingUtils.showTimedBalloon(balloonTip, 2500);
+                earlyTF.setBackground(Color.RED);
+            } else {
+                earlyTF.setBackground(Color.GREEN);
+                balloonTip.setVisible(false);
+                input.setEarlyAmnt(input.getEarlyAmnt() - Integer.valueOf(earlyTF.getText()));
+                while (stu == null) {
+                    stu = Consts.DB.getStudent(stuName);
+                }
+                stu.farm.updateSeedsOwned(Integer.valueOf(earlyTF.getText()), 0, 0);
+                while (input == null) {
+                    input = Consts.DB.getInputSeller(inName);
+                }
+                stu.farm.addSeedCost(inName, Consts.Seed_Name.EARLY, Integer.valueOf(earlyTF.getText()), input.getEarlyPrice());
+                Consts.DB.saveStudent(stu);
+            }
+        } else if (btn.equals(midBuyBtn)) {
+            if (!midTF.getText().matches("\\d+")) {
+                balloonTip.setAttachedComponent(midTF);
+                balloonTip.setTextContents("Please enter a positive number order.");
+                TimingUtils.showTimedBalloon(balloonTip, 2500);
+                midTF.setBackground(Color.RED);
+            } else if (midAmntLabel.getText().equals("SOLD OUT")) {
+                balloonTip.setAttachedComponent(midTF);
+                balloonTip.setTextContents("The input supplier is sold out of this variety.");
+                TimingUtils.showTimedBalloon(balloonTip, 2500);
+                midTF.setBackground(Color.RED);
+            } else {
+                midTF.setBackground(Color.GREEN);
+                balloonTip.setVisible(false);
+                input.setMidAmnt(input.getMidAmnt() - Integer.valueOf(midTF.getText()));
+                while (stu == null) {
+                    stu = Consts.DB.getStudent(stuName);
+                }
+                stu.farm.updateSeedsOwned(0, Integer.valueOf(midTF.getText()), 0);
+                while (input == null) {
+                    input = Consts.DB.getInputSeller(inName);
+                }
+                stu.farm.addSeedCost(inName, Consts.Seed_Name.MID, Integer.valueOf(midTF.getText()), input.getMidPrice());
+                Consts.DB.saveStudent(stu);
+            }
+        } else if (btn.equals(fullBuyBtn)) {
+            if (!fullTF.getText().matches("\\d+")) {
+                balloonTip.setAttachedComponent(fullTF);
+                balloonTip.setTextContents("Please enter a positive number order.");
+                TimingUtils.showTimedBalloon(balloonTip, 2500);
+                fullTF.setBackground(Color.RED);
+            } else if (fullAmntLabel.getText().equals("SOLD OUT")) {
+                balloonTip.setAttachedComponent(fullTF);
+                balloonTip.setTextContents("The input supplier is sold out of this variety.");
+                TimingUtils.showTimedBalloon(balloonTip, 2500);
+                fullTF.setBackground(Color.RED);
+            } else {
+                fullTF.setBackground(Color.GREEN);
+                balloonTip.setVisible(false);
+                input.setFullAmnt(input.getFullAmnt() - Integer.valueOf(fullTF.getText()));
+                while (stu == null) {
+                    stu = Consts.DB.getStudent(stuName);
+                }
+                stu.farm.updateSeedsOwned(0, 0, Integer.valueOf(fullTF.getText()));
+                while (input == null) {
+                    input = Consts.DB.getInputSeller(inName);
+                }
+                stu.farm.addSeedCost(inName, Consts.Seed_Name.FULL, Integer.valueOf(fullTF.getText()), input.getFullPrice());
+                Consts.DB.saveStudent(stu);
+            }
+        }
     }
 }

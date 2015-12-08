@@ -10,10 +10,11 @@ import java.util.HashMap;
 
 @Embedded
 public final class FarmTypes {
-    public char size;
-    public int acres;
-    public Double totalCost = (double) 0;
-    HashMap<String, Double> costs = new HashMap<>();
+    char size;
+    int acres;
+    Double totalCost = (double) 0;
+    HashMap<String, Double> staticCosts = new HashMap<>();
+    HashMap<String, Consts.SeedStat> seedCosts = new HashMap<>();
     int acreYield = 3500;
     int ttlYield;
     double ttlBushels;
@@ -24,12 +25,13 @@ public final class FarmTypes {
     public FarmTypes(char size) {
         setSize(size);
         setAcres(size);
-        setCosts();
+        setStaticCosts();
         setTtlYield(acreYield * acres);
         setTtlBushels(ttlYield / 56);
         setSeedsNeeded(10 * acres);
         setSeedsOwned(new HashMap<Consts.Seed_Name, Integer>());
         setTtlSeedsOwned(0);
+        setTotalCost();
     }
 
     public FarmTypes() {
@@ -63,53 +65,65 @@ public final class FarmTypes {
         this.ttlBushels = ttlBushels;
     }
 
-    public HashMap<String, Double> getCosts() {
-        return costs;
+    public HashMap<String, Double> getStaticCosts() {
+        return staticCosts;
     }
 
-    public void setCosts() {
+    public void setStaticCosts() {
         if (size == Consts.SMALL_FARM) {
-            costs.put("Nitrogen", Consts.round((0.68 * Consts.INFLATION) * acres * 130));
-            costs.put("Phosphate", Consts.round((0.9 * Consts.INFLATION) * acres * 50));
-            costs.put("Potash", Consts.round((0.72 * Consts.INFLATION) * acres * 30));
-            costs.put("Lime", Consts.round((14 * Consts.INFLATION) * acres * 0.25));
-            costs.put("Pesticides", Consts.round((20 * Consts.INFLATION) * acres));
-            costs.put("Fuel Utils", Consts.round((20 * Consts.INFLATION) * acres));
-            costs.put("Repairs", Consts.round((15.23 * Consts.INFLATION) * acres));
-            costs.put("Misc", Consts.round((9 * Consts.INFLATION) * acres));
-            costs.put("Interest", Consts.round((0.09 * Consts.INFLATION) * acres));
-            costs.put("Labor", Consts.round((11 * Consts.INFLATION) * acres * 4));
-            costs.put("Equipment", Consts.round((40 * Consts.INFLATION) * acres));
-            costs.put("Land Rent", Consts.round((175 * Consts.INFLATION) * acres));
+            staticCosts.put("Nitrogen", Consts.round((0.68 * Consts.INFLATION) * acres * 130));
+            staticCosts.put("Phosphate", Consts.round((0.9 * Consts.INFLATION) * acres * 50));
+            staticCosts.put("Potash", Consts.round((0.72 * Consts.INFLATION) * acres * 30));
+            staticCosts.put("Lime", Consts.round((14 * Consts.INFLATION) * acres * 0.25));
+            staticCosts.put("Pesticides", Consts.round((20 * Consts.INFLATION) * acres));
+            staticCosts.put("Fuel Utils", Consts.round((20 * Consts.INFLATION) * acres));
+            staticCosts.put("Repairs", Consts.round((15.23 * Consts.INFLATION) * acres));
+            staticCosts.put("Misc", Consts.round((9 * Consts.INFLATION) * acres));
+            staticCosts.put("Interest", Consts.round((0.09 * Consts.INFLATION) * acres));
+            staticCosts.put("Labor", Consts.round((11 * Consts.INFLATION) * acres * 4));
+            staticCosts.put("Equipment", Consts.round((40 * Consts.INFLATION) * acres));
+            staticCosts.put("Land Rent", Consts.round((175 * Consts.INFLATION) * acres));
         } else if (size == Consts.MED_FARM) {
-            costs.put("Nitrogen", Consts.round((0.68 * Consts.INFLATION * 0.96) * acres * 130));
-            costs.put("Phosphate", Consts.round((0.9 * Consts.INFLATION * 0.96) * acres * 50));
-            costs.put("Potash", Consts.round((0.72 * Consts.INFLATION * 0.96) * acres * 30));
-            costs.put("Lime", Consts.round((14 * Consts.INFLATION * 0.96) * acres * 0.25));
-            costs.put("Pesticides", Consts.round((20 * Consts.INFLATION * 0.96) * acres));
-            costs.put("Fuel Utils", Consts.round((20 * Consts.INFLATION * 0.96) * acres));
-            costs.put("Repairs", Consts.round((15.23 * Consts.INFLATION * 0.96) * acres));
-            costs.put("Misc", Consts.round((9 * Consts.INFLATION * 0.96) * acres));
-            costs.put("Interest", Consts.round((0.09 * Consts.INFLATION * 0.96) * acres));
-            costs.put("Labor", Consts.round((11 * Consts.INFLATION * 0.96) * acres * 4));
-            costs.put("Equipment", Consts.round((40 * Consts.INFLATION * 0.96) * acres));
-            costs.put("Land Rent", Consts.round((175 * Consts.INFLATION * 0.96) * acres));
+            staticCosts.put("Nitrogen", Consts.round((0.68 * Consts.INFLATION * 0.96) * acres * 130));
+            staticCosts.put("Phosphate", Consts.round((0.9 * Consts.INFLATION * 0.96) * acres * 50));
+            staticCosts.put("Potash", Consts.round((0.72 * Consts.INFLATION * 0.96) * acres * 30));
+            staticCosts.put("Lime", Consts.round((14 * Consts.INFLATION * 0.96) * acres * 0.25));
+            staticCosts.put("Pesticides", Consts.round((20 * Consts.INFLATION * 0.96) * acres));
+            staticCosts.put("Fuel Utils", Consts.round((20 * Consts.INFLATION * 0.96) * acres));
+            staticCosts.put("Repairs", Consts.round((15.23 * Consts.INFLATION * 0.96) * acres));
+            staticCosts.put("Misc", Consts.round((9 * Consts.INFLATION * 0.96) * acres));
+            staticCosts.put("Interest", Consts.round((0.09 * Consts.INFLATION * 0.96) * acres));
+            staticCosts.put("Labor", Consts.round((11 * Consts.INFLATION * 0.96) * acres * 4));
+            staticCosts.put("Equipment", Consts.round((40 * Consts.INFLATION * 0.96) * acres));
+            staticCosts.put("Land Rent", Consts.round((175 * Consts.INFLATION * 0.96) * acres));
         } else {
-            costs.put("Nitrogen", Consts.round((0.68 * Consts.INFLATION * 0.94) * acres * 130));
-            costs.put("Phosphate", Consts.round((0.9 * Consts.INFLATION * 0.94) * acres * 50));
-            costs.put("Potash", Consts.round((0.72 * Consts.INFLATION * 0.94) * acres * 30));
-            costs.put("Lime", Consts.round((14 * Consts.INFLATION * 0.94) * acres * 0.25));
-            costs.put("Pesticides", Consts.round((20 * Consts.INFLATION * 0.94) * acres));
-            costs.put("Fuel Utils", Consts.round((20 * Consts.INFLATION * 0.94) * acres));
-            costs.put("Repairs", Consts.round((15.23 * Consts.INFLATION * 0.94) * acres));
-            costs.put("Misc", Consts.round((9 * Consts.INFLATION * 0.94) * acres));
-            costs.put("Interest", Consts.round((0.09 * Consts.INFLATION * 0.94) * acres));
-            costs.put("Labor", Consts.round((11 * Consts.INFLATION * 0.94) * acres * 4));
-            costs.put("Equipment", Consts.round((40 * Consts.INFLATION * 0.94) * acres));
-            costs.put("Land Rent", Consts.round((175 * Consts.INFLATION * 0.94) * acres));
+            staticCosts.put("Nitrogen", Consts.round((0.68 * Consts.INFLATION * 0.94) * acres * 130));
+            staticCosts.put("Phosphate", Consts.round((0.9 * Consts.INFLATION * 0.94) * acres * 50));
+            staticCosts.put("Potash", Consts.round((0.72 * Consts.INFLATION * 0.94) * acres * 30));
+            staticCosts.put("Lime", Consts.round((14 * Consts.INFLATION * 0.94) * acres * 0.25));
+            staticCosts.put("Pesticides", Consts.round((20 * Consts.INFLATION * 0.94) * acres));
+            staticCosts.put("Fuel Utils", Consts.round((20 * Consts.INFLATION * 0.94) * acres));
+            staticCosts.put("Repairs", Consts.round((15.23 * Consts.INFLATION * 0.94) * acres));
+            staticCosts.put("Misc", Consts.round((9 * Consts.INFLATION * 0.94) * acres));
+            staticCosts.put("Interest", Consts.round((0.09 * Consts.INFLATION * 0.94) * acres));
+            staticCosts.put("Labor", Consts.round((11 * Consts.INFLATION * 0.94) * acres * 4));
+            staticCosts.put("Equipment", Consts.round((40 * Consts.INFLATION * 0.94) * acres));
+            staticCosts.put("Land Rent", Consts.round((175 * Consts.INFLATION * 0.94) * acres));
         }
-        for (Double cost : costs.values()) {
-            totalCost += cost;
+    }
+
+    public void addSeedCost(String who, Consts.Seed_Name seedVar, int amount, double price) {
+        seedCosts.put(who, new Consts.SeedStat(seedVar, amount, price, Consts.round(price * amount)));
+    }
+
+    public void setTotalCost() {
+        totalCost = 0d;
+        for (Double staticCost : staticCosts.values()) {
+            totalCost += staticCost;
+        }
+
+        for (Consts.SeedStat seedStat : seedCosts.values()) {
+            totalCost += seedStat.getTtlCst();
         }
 
         totalCost = Consts.round(totalCost);

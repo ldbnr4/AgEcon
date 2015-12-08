@@ -21,7 +21,8 @@ public class MongoDBConnection{
     DBCollection inputColl = db.getCollection("inputSector");
 
     private MongoDBConnection() {
-        morphia.map(Student.class).map(FarmTypes.class).map(GameFlow.class).map(Admin.class).map(InputSector.class);
+        morphia.map(Student.class).map(FarmTypes.class).map(GameFlow.class).map(Admin.class).map(InputSector.class)
+                .map(Consts.SeedStat.class);
     }
 
     public static MongoDBConnection getInstance() {

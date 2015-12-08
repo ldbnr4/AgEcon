@@ -1,3 +1,5 @@
+import org.mongodb.morphia.annotations.Embedded;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
@@ -7,15 +9,9 @@ import java.awt.geom.RoundRectangle2D;
  *
  */
 public class Consts {
-    public static final String COMPANY_A_NAME = "CompanyA";
-    public static final String COMPANY_B_NAME = "CompanyB";
-    public static final String COMPANY_C_NAME = "CompanyC";
-    public static final String COMPANY_D_NAME = "CompanyD";
-    public static final String COMPANY_E_NAME = "CompanyE";
-    public static final char SMALL_FARM = 'S';
-    public static final char MED_FARM = 'M';
-    public static final char LARGE_FARM = 'L';
-    public static final char NO_FARM = 'X';
+    public static final String COMPANY_A_NAME = "CompanyA", COMPANY_B_NAME = "CompanyB", COMPANY_C_NAME = "CompanyC",
+            COMPANY_D_NAME = "CompanyD", COMPANY_E_NAME = "CompanyE";
+    public static final char SMALL_FARM = 'S', MED_FARM = 'M', LARGE_FARM = 'L', NO_FARM = 'X';
     public static final int S_FARM_CAP = 5;
     public static final int M_FARM_CAP = 10;
     public static final int L_FARM_CAP = 5;
@@ -69,6 +65,57 @@ public class Consts {
 
     public enum Seed_Name {
         EARLY, MID, FULL
+    }
+
+    @Embedded
+    static class SeedStat {
+        Seed_Name seedType;
+        int amount;
+        double price;
+        double ttlCst;
+
+        public SeedStat(Seed_Name seedType, int amount, double price, double totalCst) {
+            setSeedType(seedType);
+            setAmount(amount);
+            setPrice(price);
+            setTtlCst(totalCst);
+        }
+
+        public SeedStat() {
+
+        }
+
+        public Seed_Name getSeedType() {
+            return seedType;
+        }
+
+        public void setSeedType(Seed_Name seedType) {
+            this.seedType = seedType;
+        }
+
+        public int getAmount() {
+            return amount;
+        }
+
+        public void setAmount(int amount) {
+            this.amount = amount;
+        }
+
+        public double getPrice() {
+            return price;
+        }
+
+        public void setPrice(double price) {
+            this.price = price;
+        }
+
+        public double getTtlCst() {
+            return ttlCst;
+        }
+
+        public void setTtlCst(double ttlCst) {
+            this.ttlCst = ttlCst;
+        }
     }
 
     public static class RoundJTextField extends JTextField {

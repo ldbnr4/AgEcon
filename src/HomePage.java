@@ -8,7 +8,8 @@ import java.util.HashMap;
  *
  */
 public class HomePage extends JFrame {
-    JLabel welcomeLabel, rootPanel;
+    JLabel welcomeLabel;
+    JPanel rootPanel;
     JButton logoutButton, buyNowButtonA, buyNowButtonB, buyNowButtonC, buyNowButtonD, buyNowButtonE;
     JLabel earlyAmntLabelA, midAmntLabelA, fullAmntLabelA, earlyPriceLabelA, midPriceLabelA, fullPriceLabelA;
     JLabel earlyAmntLabelB, midAmntLabelB, fullAmntLabelB, earlyPriceLabelB, midPriceLabelB, fullPriceLabelB;
