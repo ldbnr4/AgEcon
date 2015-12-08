@@ -7,9 +7,11 @@ import java.awt.geom.RoundRectangle2D;
  *
  */
 public class Consts {
-    public static final String INPUT_SECTOR_NAME = "Input Supply";
-    public static final String FARM_SECTOR_NAME = "Farm Production";
-    public static final String FOOD_SECTOR_NAME = "Food Marketing";
+    public static final String COMPANY_A_NAME = "CompanyA";
+    public static final String COMPANY_B_NAME = "CompanyB";
+    public static final String COMPANY_C_NAME = "CompanyC";
+    public static final String COMPANY_D_NAME = "CompanyD";
+    public static final String COMPANY_E_NAME = "CompanyE";
     public static final char SMALL_FARM = 'S';
     public static final char MED_FARM = 'M';
     public static final char LARGE_FARM = 'L';
@@ -49,6 +51,20 @@ public class Consts {
                 return listCellRendererComponent;
             }
         };
+    }
+
+    static void checkSetSoldOut(JLabel amntlabel, JLabel priceLabel, int amount, double price) {
+        if (amount > 0) {
+            amntlabel.setForeground(Color.BLACK);
+            amntlabel.setText(String.valueOf(amount));
+            priceLabel.setForeground(Color.BLACK);
+            priceLabel.setText(String.valueOf(price));
+        } else {
+            amntlabel.setText("SOLD OUT");
+            amntlabel.setForeground(Color.RED);
+            priceLabel.setText("SOLD OUT");
+            priceLabel.setForeground(Color.RED);
+        }
     }
 
     public enum Seed_Name {

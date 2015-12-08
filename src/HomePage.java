@@ -1,54 +1,26 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
 
 /**
  * Created by Lorenzo on 10/1/2015.
  *
  */
 public class HomePage extends JFrame {
-    JLabel welcomeLabel;
-    JPanel rootPanel;
-    JButton logoutButton;
-    JButton buyNowButtonA;
-    JButton buyNowButtonB;
-    JButton buyNowButtonC;
-    JButton buyNowButtonD;
-    JButton buyNowButtonE;
-    JLabel earlyAmntLabelA;
-    JLabel midAmntLabelA;
-    JLabel fullAmntLabelA;
-    JLabel earlyPriceLabelA;
-    JLabel midPriceLabelA;
-    JLabel fullPriceLabelA;
-    JLabel earlyAmntLabelB;
-    JLabel midAmntLabelB;
-    JLabel fullAmntLabelB;
-    JLabel earlyPriceLabelB;
-    JLabel midPriceLabelB;
-    JLabel fullPriceLabelB;
-    JLabel earlyAmntLabelC;
-    JLabel midAmntLabelC;
-    JLabel fullAmntLabelC;
-    JLabel earlyPriceLabelC;
-    JLabel midPriceLabelC;
-    JLabel fullPriceLabelC;
-    JLabel earlyAmntLabelD;
-    JLabel midAmntLabelD;
-    JLabel fullAmntLabelD;
-    JLabel earlyPriceLabelD;
-    JLabel midPriceLabelD;
-    JLabel fullPriceLabelD;
-    JLabel earlyAmntLabelE;
-    JLabel midAmntLabelE;
-    JLabel fullAmntLabelE;
-    JLabel earlyPriceLabelE;
-    JLabel midPriceLabelE;
-    JLabel fullPriceLabelE;
+    JLabel welcomeLabel, rootPanel;
+    JButton logoutButton, buyNowButtonA, buyNowButtonB, buyNowButtonC, buyNowButtonD, buyNowButtonE;
+    JLabel earlyAmntLabelA, midAmntLabelA, fullAmntLabelA, earlyPriceLabelA, midPriceLabelA, fullPriceLabelA;
+    JLabel earlyAmntLabelB, midAmntLabelB, fullAmntLabelB, earlyPriceLabelB, midPriceLabelB, fullPriceLabelB;
+    JLabel earlyAmntLabelC, midAmntLabelC, fullAmntLabelC, earlyPriceLabelC, midPriceLabelC, fullPriceLabelC;
+    JLabel earlyAmntLabelD, midAmntLabelD, fullAmntLabelD, earlyPriceLabelD, midPriceLabelD, fullPriceLabelD;
+    JLabel earlyAmntLabelE, midAmntLabelE, fullAmntLabelE, earlyPriceLabelE, midPriceLabelE, fullPriceLabelE;
     JLabel neededLabel;
     JLabel onHandLabel;
+    JLabel stuEarlyLabel, stuMidLabel, stuFullLabel;
 
     Student stu;
+    String stuName;
 
     public HomePage(Student student) {
         super("Home Page");
@@ -57,8 +29,9 @@ public class HomePage extends JFrame {
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.stu = student;
+        stuName = student.uName;
         welcomeLabel.setText("Welcome " + stu.uName + "!");
         logoutButton.addActionListener(new ActionListener() {
             @Override
@@ -75,28 +48,36 @@ public class HomePage extends JFrame {
             public void run() {
                 while (isVisible()) {
                     try {
-                        onHandLabel.setText(String.valueOf(Consts.DB.getStudent(stu.uName).farm.getTtlSeedsOwned()));
-                    } catch (Exception ignored) {
-                        continue;
+                        stu = Consts.DB.getStudent(stuName);
+                        while (stu == null) {
+                            stu = Consts.DB.getStudent(stuName);
+                        }
+                        onHandLabel.setText(String.valueOf(stu.farm.getTtlSeedsOwned()));
+                        HashMap<Consts.Seed_Name, Integer> stuSeeds = stu.farm.getSeedsOwned();
+                        stuEarlyLabel.setText(String.valueOf(stuSeeds.get(Consts.Seed_Name.EARLY)));
+                        stuMidLabel.setText(String.valueOf(stuSeeds.get(Consts.Seed_Name.MID)));
+                        stuFullLabel.setText(String.valueOf(stuSeeds.get(Consts.Seed_Name.FULL)));
+                    } catch (Exception e) {
+                        e.getMessage();
                     }
                 }
             }
         };
         new Thread(t).start();
 
-        Thread thread1 = new Thread(new CompanyThread("CompanyA", earlyAmntLabelA, earlyPriceLabelA, midAmntLabelA, midPriceLabelA, fullAmntLabelA,
+        Thread thread1 = new Thread(new CompanyThread(Consts.COMPANY_A_NAME, earlyAmntLabelA, earlyPriceLabelA, midAmntLabelA, midPriceLabelA, fullAmntLabelA,
                 fullPriceLabelA));
         thread1.start();
-        Thread thread2 = new Thread(new CompanyThread("CompanyB", earlyAmntLabelB, earlyPriceLabelB, midAmntLabelB, midPriceLabelB, fullAmntLabelB,
+        Thread thread2 = new Thread(new CompanyThread(Consts.COMPANY_B_NAME, earlyAmntLabelB, earlyPriceLabelB, midAmntLabelB, midPriceLabelB, fullAmntLabelB,
                 fullPriceLabelB));
         thread2.start();
-        Thread thread3 = new Thread(new CompanyThread("CompanyC", earlyAmntLabelC, earlyPriceLabelC, midAmntLabelC, midPriceLabelC, fullAmntLabelC,
+        Thread thread3 = new Thread(new CompanyThread(Consts.COMPANY_C_NAME, earlyAmntLabelC, earlyPriceLabelC, midAmntLabelC, midPriceLabelC, fullAmntLabelC,
                 fullPriceLabelC));
         thread3.start();
-        Thread thread4 = new Thread(new CompanyThread("CompanyD", earlyAmntLabelD, earlyPriceLabelD, midAmntLabelD, midPriceLabelD, fullAmntLabelD,
+        Thread thread4 = new Thread(new CompanyThread(Consts.COMPANY_D_NAME, earlyAmntLabelD, earlyPriceLabelD, midAmntLabelD, midPriceLabelD, fullAmntLabelD,
                 fullPriceLabelD));
         thread4.start();
-        Thread thread5 = new Thread(new CompanyThread("CompanyE", earlyAmntLabelE, earlyPriceLabelE, midAmntLabelE, midPriceLabelE, fullAmntLabelE,
+        Thread thread5 = new Thread(new CompanyThread(Consts.COMPANY_E_NAME, earlyAmntLabelE, earlyPriceLabelE, midAmntLabelE, midPriceLabelE, fullAmntLabelE,
                 fullPriceLabelE));
         thread5.start();
 
@@ -105,19 +86,31 @@ public class HomePage extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 JButton btn = (JButton) e.getSource();
                 String btnTxt = btn.getText();
-                if (btnTxt.contains("CompanyA")) {
-                    new BuyingSeedsPage(stu, Consts.DB.getInputSeller("CompanyA"));
-                } else if (btnTxt.contains("CompanyB")) {
-                    new BuyingSeedsPage(stu, Consts.DB.getInputSeller("CompanyB"));
-                } else if (btnTxt.contains("CompanyC")) {
-                    new BuyingSeedsPage(stu, Consts.DB.getInputSeller("CompanyC"));
-                } else if (btnTxt.contains("CompanyD")) {
-                    new BuyingSeedsPage(stu, Consts.DB.getInputSeller("CompanyD"));
-                } else if (btnTxt.contains("CompanyE")) {
-                    new BuyingSeedsPage(stu, Consts.DB.getInputSeller("CompanyE"));
+                InputSector company = null;
+                if (btnTxt.contains(Consts.COMPANY_A_NAME)) {
+                    while (company == null) {
+                        company = Consts.DB.getInputSeller(Consts.COMPANY_A_NAME);
+                    }
+                } else if (btnTxt.contains(Consts.COMPANY_B_NAME)) {
+                    while (company == null) {
+                        company = Consts.DB.getInputSeller(Consts.COMPANY_B_NAME);
+                    }
+                } else if (btnTxt.contains(Consts.COMPANY_C_NAME)) {
+                    while (company == null) {
+                        company = Consts.DB.getInputSeller(Consts.COMPANY_C_NAME);
+                    }
+                } else if (btnTxt.contains(Consts.COMPANY_D_NAME)) {
+                    while (company == null) {
+                        company = Consts.DB.getInputSeller(Consts.COMPANY_D_NAME);
+                    }
+                } else if (btnTxt.contains(Consts.COMPANY_E_NAME)) {
+                    while (company == null) {
+                        company = Consts.DB.getInputSeller(Consts.COMPANY_E_NAME);
+                    }
                 } else {
                     System.out.println(btn.getName() + " does not have a case.");
                 }
+                new BuyingSeedsPage(stu, company);
             }
         };
 
@@ -150,14 +143,17 @@ public class HomePage extends JFrame {
             //System.out.println(Consts.DB.getInputSeller(name, Consts.GAME_FLOW.currentYear));
             while (true) {
                 try {
-                    erlA.setText(String.valueOf(DBinput.getEarlyAmnt()));
-                    erlP.setText(String.valueOf(DBinput.getEarlyPrice()));
-                    midA.setText(String.valueOf(DBinput.getMidAmnt()));
-                    midP.setText(String.valueOf(DBinput.getMidPrice()));
-                    fullA.setText(String.valueOf(DBinput.getFullAmnt()));
-                    fullP.setText(String.valueOf(DBinput.getFullPrice()));
+                    Consts.checkSetSoldOut(erlA, erlP, DBinput.getEarlyAmnt(), DBinput.getEarlyPrice());
+                    Consts.checkSetSoldOut(midA, midP, DBinput.getMidAmnt(), DBinput.getMidPrice());
+                    Consts.checkSetSoldOut(fullA, fullP, DBinput.getFullAmnt(), DBinput.getFullPrice());
                     DBinput = Consts.DB.getInputSeller(name);
-                } catch (Exception ignored) {
+                    while (DBinput == null) {
+                        DBinput = Consts.DB.getInputSeller(name);
+                    }
+                } catch (Exception e) {
+                    //System.out.println("Trouble updating labels on Home Page.");
+                    e.getMessage();
+
                 }
             }
         }

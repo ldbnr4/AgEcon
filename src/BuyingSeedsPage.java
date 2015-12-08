@@ -31,6 +31,7 @@ public class BuyingSeedsPage extends JFrame implements ActionListener {
     JButton doneButton;
 
     InputSector input;
+    String inName;
     Student stu;
 
     public BuyingSeedsPage(Student student, InputSector inputSector) {
@@ -43,6 +44,7 @@ public class BuyingSeedsPage extends JFrame implements ActionListener {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         companyNameLabel.setText(inputSector.getName());
         input = inputSector;
+        inName = input.name;
         stu = student;
         modern = new MinimalBalloonStyle(Color.yellow, 5);
         balloonTip = new BalloonTip(earlyTF, new JLabel(), modern, BalloonTip.Orientation.RIGHT_ABOVE,
@@ -52,11 +54,7 @@ public class BuyingSeedsPage extends JFrame implements ActionListener {
         Runnable r = new Runnable() {
             public void run() {
                 while (isVisible()) {
-                    try {
-                        updateLabels();
-                    } catch (Exception ignored) {
-                        continue;
-                    }
+                    updateLabels();
                 }
             }
         };
@@ -72,9 +70,9 @@ public class BuyingSeedsPage extends JFrame implements ActionListener {
                     balloonTip.setTextContents("Please enter a positive number order.");
                     TimingUtils.showTimedBalloon(balloonTip, 2500);
                     earlyTF.setBackground(Color.RED);
-                } else if (Integer.valueOf(earlyTF.getText()) > Integer.valueOf(earlyAmntLabel.getText())) {
+                } else if (earlyAmntLabel.getText().equals("SOLD OUT")) {
                     balloonTip.setAttachedComponent(earlyTF);
-                    balloonTip.setTextContents("You can not order more than what the input supplier has available.");
+                    balloonTip.setTextContents("The input supplier is sold out of this variety.");
                     TimingUtils.showTimedBalloon(balloonTip, 2500);
                     earlyTF.setBackground(Color.RED);
                 } else {
@@ -95,9 +93,9 @@ public class BuyingSeedsPage extends JFrame implements ActionListener {
                     balloonTip.setTextContents("Please enter a positive number order.");
                     TimingUtils.showTimedBalloon(balloonTip, 2500);
                     midTF.setBackground(Color.RED);
-                } else if (Integer.valueOf(midTF.getText()) > Integer.valueOf(midAmntLabel.getText())) {
+                } else if (midAmntLabel.getText().equals("SOLD OUT")) {
                     balloonTip.setAttachedComponent(midTF);
-                    balloonTip.setTextContents("You can not order more than what the input supplier has available.");
+                    balloonTip.setTextContents("The input supplier is sold out of this variety.");
                     TimingUtils.showTimedBalloon(balloonTip, 2500);
                     midTF.setBackground(Color.RED);
                 } else {
@@ -118,9 +116,9 @@ public class BuyingSeedsPage extends JFrame implements ActionListener {
                     balloonTip.setTextContents("Please enter a positive number to order.");
                     TimingUtils.showTimedBalloon(balloonTip, 2500);
                     fullTF.setBackground(Color.RED);
-                } else if (Integer.valueOf(fullTF.getText()) > Integer.valueOf(fullAmntLabel.getText())) {
+                } else if (fullAmntLabel.getText().equals("SOLD OUT")) {
                     balloonTip.setAttachedComponent(fullTF);
-                    balloonTip.setTextContents("You can not order more than what the input supplier has available.");
+                    balloonTip.setTextContents("The input supplier is sold out of this variety.");
                     TimingUtils.showTimedBalloon(balloonTip, 2500);
                     fullTF.setBackground(Color.RED);
                 } else {
@@ -135,13 +133,14 @@ public class BuyingSeedsPage extends JFrame implements ActionListener {
     }
 
     private void updateLabels() {
-        input = Consts.DB.getInputSeller(input.getName());
-        earlyAmntLabel.setText(String.valueOf(input.getEarlyAmnt()));
-        earlyPriceLabel.setText(String.valueOf(input.getEarlyPrice()));
-        midAmntLabel.setText(String.valueOf(input.getMidAmnt()));
-        midPriceLabel.setText(String.valueOf(input.getMidPrice()));
-        fullAmntLabel.setText(String.valueOf(input.getFullAmnt()));
-        fullPriceLabel.setText(String.valueOf(input.getFullPrice()));
+        input = Consts.DB.getInputSeller(inName);
+        while (input == null) {
+            input = Consts.DB.getInputSeller(inName);
+        }
+        Consts.checkSetSoldOut(earlyAmntLabel, earlyPriceLabel, input.getEarlyAmnt(), input.getEarlyPrice());
+        Consts.checkSetSoldOut(midAmntLabel, midPriceLabel, input.getMidAmnt(), input.getMidPrice());
+        Consts.checkSetSoldOut(fullAmntLabel, fullPriceLabel, input.getFullAmnt(), input.getFullPrice());
+
     }
 
     @Override
