@@ -22,6 +22,7 @@ public class HomePage extends JFrame {
 
     Student stu;
     String stuName;
+    Boolean inSectsAvail;
 
     public HomePage(Student student) {
         super("Home Page");
@@ -31,8 +32,10 @@ public class HomePage extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
         this.stu = student;
         stuName = student.uName;
+        inSectsAvail = false;
         welcomeLabel.setText("Welcome " + stu.uName + "!");
         logoutButton.addActionListener(new ActionListener() {
             @Override
@@ -42,16 +45,18 @@ public class HomePage extends JFrame {
                 dispose();
             }
         });
-
         neededLabel.setText(String.valueOf(stu.farm.getSeedsNeeded()));
-        Runnable t = new Runnable() {
+
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 while (isVisible()) {
                     try {
-                        stu = Consts.DB.getStudent(stuName);
-                        while (stu == null) {
+                        if (inSectsAvail) {
                             stu = Consts.DB.getStudent(stuName);
+                            while (stu == null) {
+                                stu = Consts.DB.getStudent(stuName);
+                            }
                         }
                         onHandLabel.setText(String.valueOf(stu.farm.getTtlSeedsOwned()));
                         HashMap<Consts.Seed_Name, Integer> stuSeeds = stu.farm.getSeedsOwned();
@@ -63,55 +68,51 @@ public class HomePage extends JFrame {
                     }
                 }
             }
-        };
-        new Thread(t).start();
+        }).start();
 
-        Thread thread1 = new Thread(new CompanyThread(Consts.COMPANY_A_NAME, earlyAmntLabelA, earlyPriceLabelA, midAmntLabelA, midPriceLabelA, fullAmntLabelA,
-                fullPriceLabelA));
-        thread1.start();
-        Thread thread2 = new Thread(new CompanyThread(Consts.COMPANY_B_NAME, earlyAmntLabelB, earlyPriceLabelB, midAmntLabelB, midPriceLabelB, fullAmntLabelB,
-                fullPriceLabelB));
-        thread2.start();
-        Thread thread3 = new Thread(new CompanyThread(Consts.COMPANY_C_NAME, earlyAmntLabelC, earlyPriceLabelC, midAmntLabelC, midPriceLabelC, fullAmntLabelC,
-                fullPriceLabelC));
-        thread3.start();
-        Thread thread4 = new Thread(new CompanyThread(Consts.COMPANY_D_NAME, earlyAmntLabelD, earlyPriceLabelD, midAmntLabelD, midPriceLabelD, fullAmntLabelD,
-                fullPriceLabelD));
-        thread4.start();
-        Thread thread5 = new Thread(new CompanyThread(Consts.COMPANY_E_NAME, earlyAmntLabelE, earlyPriceLabelE, midAmntLabelE, midPriceLabelE, fullAmntLabelE,
-                fullPriceLabelE));
-        thread5.start();
+        final Runnable initInSects = new Runnable() {
+            @Override
+            public void run() {
+                while (!inSectsAvail) {
+                    inSectsAvail = !(Consts.DB.getInputSectorSellers()).isEmpty();
+                }
+                startCompThreads();
+            }
+        };
+        new Thread(initInSects).start();
 
         final ActionListener buyNowAction = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JButton btn = (JButton) e.getSource();
-                String btnTxt = btn.getText();
-                InputSector company = null;
-                if (btnTxt.contains(Consts.COMPANY_A_NAME)) {
-                    while (company == null) {
-                        company = Consts.DB.getInputSeller(Consts.COMPANY_A_NAME);
+                if (inSectsAvail) {
+                    JButton btn = (JButton) e.getSource();
+                    String btnTxt = btn.getText();
+                    InputSector company = null;
+                    if (btnTxt.contains(Consts.COMPANY_A_NAME)) {
+                        while (company == null) {
+                            company = Consts.DB.getInputSeller(Consts.COMPANY_A_NAME);
+                        }
+                    } else if (btnTxt.contains(Consts.COMPANY_B_NAME)) {
+                        while (company == null) {
+                            company = Consts.DB.getInputSeller(Consts.COMPANY_B_NAME);
+                        }
+                    } else if (btnTxt.contains(Consts.COMPANY_C_NAME)) {
+                        while (company == null) {
+                            company = Consts.DB.getInputSeller(Consts.COMPANY_C_NAME);
+                        }
+                    } else if (btnTxt.contains(Consts.COMPANY_D_NAME)) {
+                        while (company == null) {
+                            company = Consts.DB.getInputSeller(Consts.COMPANY_D_NAME);
+                        }
+                    } else if (btnTxt.contains(Consts.COMPANY_E_NAME)) {
+                        while (company == null) {
+                            company = Consts.DB.getInputSeller(Consts.COMPANY_E_NAME);
+                        }
+                    } else {
+                        System.out.println(btn.getName() + " does not have a case.");
                     }
-                } else if (btnTxt.contains(Consts.COMPANY_B_NAME)) {
-                    while (company == null) {
-                        company = Consts.DB.getInputSeller(Consts.COMPANY_B_NAME);
-                    }
-                } else if (btnTxt.contains(Consts.COMPANY_C_NAME)) {
-                    while (company == null) {
-                        company = Consts.DB.getInputSeller(Consts.COMPANY_C_NAME);
-                    }
-                } else if (btnTxt.contains(Consts.COMPANY_D_NAME)) {
-                    while (company == null) {
-                        company = Consts.DB.getInputSeller(Consts.COMPANY_D_NAME);
-                    }
-                } else if (btnTxt.contains(Consts.COMPANY_E_NAME)) {
-                    while (company == null) {
-                        company = Consts.DB.getInputSeller(Consts.COMPANY_E_NAME);
-                    }
-                } else {
-                    System.out.println(btn.getName() + " does not have a case.");
+                    new BuyingSeedsPage(stu, company);
                 }
-                new BuyingSeedsPage(stu, company);
             }
         };
 
@@ -120,6 +121,19 @@ public class HomePage extends JFrame {
         buyNowButtonC.addActionListener(buyNowAction);
         buyNowButtonD.addActionListener(buyNowAction);
         buyNowButtonE.addActionListener(buyNowAction);
+    }
+
+    void startCompThreads() {
+        new Thread(new CompanyThread(Consts.COMPANY_A_NAME, earlyAmntLabelA, earlyPriceLabelA, midAmntLabelA,
+                midPriceLabelA, fullAmntLabelA, fullPriceLabelA)).start();
+        new Thread(new CompanyThread(Consts.COMPANY_B_NAME, earlyAmntLabelB, earlyPriceLabelB, midAmntLabelB,
+                midPriceLabelB, fullAmntLabelB, fullPriceLabelB)).start();
+        new Thread(new CompanyThread(Consts.COMPANY_C_NAME, earlyAmntLabelC, earlyPriceLabelC, midAmntLabelC,
+                midPriceLabelC, fullAmntLabelC, fullPriceLabelC)).start();
+        new Thread(new CompanyThread(Consts.COMPANY_D_NAME, earlyAmntLabelD, earlyPriceLabelD, midAmntLabelD,
+                midPriceLabelD, fullAmntLabelD, fullPriceLabelD)).start();
+        new Thread(new CompanyThread(Consts.COMPANY_E_NAME, earlyAmntLabelE, earlyPriceLabelE, midAmntLabelE,
+                midPriceLabelE, fullAmntLabelE, fullPriceLabelE)).start();
     }
 
     public static class CompanyThread implements Runnable {

@@ -13,8 +13,8 @@ public class GameDriver {
             Consts.DB.addGameFlow(Consts.GAME_FLOW);
         }
         //DB.yearChange(1);
-        //new WelcomePage();
-        new CreatePage();
+        new WelcomePage();
+        //new CreatePage();
         //new HomePage(Consts.DB.getStudent("ldbnr4"));
         //Student student = DB.getStudent("InputIvy");
         //InputSector stuSect = (InputSector) student.sector;

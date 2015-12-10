@@ -29,6 +29,7 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
     JLabel numOfAdminsLabel;
     JButton generateInputSectorButton;
     JButton generateMarketingSectorButton;
+    JButton logoutButton;
 
     public AdminDecisionPage(final Admin admin) {
         super("Admin Page");
@@ -41,7 +42,6 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
         setLabels();
         setNumOfAdminsLabel();
         rootPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-
 
         nextYearBtn.addActionListener(this);
 
@@ -83,11 +83,16 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
                         compMax -= rn;
                     }
                     try {
-                        Consts.DB.addInputComp(new InputSector("Company" + i, early, Consts.round(minPrice + new Random().nextDouble() * (maxPrice - minPrice)),
-                                mid, Consts.round(minPrice + new Random().nextDouble() * (maxPrice - minPrice)),
-                                full, Consts.round(minPrice + new Random().nextDouble() * (maxPrice - minPrice))));
+                        Consts.DB.addInputComp(new InputSector("Company" + i, early, Consts.round(minPrice +
+                                new Random().nextDouble() * (maxPrice - minPrice)), mid, Consts.round(minPrice +
+                                new Random().nextDouble() * (maxPrice - minPrice)), full,
+                                Consts.round(minPrice + new Random().nextDouble() * (maxPrice - minPrice))));
                     } catch (MongoException v) {
-                        System.out.println(v.getLocalizedMessage());
+                        Consts.DB.removeInput("Company" + i);
+                        Consts.DB.addInputComp(new InputSector("Company" + i, early, Consts.round(minPrice +
+                                new Random().nextDouble() * (maxPrice - minPrice)), mid, Consts.round(minPrice +
+                                new Random().nextDouble() * (maxPrice - minPrice)), full,
+                                Consts.round(minPrice + new Random().nextDouble() * (maxPrice - minPrice))));
                     }
                 }
             }
@@ -95,7 +100,16 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+        logoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new WelcomePage();
+                setVisible(false);
+                dispose();
+            }
+        });
     }
 
     @Override
