@@ -19,6 +19,7 @@ public class HomePage extends JFrame {
     JLabel neededLabel;
     JLabel onHandLabel;
     JLabel stuEarlyLabel, stuMidLabel, stuFullLabel;
+    JButton plantButton;
 
     Student stu;
     String stuName;
@@ -46,6 +47,12 @@ public class HomePage extends JFrame {
             }
         });
         neededLabel.setText(String.valueOf(stu.farm.getSeedsNeeded()));
+        plantButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                stu.farm.plantAction();
+            }
+        });
 
         new Thread(new Runnable() {
             @Override

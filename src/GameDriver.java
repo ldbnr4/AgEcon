@@ -12,8 +12,12 @@ public class GameDriver {
             Consts.GAME_FLOW = new GameFlow();
             Consts.DB.addGameFlow(Consts.GAME_FLOW);
         }
-        //DB.yearChange(1);
-        //new WelcomePage();
+        FarmTypes test = new FarmTypes('M');
+        test.updateSeedsOwned(1000, 2000, 4000);
+
+        test.plantAction();
+
+        new WelcomePage();
         //new CreatePage();
         //new HomePage(Consts.DB.getStudent("ldbnr4"));
         //Student student = DB.getStudent("InputIvy");

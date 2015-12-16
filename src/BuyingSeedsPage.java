@@ -96,6 +96,11 @@ public class BuyingSeedsPage extends JFrame implements ActionListener {
                 balloonTip.setTextContents("The input supplier is sold out of this variety.");
                 TimingUtils.showTimedBalloon(balloonTip, 2500);
                 earlyTF.setBackground(Color.RED);
+            } else if (Integer.valueOf(earlyTF.getText()) > input.getEarlyAmnt()) {
+                balloonTip.setAttachedComponent(earlyTF);
+                balloonTip.setTextContents("You cant purchase more than what is available.");
+                TimingUtils.showTimedBalloon(balloonTip, 2500);
+                earlyTF.setBackground(Color.RED);
             } else {
                 earlyTF.setBackground(Color.GREEN);
                 balloonTip.setVisible(false);
@@ -121,6 +126,11 @@ public class BuyingSeedsPage extends JFrame implements ActionListener {
                 balloonTip.setTextContents("The input supplier is sold out of this variety.");
                 TimingUtils.showTimedBalloon(balloonTip, 2500);
                 midTF.setBackground(Color.RED);
+            } else if (Integer.valueOf(midTF.getText()) > input.getMidAmnt()) {
+                balloonTip.setAttachedComponent(midTF);
+                balloonTip.setTextContents("You cant purchase more than what is available.");
+                TimingUtils.showTimedBalloon(balloonTip, 2500);
+                midTF.setBackground(Color.RED);
             } else {
                 midTF.setBackground(Color.GREEN);
                 balloonTip.setVisible(false);
@@ -144,6 +154,11 @@ public class BuyingSeedsPage extends JFrame implements ActionListener {
             } else if (fullAmntLabel.getText().equals("SOLD OUT")) {
                 balloonTip.setAttachedComponent(fullTF);
                 balloonTip.setTextContents("The input supplier is sold out of this variety.");
+                TimingUtils.showTimedBalloon(balloonTip, 2500);
+                fullTF.setBackground(Color.RED);
+            } else if (Integer.valueOf(fullTF.getText()) > input.getFullAmnt()) {
+                balloonTip.setAttachedComponent(fullTF);
+                balloonTip.setTextContents("You cant purchase more than what is available.");
                 TimingUtils.showTimedBalloon(balloonTip, 2500);
                 fullTF.setBackground(Color.RED);
             } else {

@@ -12,25 +12,26 @@ import java.util.HashMap;
 public final class FarmTypes {
     char size;
     int acres;
-    Double totalCost = (double) 0;
-    HashMap<String, Double> staticCosts = new HashMap<>();
-    HashMap<String, Consts.SeedStat> seedCosts = new HashMap<>();
-    int acreYield = 3500;
     int ttlYield;
     double ttlBushels;
     int seedsNeeded;
-    HashMap<Consts.Seed_Name, Integer> seedsOwned;
     int ttlSeedsOwned;
+    Double totalCost = (double) 0;
+    HashMap<String, Double> staticCosts = new HashMap<>();
+    HashMap<String, Consts.SeedStat> seedCosts = new HashMap<>();
+    HashMap<String, Integer> bshlHash = new HashMap<>();
+    private HashMap<Consts.Seed_Name, Integer> seedsOwned;
+    //HashMap<>;
 
     public FarmTypes(char size) {
         setSize(size);
         setAcres(size);
         setStaticCosts();
-        setTtlYield(acreYield * acres);
+        setTtlYield(0);
         setTtlBushels(ttlYield / 56);
         setSeedsNeeded(10 * acres);
-        setSeedsOwned(new HashMap<Consts.Seed_Name, Integer>());
         setTtlSeedsOwned(0);
+        setSeedsOwned(new HashMap<Consts.Seed_Name, Integer>());
         setTotalCost();
     }
 
@@ -200,5 +201,24 @@ public final class FarmTypes {
         for (int amount : seedsOwned.values()) {
             ttlSeedsOwned += amount;
         }
+    }
+
+    public void plantAction() {
+        double earlyPerc = Consts.round((double) seedsOwned.get(Consts.Seed_Name.EARLY) / getTtlSeedsOwned());
+        double midPerc = Consts.round((double) seedsOwned.get(Consts.Seed_Name.MID) / getTtlSeedsOwned());
+        double fullPerc = Consts.round((double) seedsOwned.get(Consts.Seed_Name.FULL) / getTtlSeedsOwned());
+        if (ttlSeedsOwned > seedsNeeded) {
+            ttlSeedsOwned = seedsNeeded;
+            seedsOwned.put(Consts.Seed_Name.EARLY, (int) Consts.round(earlyPerc * ttlSeedsOwned));
+            seedsOwned.put(Consts.Seed_Name.MID, (int) Consts.round(midPerc * ttlSeedsOwned));
+            seedsOwned.put(Consts.Seed_Name.FULL, (int) Consts.round(fullPerc * ttlSeedsOwned));
+        }
+        double earlyAcres = Consts.round((double) seedsOwned.get(Consts.Seed_Name.EARLY) / 10);
+        double midAcres = Consts.round((double) seedsOwned.get(Consts.Seed_Name.MID) / 10);
+        double fullAcres = Consts.round((double) seedsOwned.get(Consts.Seed_Name.FULL) / 10);
+
+        bshlHash.put(Consts.getEarlyHarvDt(), (int) (earlyAcres * Consts.ACRE_YIELD));
+        bshlHash.put(Consts.getMidHarvDt(), (int) (midAcres * Consts.ACRE_YIELD) + bshlHash.get(Consts.getEarlyHarvDt()));
+        bshlHash.put(Consts.getFullHarvDt(), (int) (fullAcres * Consts.ACRE_YIELD) + bshlHash.get(Consts.getMidHarvDt()));
     }
 }

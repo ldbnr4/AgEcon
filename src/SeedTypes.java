@@ -1,6 +1,3 @@
-import java.util.Calendar;
-import java.util.Date;
-
 /**
  * Created by Lorenzo on 10/13/2015.
  *
@@ -8,7 +5,6 @@ import java.util.Date;
 public class SeedTypes {
     int earlySale, midSale, ttlSeeds, fullSale;
     double earlyPrice, midPrice, fullPrice;
-    Date earlyHarvDt = null, midHarvDt = null, fullHarvDt = null;
 
     public SeedTypes() {
         this.earlySale = 0;
@@ -28,42 +24,6 @@ public class SeedTypes {
         this.fullSale = fullSale;
         this.fullPrice = fullPrice;
         setTtlSeeds();
-    }
-
-    public void setAllHarvDts() {
-        setEarlyHarvDt();
-        setMidHarvDt();
-        setFullHarvDt();
-    }
-
-    public void setEarlyHarvDt() {
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, 100);
-        earlyHarvDt = cal.getTime();
-    }
-
-    public Date getEarlyHarvDt() {
-        return earlyHarvDt;
-    }
-
-    public void setMidHarvDt() {
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, 107);
-        midHarvDt = cal.getTime();
-    }
-
-    public Date getMidHarvDt() {
-        return midHarvDt;
-    }
-
-    public void setFullHarvDt() {
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, 112);
-        fullHarvDt = cal.getTime();
-    }
-
-    public Date getFullHarvDt() {
-        return fullHarvDt;
     }
 
     public int getEarlySale() {

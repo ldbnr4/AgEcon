@@ -3,23 +3,27 @@ import org.mongodb.morphia.annotations.Embedded;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 /**
  * Created by Lorenzo on 11/12/2015.
  *
  */
 public class Consts {
-    public static final String COMPANY_A_NAME = "CompanyA", COMPANY_B_NAME = "CompanyB", COMPANY_C_NAME = "CompanyC",
+    static final String COMPANY_A_NAME = "CompanyA", COMPANY_B_NAME = "CompanyB", COMPANY_C_NAME = "CompanyC",
             COMPANY_D_NAME = "CompanyD", COMPANY_E_NAME = "CompanyE";
-    public static final char SMALL_FARM = 'S', MED_FARM = 'M', LARGE_FARM = 'L', NO_FARM = 'X';
-    public static final int S_FARM_CAP = 5;
-    public static final int M_FARM_CAP = 10;
-    public static final int L_FARM_CAP = 5;
-    public static final double INFLATION = 1.05;
-    public static final int FORWARD = -1;
-    public static final int BACK = 1;
-    public static final MongoDBConnection DB = MongoDBConnection.getInstance();
-    public static GameFlow GAME_FLOW = DB.getGameFlow();
+    static final char SMALL_FARM = 'S', MED_FARM = 'M', LARGE_FARM = 'L', NO_FARM = 'X';
+    static final int S_FARM_CAP = 5;
+    static final int M_FARM_CAP = 10;
+    static final int L_FARM_CAP = 5;
+    static final double INFLATION = 1.05;
+    static final int FORWARD = -1;
+    static final int BACK = 1;
+    static final MongoDBConnection DB = MongoDBConnection.getInstance();
+    static GameFlow GAME_FLOW = DB.getGameFlow();
+    static Double ACRE_YIELD = 62.5;
+    static SimpleDateFormat sd = new SimpleDateFormat("MMM dd yyyy");
 
     private Consts() {
         throw new AssertionError();
@@ -61,6 +65,24 @@ public class Consts {
             priceLabel.setText("SOLD OUT");
             priceLabel.setForeground(Color.RED);
         }
+    }
+
+    static String getEarlyHarvDt() {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, 100);
+        return sd.format(cal.getTime());
+    }
+
+    static String getMidHarvDt() {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, 107);
+        return sd.format(cal.getTime());
+    }
+
+    static String getFullHarvDt() {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, 112);
+        return sd.format(cal.getTime());
     }
 
     public enum Seed_Name {
