@@ -67,6 +67,26 @@ public class Consts {
         }
     }
 
+    static void checkSetSoldOut(JLabel amntlabel, JLabel pricelabel, JLabel datelabel, int amount, Double price, String date) {
+        if (amount > 0) {
+            amntlabel.setForeground(Color.BLACK);
+            pricelabel.setForeground(Color.BLACK);
+            datelabel.setForeground(Color.BLACK);
+            amntlabel.setText(String.valueOf(amount));
+            pricelabel.setText(String.valueOf(price));
+            datelabel.setText(date);
+        } else {
+            amntlabel.setText("SOLD OUT");
+            amntlabel.setForeground(Color.RED);
+            amntlabel.setText("SOLD OUT");
+            amntlabel.setForeground(Color.RED);
+            amntlabel.setText("SOLD OUT");
+            amntlabel.setForeground(Color.RED);
+            amntlabel.setText("SOLD OUT");
+            amntlabel.setForeground(Color.RED);
+        }
+    }
+
     static String getEarlyHarvDt() {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, 100);

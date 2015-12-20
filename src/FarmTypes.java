@@ -3,6 +3,8 @@ import org.mongodb.morphia.annotations.Embedded;
 
 import java.util.HashMap;
 
+import static java.lang.Math.ceil;
+
 /**
  * Created by Lorenzo on 10/22/2015.
  *
@@ -68,6 +70,10 @@ public final class FarmTypes {
 
     public HashMap<String, Double> getStaticCosts() {
         return staticCosts;
+    }
+
+    public HashMap<String, Integer> getBshlHash() {
+        return this.bshlHash;
     }
 
     public void setStaticCosts() {
@@ -217,8 +223,9 @@ public final class FarmTypes {
         double midAcres = Consts.round((double) seedsOwned.get(Consts.Seed_Name.MID) / 10);
         double fullAcres = Consts.round((double) seedsOwned.get(Consts.Seed_Name.FULL) / 10);
 
-        bshlHash.put(Consts.getEarlyHarvDt(), (int) (earlyAcres * Consts.ACRE_YIELD));
-        bshlHash.put(Consts.getMidHarvDt(), (int) (midAcres * Consts.ACRE_YIELD) + bshlHash.get(Consts.getEarlyHarvDt()));
-        bshlHash.put(Consts.getFullHarvDt(), (int) (fullAcres * Consts.ACRE_YIELD) + bshlHash.get(Consts.getMidHarvDt()));
+        this.bshlHash.put(Consts.getEarlyHarvDt(), (int) ceil(earlyAcres * Consts.ACRE_YIELD));
+        this.bshlHash.put(Consts.getMidHarvDt(), (int) ceil((midAcres * Consts.ACRE_YIELD) + bshlHash.get(Consts.getEarlyHarvDt())));
+        this.bshlHash.put(Consts.getFullHarvDt(), (int) ceil((fullAcres * Consts.ACRE_YIELD) + bshlHash.get(Consts.getMidHarvDt())));
+
     }
 }

@@ -136,7 +136,7 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
                         case 'E':
                             compBshls = (int) ceil(bshlsNeeded * .10);
                     }
-                    genDBMarketComp(new MarketingSector("Company " + i, compDate, Consts.round(minPrice +
+                    genDBMarketComp(new MarketingSector("Company" + i, compDate, Consts.round(minPrice +
                             new Random().nextDouble() * (maxPrice - minPrice)), compBshls));
                 }
             }

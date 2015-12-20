@@ -51,6 +51,10 @@ public class HomePage extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 stu.farm.plantAction();
+                Consts.DB.saveStudent(stu);
+                new MarketingDealsPage(stu);
+                setVisible(false);
+                dispose();
             }
         });
 
@@ -141,43 +145,5 @@ public class HomePage extends JFrame {
                 midPriceLabelD, fullAmntLabelD, fullPriceLabelD)).start();
         new Thread(new CompanyThread(Consts.COMPANY_E_NAME, earlyAmntLabelE, earlyPriceLabelE, midAmntLabelE,
                 midPriceLabelE, fullAmntLabelE, fullPriceLabelE)).start();
-    }
-
-    public static class CompanyThread implements Runnable {
-        JLabel erlA, erlP, midA, midP, fullA, fullP;
-        String name;
-        InputSector DBinput;
-
-
-        public CompanyThread(String name, JLabel eAmnt, JLabel ePrice, JLabel mAmnt, JLabel mPrice, JLabel fAmnt, JLabel fPrice) {
-            this.erlA = eAmnt;
-            this.erlP = ePrice;
-            this.midA = mAmnt;
-            this.midP = mPrice;
-            this.fullA = fAmnt;
-            this.fullP = fPrice;
-            this.name = name;
-            this.DBinput = Consts.DB.getInputSeller(name);
-        }
-
-        @Override
-        public void run() {
-            //System.out.println(Consts.DB.getInputSeller(name, Consts.GAME_FLOW.currentYear));
-            while (true) {
-                try {
-                    Consts.checkSetSoldOut(erlA, erlP, DBinput.getEarlyAmnt(), DBinput.getEarlyPrice());
-                    Consts.checkSetSoldOut(midA, midP, DBinput.getMidAmnt(), DBinput.getMidPrice());
-                    Consts.checkSetSoldOut(fullA, fullP, DBinput.getFullAmnt(), DBinput.getFullPrice());
-                    DBinput = Consts.DB.getInputSeller(name);
-                    while (DBinput == null) {
-                        DBinput = Consts.DB.getInputSeller(name);
-                    }
-                } catch (Exception e) {
-                    //System.out.println("Trouble updating labels on Home Page.");
-                    e.getMessage();
-
-                }
-            }
-        }
     }
 }

@@ -9,12 +9,12 @@ import org.mongodb.morphia.annotations.Id;
 @Entity
 public class MarketingSector {
     @Id
-    String name;
-    String neededDate;
-    Double pricePerBush;
-    int year;
+    private String name;
+    private String neededDate;
+    private Double pricePerBush;
+    private int year;
 
-    int bshls;
+    private int bshls;
 
     public MarketingSector() {
     }
@@ -40,7 +40,7 @@ public class MarketingSector {
     }
 
     public int getBshls() {
-        return bshls;
+        return this.bshls;
     }
 
     public boolean updateBshls(int adjust) {
