@@ -61,8 +61,9 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
             public void actionPerformed(ActionEvent e) {
                 int compMax = 0, early = 0, mid = 0, full = 0, rn = 0, var = 0;
                 Double maxPrice = 3.50, minPrice = 1.50;
+                double ttlSeedsNeeded = Consts.DB.getSeedsNeeded();
                 for (char i = 'A'; i <= 'E'; i++) {
-                    compMax = (int) ceil((double) Consts.DB.getSeedsNeeded() / 5);
+                    compMax = (int) ceil(ttlSeedsNeeded / 5d);
                     early = 0;
                     mid = 0;
                     full = 0;
@@ -94,6 +95,49 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
                                 new Random().nextDouble() * (maxPrice - minPrice)), full,
                                 Consts.round(minPrice + new Random().nextDouble() * (maxPrice - minPrice))));
                     }
+                }
+            }
+        });
+
+        generateMarketingSectorButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String dateNeededBy = "";
+                Double maxPrice = 4.50, minPrice = 3.70, compPrice = 0d;
+                int bshlsNeeded = Consts.DB.getBshlsNeeded();
+
+                for (char i = 'A'; i <= 'E'; i++) {
+                    int var = new Random().nextInt(3), compBshls = 0;
+                    String compDate = "";
+                    switch (var) {
+                        case 0:
+                            compDate = Consts.getEarlyHarvDt();
+                            break;
+                        case 1:
+                            compDate = Consts.getMidHarvDt();
+                            break;
+                        case 2:
+                            compDate = Consts.getFullHarvDt();
+                            break;
+                    }
+                    switch (i) {
+                        case 'A':
+                            compBshls = (int) ceil(bshlsNeeded * .5);
+                            break;
+                        case 'B':
+                            compBshls = (int) ceil(bshlsNeeded * .15);
+                            break;
+                        case 'C':
+                            compBshls = (int) ceil(bshlsNeeded * .13);
+                            break;
+                        case 'D':
+                            compBshls = (int) ceil(bshlsNeeded * .12);
+                            break;
+                        case 'E':
+                            compBshls = (int) ceil(bshlsNeeded * .10);
+                    }
+                    genDBMarketComp(new MarketingSector("Company " + i, compDate, Consts.round(minPrice +
+                            new Random().nextDouble() * (maxPrice - minPrice)), compBshls));
                 }
             }
         });
@@ -174,7 +218,16 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
         adminTbl.setPreferredScrollableViewportSize(new Dimension(100, 100));
     }
 
-    public void setNumOfAdminsLabel() {
+    void setNumOfAdminsLabel() {
         numOfAdminsLabel.setText(Integer.toString(Consts.DB.getTotalAdmins()));
+    }
+
+    void genDBMarketComp(MarketingSector marketComp) {
+        try {
+            Consts.DB.addMarketComp(marketComp);
+        } catch (MongoException v) {
+            Consts.DB.removeMarketComp(marketComp.getName());
+            Consts.DB.addMarketComp(marketComp);
+        }
     }
 }

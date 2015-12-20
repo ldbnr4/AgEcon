@@ -19,10 +19,11 @@ public class MongoDBConnection{
     DBCollection adminsColl = db.getCollection("admins");
     DBCollection usersColl = db.getCollection("users");
     DBCollection inputColl = db.getCollection("inputSector");
+    DBCollection marketColl = db.getCollection("marketingSector");
 
     private MongoDBConnection() {
         morphia.map(Student.class).map(FarmTypes.class).map(GameFlow.class).map(Admin.class).map(InputSector.class)
-                .map(Consts.SeedStat.class);
+                .map(Consts.SeedStat.class).map(MarketingSector.class);
     }
 
     public static MongoDBConnection getInstance() {
@@ -48,6 +49,10 @@ public class MongoDBConnection{
 
     public void removeInput(String input) {
         inputColl.remove(new BasicDBObject("_id", input).append("year", Consts.GAME_FLOW.currentYear));
+    }
+
+    public void removeMarketComp(String marketName) {
+        marketColl.remove(new BasicDBObject("_id", marketName).append("year", Consts.GAME_FLOW.currentYear));
     }
 
     public void saveStudent(Student student) {
@@ -113,6 +118,18 @@ public class MongoDBConnection{
         return list;
     }
 
+    public HashMap<String, MarketingSector> getMarketingComps() {
+        HashMap<String, MarketingSector> list = new HashMap<>();
+        try (DBCursor cursor = marketColl.find(new BasicDBObject("year", Consts.GAME_FLOW.currentYear))) {
+            MarketingSector marketingSector;
+            while (cursor.hasNext()) {
+                marketingSector = morphia.fromDBObject(MarketingSector.class, cursor.next());
+                list.put(marketingSector.getName(), marketingSector);
+            }
+        }
+        return list;
+    }
+
     public InputSector getInputSeller(String name) {
         DBObject one = inputColl.findOne(new BasicDBObject("_id", name).append("year", Consts.GAME_FLOW.currentYear));
         if (one == null) {
@@ -120,6 +137,15 @@ public class MongoDBConnection{
             return null;
         }
         return morphia.fromDBObject(InputSector.class, one);
+    }
+
+    public MarketingSector getMarketingComp(String name) {
+        DBObject one = marketColl.findOne(new BasicDBObject("_id", name).append("year", Consts.GAME_FLOW.currentYear));
+        if (one == null) {
+            //System.out.println("RETURNED NULL");
+            return null;
+        }
+        return morphia.fromDBObject(MarketingSector.class, one);
     }
 
     public int getTotalPlayers() {
@@ -173,6 +199,16 @@ public class MongoDBConnection{
         return seed_total;
     }
 
+    public int getBshlsNeeded() {
+        int bshl_ttl = 0;
+        try (DBCursor cursor = usersColl.find(new BasicDBObject("year", Consts.GAME_FLOW.currentYear))) {
+            while (cursor.hasNext()) {
+                bshl_ttl += morphia.fromDBObject(Student.class, cursor.next()).farm.getTtlBushels();
+            }
+        }
+        return bshl_ttl;
+    }
+
     public HashMap<Character, Integer> numInEachFarm() {
         HashMap<Character, Integer> numRes = new HashMap<>();
 
@@ -207,6 +243,10 @@ public class MongoDBConnection{
 
     public void addInputComp(InputSector inputComp) {
         inputColl.insert(morphia.toDBObject(inputComp));
+    }
+
+    public void addMarketComp(MarketingSector marketingSector) {
+        marketColl.insert(morphia.toDBObject(marketingSector));
     }
 
     public void yearChange(int dir) {

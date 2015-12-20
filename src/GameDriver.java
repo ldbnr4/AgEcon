@@ -5,19 +5,16 @@
 public class GameDriver {
 
     public static void main(String[] args) {
-        //out.println(Arrays.toString(EncryptPassword.encrypt("pass")));
-        //Admin admin = new Admin("admin", "pass");
-        //DB.addAdmin(admin);
         if (Consts.GAME_FLOW == null) {
             Consts.GAME_FLOW = new GameFlow();
             Consts.DB.addGameFlow(Consts.GAME_FLOW);
         }
-        FarmTypes test = new FarmTypes('M');
+        /*FarmTypes test = new FarmTypes('M');
         test.updateSeedsOwned(1000, 2000, 4000);
 
-        test.plantAction();
+        test.plantAction();*/
 
-        new WelcomePage();
+        //new WelcomePage();
         //new CreatePage();
         //new HomePage(Consts.DB.getStudent("ldbnr4"));
         //Student student = DB.getStudent("InputIvy");
@@ -39,7 +36,7 @@ public class GameDriver {
             Student student = new Student("MedFarmers"+ String.valueOf(i), "passpass", new FarmTypes(Consts.MED_FARM));
             Consts.DB.addStudent(student);
         }*/
-        //new AdminDecisionPage(Consts.DB.getAdmin("admin"));
+        new AdminDecisionPage(Consts.DB.getAdmin("admin"));
         //System.out.println(Consts.DB.getSeedsNeeded(Consts.GAME_FLOW.currentYear));
         //System.out.println();
     }
