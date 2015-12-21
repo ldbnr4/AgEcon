@@ -15,7 +15,7 @@ public class GameDriver {
         test.plantAction();*/
 
         //new WelcomePage();
-        //new CreatePage();
+        new CreatePage();
         //new HomePage(Consts.DB.getStudent("ldbnr4"));
         //Student student = DB.getStudent("InputIvy");
         //InputSector stuSect = (InputSector) student.sector;

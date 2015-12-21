@@ -78,12 +78,10 @@ public class Consts {
         } else {
             amntlabel.setText("SOLD OUT");
             amntlabel.setForeground(Color.RED);
-            amntlabel.setText("SOLD OUT");
-            amntlabel.setForeground(Color.RED);
-            amntlabel.setText("SOLD OUT");
-            amntlabel.setForeground(Color.RED);
-            amntlabel.setText("SOLD OUT");
-            amntlabel.setForeground(Color.RED);
+            pricelabel.setText("SOLD OUT");
+            pricelabel.setForeground(Color.RED);
+            datelabel.setText("SOLD OUT");
+            datelabel.setForeground(Color.RED);
         }
     }
 

@@ -5,8 +5,6 @@ import javax.swing.text.NumberFormatter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.util.Date;
 
 /**
  * Created by Lorenzo on 12/15/2015.
@@ -18,14 +16,7 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
             compCPrice, compDDate, compDBushels, compDPrice, compEDate, compEBushels, compEPrice, welcomeLabel;
     JButton compABtn, compBBtn, compCBtn, compDBtn, logoutButton, compEBtn;
     JFormattedTextField compAAmount, compBAmount, compCAmount, compDAmount, compEAmount;
-    JTable table1;
-
-    String[] stuKeys;
-    DefaultTableModel tableModel = new DefaultTableModel(new String[]{"Date", "Amount of Bushels"}, 0) {
-        public boolean isCellEditable(int row, int column) {
-            return false;
-        }
-    };
+    JTable bshlBalSheet;
 
     private Student stu;
     private String stuName;
@@ -53,20 +44,7 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
             }
         });
 
-        for (BushelLegerEntry ledger : stu.farm.getBshlLedger()) {
-            tableModel.addRow(new Object[]{ledger.getDate(), ledger.getAmount()});
-        }
-        table1.setModel(tableModel);
-
-
-
-        /*stuKeys = (String[]) stu.farm.getBshlLedger().keySet().toArray();
-        this.earlyDateLabel.setText(String.valueOf(stuKeys[2]));
-        this.earlyAmountLabel.setText(String.valueOf(stu.farm.bshlLedger.get(String.valueOf(stuKeys[2]))));
-        this.midDateLabel.setText(String.valueOf(stuKeys[1]));
-        this.midAmountLabel.setText(String.valueOf(stu.farm.bshlLedger.get(String.valueOf(stuKeys[1]))));
-        this.fullDateLabel.setText(String.valueOf(stuKeys[0]));
-        this.fullAmountLabel.setText(String.valueOf(stu.farm.bshlLedger.get(String.valueOf(stuKeys[0]))));*/
+        printBalSheet();
 
         final Runnable initMarket = new Runnable() {
             @Override
@@ -96,13 +74,11 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
-        // create the JFormattedTextField
-        this.compAAmount = new JFormattedTextField();
         // create the formatters, default, display, edit
-        NumberFormatter defaultFormatter = new NumberFormatter();
+        NumberFormatter defaultFormatter = new NumberFormatter(new DecimalFormat("#"));
         NumberFormatter displayFormatter =
-                new NumberFormatter(new DecimalFormat("#,###"));
-        NumberFormatter editFormatter = new NumberFormatter();
+                new NumberFormatter(new DecimalFormat("#"));
+        NumberFormatter editFormatter = new NumberFormatter(new DecimalFormat("#"));
         // set their value classes
         defaultFormatter.setValueClass(Integer.class);
         displayFormatter.setValueClass(Integer.class);
@@ -110,6 +86,8 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
         // create and set the DefaultFormatterFactory
         DefaultFormatterFactory salaryFactory =
                 new DefaultFormatterFactory(defaultFormatter, displayFormatter, editFormatter);
+
+        this.compAAmount = new JFormattedTextField();
         compAAmount.setFormatterFactory(salaryFactory);
 
         this.compBAmount = new JFormattedTextField();
@@ -123,86 +101,92 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
 
         this.compEAmount = new JFormattedTextField();
         compEAmount.setFormatterFactory(salaryFactory);
-
-        /*String[] columnNames = {"Date", "Amount of Bushels"};
-
-        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0) {
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };*/
-
-        //table1 = new JTable();
-        //table1.setPreferredScrollableViewportSize(new Dimension(300, 200));
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton btn = (JButton) e.getSource();
-        int amount;
+        int amount = 0;
         MarketingSector marketingSector = null;
+        String compDate = "";
         if (btn.equals(compABtn)) {
+            if (compAAmount.getText().isEmpty() || compAAmount.getText().equals("SOLD OUT")) return;
             amount = Integer.valueOf(compAAmount.getText());
+            compDate = compADate.getText();
+            compAAmount.setText("");
             while (marketingSector == null) {
                 marketingSector = Consts.DB.getMarketingComp(Consts.COMPANY_A_NAME);
             }
-            if (!marketingSector.updateBshls(amount)) {
-
-            } else {
-                Date compDate = null, stuDate = null;
-                try {
-                    compDate = Consts.sd.parse(compADate.getText());
-                } catch (ParseException e1) {
-                    e1.printStackTrace();
-                }
-                for (String date : stuKeys) {
-                    try {
-                        stuDate = Consts.sd.parse(date);
-                    } catch (ParseException e1) {
-                        e1.printStackTrace();
-                    }
-                    /*if(){
-
-                    }*/
-
-                }
-            }
         } else if (btn.equals(compBBtn)) {
+            if (compBAmount.getText().isEmpty() || compBAmount.getText().equals("SOLD OUT")) return;
             amount = Integer.valueOf(compBAmount.getText());
+            compDate = compBDate.getText();
+            compBAmount.setText("");
             while (marketingSector == null) {
                 marketingSector = Consts.DB.getMarketingComp(Consts.COMPANY_B_NAME);
             }
-            if (!marketingSector.updateBshls(amount)) {
-
-            } else {
-                DefaultTableModel tableModel = (DefaultTableModel) table1.getModel();
-                tableModel.addRow(new String[]{"today", "here"});
-                table1.setModel(tableModel);
-            }
         } else if (btn.equals(compCBtn)) {
+            if (compCAmount.getText().isEmpty() || compCAmount.getText().equals("SOLD OUT")) return;
             amount = Integer.valueOf(compCAmount.getText());
+            compDate = compCDate.getText();
+            compCAmount.setText("");
             while (marketingSector == null) {
                 marketingSector = Consts.DB.getMarketingComp(Consts.COMPANY_C_NAME);
             }
-            if (!marketingSector.updateBshls(amount)) {
-
-            }
         } else if (btn.equals(compDBtn)) {
+            if (compDAmount.getText().isEmpty() || compDAmount.getText().equals("SOLD OUT")) return;
             amount = Integer.valueOf(compDAmount.getText());
+            compDate = compDDate.getText();
+            compDAmount.setText("");
             while (marketingSector == null) {
                 marketingSector = Consts.DB.getMarketingComp(Consts.COMPANY_D_NAME);
             }
-            if (!marketingSector.updateBshls(amount)) {
-
-            }
         } else if (btn.equals(compEBtn)) {
+            if (compEAmount.getText().isEmpty() || compEAmount.getText().equals("SOLD OUT")) return;
             amount = Integer.valueOf(compEAmount.getText());
+            compDate = compEDate.getText();
+            compEAmount.setText("");
             while (marketingSector == null) {
                 marketingSector = Consts.DB.getMarketingComp(Consts.COMPANY_E_NAME);
             }
-            if (!marketingSector.updateBshls(amount)) {
-
-            }
         }
+        if (amount < 0) {
+            return;
+        }
+        BushelLegerEntry varEntry = new BushelLegerEntry(compDate, -amount);
+        stu.farm.addToLedger(varEntry);
+        //tableModel.addRow(new Object[]{compDate, amount});
+        if (marketingSector != null && (!printBalSheet() || !marketingSector.updateBshls(amount))) {
+            //invalid request error
+            stu.farm.removeFromLedger(varEntry);
+            printBalSheet();
+        }
+        Consts.DB.saveStudent(stu);
+    }
+
+    boolean printBalSheet() {
+        int runTtl = 0;
+        DefaultTableModel nModel = new DefaultTableModel(new String[]{"Date", "Amount of Bushels"}, 0) {
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        int row = 0;
+        for (BushelLegerEntry ledger : stu.farm.getBshlLedger()) {
+            runTtl += ledger.getAmount();
+            if (runTtl < 0) {
+                return false;
+            }
+            if (row != 0) {
+                if (ledger.getDate().equals(nModel.getValueAt(row - 1, 0))) {
+                    nModel.setValueAt(runTtl, row - 1, 1);
+                    continue;
+                }
+            }
+            nModel.addRow(new Object[]{ledger.getDate(), runTtl});
+            row++;
+        }
+        bshlBalSheet.setModel(nModel);
+        return true;
     }
 }

@@ -3,7 +3,7 @@
   <grid id="27dc6" binding="rootPanel" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="15" left="15" bottom="15" right="15"/>
     <constraints>
-      <xy x="20" y="116" width="1061" height="770"/>
+      <xy x="20" y="116" width="1061" height="893"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -214,7 +214,9 @@
                                 <preferred-size width="150" height="-1"/>
                               </grid>
                             </constraints>
-                            <properties/>
+                            <properties>
+                              <focusLostBehavior value="1"/>
+                            </properties>
                           </component>
                         </children>
                       </grid>
@@ -415,7 +417,9 @@
                                 <preferred-size width="150" height="-1"/>
                               </grid>
                             </constraints>
-                            <properties/>
+                            <properties>
+                              <focusLostBehavior value="1"/>
+                            </properties>
                           </component>
                         </children>
                       </grid>
@@ -595,7 +599,9 @@
                                 <preferred-size width="150" height="-1"/>
                               </grid>
                             </constraints>
-                            <properties/>
+                            <properties>
+                              <focusLostBehavior value="1"/>
+                            </properties>
                           </component>
                         </children>
                       </grid>
@@ -775,7 +781,9 @@
                                 <preferred-size width="150" height="-1"/>
                               </grid>
                             </constraints>
-                            <properties/>
+                            <properties>
+                              <focusLostBehavior value="1"/>
+                            </properties>
                           </component>
                         </children>
                       </grid>
@@ -955,7 +963,9 @@
                                 <preferred-size width="150" height="-1"/>
                               </grid>
                             </constraints>
-                            <properties/>
+                            <properties>
+                              <focusLostBehavior value="1"/>
+                            </properties>
                           </component>
                         </children>
                       </grid>
@@ -1069,7 +1079,7 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="d03d1" class="javax.swing.JTable" binding="table1" default-binding="true">
+                  <component id="d03d1" class="javax.swing.JTable" binding="bshlBalSheet" default-binding="true">
                     <constraints/>
                     <properties/>
                   </component>

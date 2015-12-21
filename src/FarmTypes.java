@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static java.lang.Math.ceil;
+import static java.util.Collections.sort;
 
 /**
  * Created by Lorenzo on 10/22/2015.
@@ -236,5 +237,14 @@ public final class FarmTypes {
         setTtlBushels((int) ceil(earlyAcres * Consts.ACRE_YIELD) + (int) ceil(midAcres * Consts.ACRE_YIELD) +
                 (int) ceil(fullAcres * Consts.ACRE_YIELD));
 
+    }
+
+    public void addToLedger(BushelLegerEntry entry) {
+        bshlLedger.add(entry);
+        sort(bshlLedger);
+    }
+
+    public void removeFromLedger(BushelLegerEntry entry) {
+        bshlLedger.remove(entry);
     }
 }
