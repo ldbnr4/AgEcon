@@ -2,6 +2,7 @@ import javax.swing.*;
 
 /**
  * Created by Lorenzo on 12/19/2015.
+ *
  */
 public class CompanyThread implements Runnable {
     JLabel erlA, erlP, midA, midP, fullA, fullP;

@@ -102,13 +102,14 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
         generateMarketingSectorButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String dateNeededBy = "";
-                Double maxPrice = 4.50, minPrice = 3.70, compPrice = 0d;
+                Double maxPrice = 4.50, minPrice = 3.70;
                 int bshlsNeeded = Consts.DB.getBshlsNeeded();
+                int var = 0, compBshls = 0;
+                String compDate = "";
 
                 for (char i = 'A'; i <= 'E'; i++) {
-                    int var = new Random().nextInt(3), compBshls = 0;
-                    String compDate = "";
+                    var = new Random().nextInt(3);
+                    compBshls = 0;
                     switch (var) {
                         case 0:
                             compDate = Consts.getEarlyHarvDt();

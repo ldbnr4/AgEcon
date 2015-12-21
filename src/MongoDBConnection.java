@@ -70,6 +70,11 @@ public class MongoDBConnection{
         addInputComp(inputSector);
     }
 
+    public void saveMarketing(MarketingSector marketingSector) {
+        removeMarketComp(marketingSector.getName());
+        addMarketComp(marketingSector);
+    }
+
     public Student getStudent(String username) {
         HashMap<String, Integer> id = new HashMap<>();
         id.put(username, Consts.GAME_FLOW.currentYear);

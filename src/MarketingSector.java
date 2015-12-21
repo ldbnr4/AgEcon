@@ -48,6 +48,7 @@ public class MarketingSector {
             return false;
         }
         this.bshls -= adjust;
+        Consts.DB.saveMarketing(this);
         return true;
     }
 }

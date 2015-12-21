@@ -1,6 +1,7 @@
 import org.jetbrains.annotations.Contract;
 import org.mongodb.morphia.annotations.Embedded;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static java.lang.Math.ceil;
@@ -15,13 +16,13 @@ public final class FarmTypes {
     char size;
     int acres;
     int ttlYield;
-    double ttlBushels;
+    int ttlBushels;
     int seedsNeeded;
     int ttlSeedsOwned;
     Double totalCost = (double) 0;
     HashMap<String, Double> staticCosts = new HashMap<>();
     HashMap<String, Consts.SeedStat> seedCosts = new HashMap<>();
-    HashMap<String, Integer> bshlHash = new HashMap<>();
+    ArrayList<BushelLegerEntry> bshlLedger = new ArrayList<>();
     private HashMap<Consts.Seed_Name, Integer> seedsOwned;
     //HashMap<>;
 
@@ -64,7 +65,7 @@ public final class FarmTypes {
         return ttlBushels;
     }
 
-    public void setTtlBushels(double ttlBushels) {
+    public void setTtlBushels(int ttlBushels) {
         this.ttlBushels = ttlBushels;
     }
 
@@ -72,8 +73,8 @@ public final class FarmTypes {
         return staticCosts;
     }
 
-    public HashMap<String, Integer> getBshlHash() {
-        return this.bshlHash;
+    public ArrayList<BushelLegerEntry> getBshlLedger() {
+        return this.bshlLedger;
     }
 
     public void setStaticCosts() {
@@ -223,9 +224,21 @@ public final class FarmTypes {
         double midAcres = Consts.round((double) seedsOwned.get(Consts.Seed_Name.MID) / 10);
         double fullAcres = Consts.round((double) seedsOwned.get(Consts.Seed_Name.FULL) / 10);
 
-        this.bshlHash.put(Consts.getEarlyHarvDt(), (int) ceil(earlyAcres * Consts.ACRE_YIELD));
-        this.bshlHash.put(Consts.getMidHarvDt(), (int) ceil((midAcres * Consts.ACRE_YIELD) + bshlHash.get(Consts.getEarlyHarvDt())));
-        this.bshlHash.put(Consts.getFullHarvDt(), (int) ceil((fullAcres * Consts.ACRE_YIELD) + bshlHash.get(Consts.getMidHarvDt())));
+        BushelLegerEntry earlyEntry = new BushelLegerEntry(Consts.getEarlyHarvDt(), (int) ceil(earlyAcres * Consts.ACRE_YIELD));
+        if (!bshlLedger.contains(earlyEntry)) {
+            this.bshlLedger.add(earlyEntry);
+        }
+        BushelLegerEntry midEntry = new BushelLegerEntry(Consts.getMidHarvDt(), (int) ceil((midAcres * Consts.ACRE_YIELD)));
+        if (!bshlLedger.contains(midEntry)) {
+            this.bshlLedger.add(midEntry);
+        }
+        BushelLegerEntry fullEntry = new BushelLegerEntry(Consts.getFullHarvDt(), (int) ceil((fullAcres * Consts.ACRE_YIELD)));
+        if (!bshlLedger.contains(fullEntry)) {
+            this.bshlLedger.add(fullEntry);
+        }
+
+        setTtlBushels((int) ceil(earlyAcres * Consts.ACRE_YIELD) + (int) ceil(midAcres * Consts.ACRE_YIELD) +
+                (int) ceil(fullAcres * Consts.ACRE_YIELD));
 
     }
 }
