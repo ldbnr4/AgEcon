@@ -13,16 +13,12 @@ import static java.lang.Math.ceil;
 
 @Embedded
 public final class FarmTypes {
-    char size;
-    int acres;
-    int ttlYield;
-    int ttlBushels;
-    int seedsNeeded;
-    int ttlSeedsOwned;
-    Double totalCost = (double) 0;
-    HashMap<String, Double> staticCosts = new HashMap<>();
-    HashMap<String, Consts.SeedStat> seedCosts = new HashMap<>();
-    ArrayList<BushelLegerEntry> bshlLedger = new ArrayList<>();
+    private char size;
+    private int acres, ttlYield, ttlBushels, seedsNeeded, ttlSeedsOwned;
+    private Double totalCost = (double) 0;
+    private HashMap<String, Double> staticCosts = new HashMap<>();
+    private HashMap<String, Consts.SeedStat> seedCosts = new HashMap<>();
+    private ArrayList<BushelLegerEntry> bshlLedger = new ArrayList<>();
     private HashMap<Consts.Seed_Name, Integer> seedsOwned;
     //HashMap<>;
 
