@@ -3,7 +3,7 @@
   <grid id="27dc6" binding="rootPanel" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="15" left="15" bottom="15" right="15"/>
     <constraints>
-      <xy x="20" y="116" width="1061" height="893"/>
+      <xy x="20" y="116" width="1061" height="1227"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -183,7 +183,7 @@
                           </component>
                         </children>
                       </grid>
-                      <grid id="4eb6e" layout-manager="GridLayoutManager" row-count="1" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                      <grid id="4eb6e" layout-manager="GridLayoutManager" row-count="2" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                         <margin top="0" left="0" bottom="0" right="0"/>
                         <constraints>
                           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -193,12 +193,28 @@
                         <children>
                           <component id="28ea8" class="javax.swing.JButton" binding="compABtn">
                             <constraints>
-                              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                              <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                             </constraints>
                             <properties>
                               <font name="Perpetua" size="22" style="1"/>
                               <text value="Make deal with CompanyA"/>
                             </properties>
+                          </component>
+                          <component id="2fc99" class="javax.swing.JFormattedTextField" binding="compAAmount" custom-create="true">
+                            <constraints>
+                              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                                <preferred-size width="150" height="-1"/>
+                              </grid>
+                            </constraints>
+                            <properties>
+                              <focusLostBehavior value="1"/>
+                            </properties>
+                          </component>
+                          <component id="1b017" class="org.jdatepicker.impl.JDatePickerImpl" binding="datePickerA" custom-create="true">
+                            <constraints>
+                              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties/>
                           </component>
                           <component id="eae49" class="javax.swing.JLabel">
                             <constraints>
@@ -208,14 +224,12 @@
                               <text value="Amount to sell"/>
                             </properties>
                           </component>
-                          <component id="2fc99" class="javax.swing.JFormattedTextField" binding="compAAmount" custom-create="true">
+                          <component id="75200" class="javax.swing.JLabel">
                             <constraints>
-                              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                                <preferred-size width="150" height="-1"/>
-                              </grid>
+                              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                             </constraints>
                             <properties>
-                              <focusLostBehavior value="1"/>
+                              <text value="When"/>
                             </properties>
                           </component>
                         </children>
@@ -386,7 +400,7 @@
                           </component>
                         </children>
                       </grid>
-                      <grid id="1a97b" layout-manager="GridLayoutManager" row-count="1" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                      <grid id="1a97b" layout-manager="GridLayoutManager" row-count="2" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                         <margin top="0" left="0" bottom="0" right="0"/>
                         <constraints>
                           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -396,12 +410,28 @@
                         <children>
                           <component id="a3194" class="javax.swing.JButton" binding="compBBtn">
                             <constraints>
-                              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                              <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                             </constraints>
                             <properties>
                               <font name="Perpetua" size="22" style="1"/>
                               <text value="Make deal with CompanyB"/>
                             </properties>
+                          </component>
+                          <component id="51aa1" class="javax.swing.JFormattedTextField" binding="compBAmount" custom-create="true">
+                            <constraints>
+                              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                                <preferred-size width="150" height="-1"/>
+                              </grid>
+                            </constraints>
+                            <properties>
+                              <focusLostBehavior value="1"/>
+                            </properties>
+                          </component>
+                          <component id="12cc9" class="org.jdatepicker.impl.JDatePickerImpl" binding="datePickerB" custom-create="true">
+                            <constraints>
+                              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties/>
                           </component>
                           <component id="88933" class="javax.swing.JLabel">
                             <constraints>
@@ -411,14 +441,12 @@
                               <text value="Amount to sell"/>
                             </properties>
                           </component>
-                          <component id="51aa1" class="javax.swing.JFormattedTextField" binding="compBAmount" custom-create="true">
+                          <component id="e19d" class="javax.swing.JLabel">
                             <constraints>
-                              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                                <preferred-size width="150" height="-1"/>
-                              </grid>
+                              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                             </constraints>
                             <properties>
-                              <focusLostBehavior value="1"/>
+                              <text value="When"/>
                             </properties>
                           </component>
                         </children>
@@ -568,7 +596,7 @@
                           </component>
                         </children>
                       </grid>
-                      <grid id="86559" layout-manager="GridLayoutManager" row-count="1" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                      <grid id="86559" layout-manager="GridLayoutManager" row-count="2" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                         <margin top="0" left="0" bottom="0" right="0"/>
                         <constraints>
                           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -578,12 +606,28 @@
                         <children>
                           <component id="6563c" class="javax.swing.JButton" binding="compCBtn">
                             <constraints>
-                              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                              <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                             </constraints>
                             <properties>
                               <font name="Perpetua" size="22" style="1"/>
                               <text value="Make deal with CompanyC"/>
                             </properties>
+                          </component>
+                          <component id="d7cc" class="javax.swing.JFormattedTextField" binding="compCAmount" custom-create="true">
+                            <constraints>
+                              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                                <preferred-size width="150" height="-1"/>
+                              </grid>
+                            </constraints>
+                            <properties>
+                              <focusLostBehavior value="1"/>
+                            </properties>
+                          </component>
+                          <component id="67cc" class="org.jdatepicker.impl.JDatePickerImpl" binding="datePickerC" custom-create="true">
+                            <constraints>
+                              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties/>
                           </component>
                           <component id="ffae1" class="javax.swing.JLabel">
                             <constraints>
@@ -593,14 +637,12 @@
                               <text value="Amount to sell"/>
                             </properties>
                           </component>
-                          <component id="d7cc" class="javax.swing.JFormattedTextField" binding="compCAmount" custom-create="true">
+                          <component id="f27f" class="javax.swing.JLabel">
                             <constraints>
-                              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                                <preferred-size width="150" height="-1"/>
-                              </grid>
+                              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                             </constraints>
                             <properties>
-                              <focusLostBehavior value="1"/>
+                              <text value="When"/>
                             </properties>
                           </component>
                         </children>
@@ -750,7 +792,7 @@
                           </component>
                         </children>
                       </grid>
-                      <grid id="cfaea" layout-manager="GridLayoutManager" row-count="1" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                      <grid id="cfaea" layout-manager="GridLayoutManager" row-count="2" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                         <margin top="0" left="0" bottom="0" right="0"/>
                         <constraints>
                           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -760,11 +802,21 @@
                         <children>
                           <component id="96f3e" class="javax.swing.JButton" binding="compDBtn">
                             <constraints>
-                              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                              <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                             </constraints>
                             <properties>
                               <font name="Perpetua" size="22" style="1"/>
                               <text value="Make deal with CompanyD"/>
+                            </properties>
+                          </component>
+                          <component id="9c316" class="javax.swing.JFormattedTextField" binding="compDAmount" custom-create="true">
+                            <constraints>
+                              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                                <preferred-size width="150" height="-1"/>
+                              </grid>
+                            </constraints>
+                            <properties>
+                              <focusLostBehavior value="1"/>
                             </properties>
                           </component>
                           <component id="f9648" class="javax.swing.JLabel">
@@ -775,14 +827,18 @@
                               <text value="Amount to sell"/>
                             </properties>
                           </component>
-                          <component id="9c316" class="javax.swing.JFormattedTextField" binding="compDAmount" custom-create="true">
+                          <component id="9922" class="org.jdatepicker.impl.JDatePickerImpl" binding="datePickerD" custom-create="true">
                             <constraints>
-                              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                                <preferred-size width="150" height="-1"/>
-                              </grid>
+                              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties/>
+                          </component>
+                          <component id="ff3eb" class="javax.swing.JLabel">
+                            <constraints>
+                              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                             </constraints>
                             <properties>
-                              <focusLostBehavior value="1"/>
+                              <text value="When"/>
                             </properties>
                           </component>
                         </children>
@@ -932,7 +988,7 @@
                           </component>
                         </children>
                       </grid>
-                      <grid id="36903" layout-manager="GridLayoutManager" row-count="1" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                      <grid id="36903" layout-manager="GridLayoutManager" row-count="2" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                         <margin top="0" left="0" bottom="0" right="0"/>
                         <constraints>
                           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -942,11 +998,21 @@
                         <children>
                           <component id="875d7" class="javax.swing.JButton" binding="compEBtn">
                             <constraints>
-                              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                              <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                             </constraints>
                             <properties>
                               <font name="Perpetua" size="22" style="1"/>
                               <text value="Make deal with CompanyE"/>
+                            </properties>
+                          </component>
+                          <component id="c7e60" class="javax.swing.JFormattedTextField" binding="compEAmount" custom-create="true">
+                            <constraints>
+                              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                                <preferred-size width="150" height="-1"/>
+                              </grid>
+                            </constraints>
+                            <properties>
+                              <focusLostBehavior value="1"/>
                             </properties>
                           </component>
                           <component id="5ec49" class="javax.swing.JLabel">
@@ -957,14 +1023,18 @@
                               <text value="Amount to sell"/>
                             </properties>
                           </component>
-                          <component id="c7e60" class="javax.swing.JFormattedTextField" binding="compEAmount" custom-create="true">
+                          <component id="cdfb" class="org.jdatepicker.impl.JDatePickerImpl" binding="datePickerE" custom-create="true">
                             <constraints>
-                              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                                <preferred-size width="150" height="-1"/>
-                              </grid>
+                              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties/>
+                          </component>
+                          <component id="cfef9" class="javax.swing.JLabel">
+                            <constraints>
+                              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                             </constraints>
                             <properties>
-                              <focusLostBehavior value="1"/>
+                              <text value="When"/>
                             </properties>
                           </component>
                         </children>
