@@ -15,19 +15,9 @@ public class BuyingSeedsPage extends JFrame implements ActionListener {
     private final MinimalBalloonStyle modern;
     private final BalloonTip balloonTip;
     JPanel rootPanel;
-    JLabel earlyAmntLabel;
-    JLabel midAmntLabel;
-    JLabel fullAmntLabel;
-    JLabel earlyPriceLabel;
-    JLabel midPriceLabel;
-    JLabel fullPriceLabel;
-    JButton earlyBuyBtn;
-    JButton midBuyBtn;
-    JButton fullBuyBtn;
-    JTextField earlyTF;
-    JLabel companyNameLabel;
-    JTextField midTF;
-    JTextField fullTF;
+    JLabel earlyAmntLabel, midAmntLabel, fullAmntLabel, earlyPriceLabel, midPriceLabel, fullPriceLabel, companyNameLabel;
+    JButton earlyBuyBtn, midBuyBtn, fullBuyBtn;
+    JTextField earlyTF, midTF, fullTF;
     JButton doneButton;
 
     InputSector input;
@@ -53,11 +43,9 @@ public class BuyingSeedsPage extends JFrame implements ActionListener {
                 BalloonTip.AttachLocation.ALIGNED, 10, 10, false);
         this.balloonTip.setVisible(false);
 
-        Runnable r = new Runnable() {
-            public void run() {
-                while (isVisible()) {
-                    updateLabels();
-                }
+        Runnable r = () -> {
+            while (isVisible()) {
+                updateLabels();
             }
         };
         new Thread(r).start();

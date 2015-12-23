@@ -6,6 +6,7 @@ import java.awt.*;
 
 /**
  * Created by Lorenzo on 9/24/2015.
+ *
  */
 public class PassVerifier {
     BalloonTip balloonTip;

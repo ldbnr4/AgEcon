@@ -1,4 +1,3 @@
-import org.jetbrains.annotations.Contract;
 import org.mongodb.morphia.annotations.Embedded;
 
 import java.util.ArrayList;
@@ -31,14 +30,14 @@ public final class FarmTypes {
         setTtlBushels(ttlYield / 56);
         setSeedsNeeded(10 * acres);
         setTtlSeedsOwned(0);
-        setSeedsOwned(new HashMap<Consts.Seed_Name, Integer>());
+        setSeedsOwned(new HashMap<>());
         setTotalCost();
     }
 
     public FarmTypes() {
         size = Consts.NO_FARM;
         acres = 0;
-        setSeedsOwned(new HashMap<Consts.Seed_Name, Integer>());
+        setSeedsOwned(new HashMap<>());
         setTtlSeedsOwned(0);
     }
 
@@ -166,7 +165,6 @@ public final class FarmTypes {
         return totalCost;
     }
 
-    @Contract(pure = true)
     boolean checkIfEmpty() {
         return size == Consts.NO_FARM && acres == 0;
     }
