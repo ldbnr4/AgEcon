@@ -6,8 +6,7 @@ import javax.swing.*;
  */
 public class WelcomePage extends JFrame {
     private JPanel rootPanel;
-    private JButton loginButton;
-    private JButton newUserButton;
+    private JButton loginButton, newUserButton;
 
     public WelcomePage() {
         super("Welcome Page");

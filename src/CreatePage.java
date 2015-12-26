@@ -43,13 +43,10 @@ public class CreatePage extends JFrame implements ActionListener {
         confPassBalloonTip = new BalloonTip(confirmPasswordPasswordField, new JLabel(), modern, BalloonTip.Orientation.RIGHT_ABOVE, BalloonTip.AttachLocation.ALIGNED, 10, 10, false);
         this.confPassBalloonTip.setVisible(false);
 
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new LoginPage();
-                setVisible(false);
-                dispose();
-            }
+        loginButton.addActionListener(e -> {
+            new LoginPage();
+            setVisible(false);
+            dispose();
         });
 
         submitButton.addActionListener(this);
@@ -128,13 +125,10 @@ public class CreatePage extends JFrame implements ActionListener {
         confPassBalloonTip = new BalloonTip(confirmPasswordPasswordField, new JLabel(), modern, BalloonTip.Orientation.RIGHT_ABOVE, BalloonTip.AttachLocation.ALIGNED, 10, 10, false);
         this.confPassBalloonTip.setVisible(false);
 
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new LoginPage();
-                setVisible(false);
-                dispose();
-            }
+        loginButton.addActionListener(e -> {
+            new LoginPage();
+            setVisible(false);
+            dispose();
         });
 
         submitButton.addActionListener(this);

@@ -42,15 +42,12 @@ public class CreateAdminPage extends JFrame implements ActionListener {
         confPassBalloonTip = new BalloonTip(confimpassword_pf, new JLabel(), modern, BalloonTip.Orientation.RIGHT_ABOVE, BalloonTip.AttachLocation.ALIGNED, 10, 10, false);
         this.confPassBalloonTip.setVisible(false);
 
-        backBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new AdminDecisionPage(admin);
-                setVisible(false);
-                dispose();
-            }
+        backBtn.addActionListener(e -> {
+            new AdminDecisionPage(admin);
+            setVisible(false);
+            dispose();
         });
-
+        
         submitBtn.addActionListener(this);
 
         usernameVerifier = new UNameVerifier(uNameBalloonTip);

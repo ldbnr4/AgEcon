@@ -32,8 +32,7 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
     JTable bshlBalSheet;
     private JDatePickerImpl datePickerA, datePickerB, datePickerC, datePickerD, datePickerE;
 
-    private MinimalBalloonStyle modern;
-    private BalloonTip balloonTip;
+    private BalloonTip balloonTip, successBalloon;
 
     private Student stu;
     private String stuName;
@@ -52,25 +51,19 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
         this.stuName = student.uName;
         this.marketsAvail = false;
         welcomeLabel.setText("Welcome " + this.stuName + "!");
-        logoutButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new WelcomePage();
-                setVisible(false);
-                dispose();
-            }
+        logoutButton.addActionListener(e -> {
+            new WelcomePage();
+            setVisible(false);
+            dispose();
         });
 
         printBalSheet();
 
-        final Runnable initMarket = new Runnable() {
-            @Override
-            public void run() {
-                while (!marketsAvail) {
-                    marketsAvail = !(Consts.DB.getMarketingComps()).isEmpty();
-                }
-                initCompThreads();
+        final Runnable initMarket = () -> {
+            while (!marketsAvail) {
+                marketsAvail = !(Consts.DB.getMarketingComps()).isEmpty();
             }
+            initCompThreads();
         };
         new Thread(initMarket).start();
 
@@ -80,10 +73,17 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
         compDBtn.addActionListener(this);
         compEBtn.addActionListener(this);
 
-        modern = new MinimalBalloonStyle(Color.yellow, 5);
+
+        MinimalBalloonStyle modern = new MinimalBalloonStyle(Color.yellow, 5);
         balloonTip = new BalloonTip(compAAmount, new JLabel(), modern, BalloonTip.Orientation.RIGHT_ABOVE,
                 BalloonTip.AttachLocation.ALIGNED, 10, 10, false);
         this.balloonTip.setVisible(false);
+
+        MinimalBalloonStyle greenModern = new MinimalBalloonStyle(Color.GREEN, 5);
+        successBalloon = new BalloonTip(bshlBalSheet, new JLabel(), greenModern, BalloonTip.Orientation.RIGHT_ABOVE,
+                BalloonTip.AttachLocation.ALIGNED, 10, 10, false);
+        this.successBalloon.setVisible(false);
+
     }
 
     void initCompThreads() {
@@ -148,180 +148,17 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton btn = (JButton) e.getSource();
-        int amount = 0;
-        MarketingSector marketingSector = null;
-        String compDate, selectedDate = "";
         if (btn.equals(compABtn)) {
-            selectedDate = Consts.sd.format(datePickerA.getModel().getValue());
-            compDate = compADate.getText();
-            if (compAAmount.getText().isEmpty()) {
-                balloonTip.setAttachedComponent(compAAmount);
-                balloonTip.setTextContents("Please enter a number to sell.");
-                TimingUtils.showTimedBalloon(balloonTip, 2500);
-                compAAmount.setBackground(Color.RED);
-                return;
-            } else if (compABushels.getText().equals("SOLD OUT")) {
-                balloonTip.setAttachedComponent(compAAmount);
-                balloonTip.setTextContents("This marketing seller has no more to sell.");
-                TimingUtils.showTimedBalloon(balloonTip, 2500);
-                compAAmount.setBackground(Color.RED);
-                return;
-            }
-            try {
-                if (Consts.sd.parse(selectedDate).after(Consts.sd.parse(compDate))) {
-                    balloonTip.setAttachedComponent(compAAmount);
-                    balloonTip.setTextContents("Please select a date before or on the sellers needed by date.");
-                    TimingUtils.showTimedBalloon(balloonTip, 2500);
-                    compAAmount.setBackground(Color.RED);
-                    return;
-                }
-            } catch (ParseException e1) {
-                e1.printStackTrace();
-            }
-            while (marketingSector == null) {
-                marketingSector = Consts.DB.getMarketingComp(Consts.COMPANY_A_NAME);
-            }
-            amount = Integer.valueOf(compAAmount.getText());
-            compAAmount.setText("");
+            buttonHandler(datePickerA, compADate, compAAmount, Consts.COMPANY_A_NAME);
         } else if (btn.equals(compBBtn)) {
-            selectedDate = Consts.sd.format(datePickerB.getModel().getValue());
-            compDate = compBDate.getText();
-            if (compBAmount.getText().isEmpty()) {
-                balloonTip.setAttachedComponent(compBAmount);
-                balloonTip.setTextContents("Please enter a number to sell.");
-                TimingUtils.showTimedBalloon(balloonTip, 2500);
-                compBAmount.setBackground(Color.RED);
-                return;
-            } else if (compBBushels.getText().equals("SOLD OUT")) {
-                balloonTip.setAttachedComponent(compBAmount);
-                balloonTip.setTextContents("This marketing seller has no more to sell.");
-                TimingUtils.showTimedBalloon(balloonTip, 2500);
-                compBAmount.setBackground(Color.RED);
-                return;
-            }
-            try {
-                if (Consts.sd.parse(selectedDate).after(Consts.sd.parse(compDate))) {
-                    balloonTip.setAttachedComponent(compBAmount);
-                    balloonTip.setTextContents("Please select a date before or on the sellers needed by date.");
-                    TimingUtils.showTimedBalloon(balloonTip, 2500);
-                    compBAmount.setBackground(Color.RED);
-                    return;
-                }
-            } catch (ParseException e1) {
-                e1.printStackTrace();
-            }
-            while (marketingSector == null) {
-                marketingSector = Consts.DB.getMarketingComp(Consts.COMPANY_B_NAME);
-            }
-            amount = Integer.valueOf(compBAmount.getText());
-            compBAmount.setText("");
+            buttonHandler(datePickerB, compBDate, compBAmount, Consts.COMPANY_B_NAME);
         } else if (btn.equals(compCBtn)) {
-            selectedDate = Consts.sd.format(datePickerC.getModel().getValue());
-            compDate = compCDate.getText();
-            if (compCAmount.getText().isEmpty()) {
-                balloonTip.setAttachedComponent(compCAmount);
-                balloonTip.setTextContents("Please enter a number to sell.");
-                TimingUtils.showTimedBalloon(balloonTip, 2500);
-                compCAmount.setBackground(Color.RED);
-                return;
-            } else if (compCBushels.getText().equals("SOLD OUT")) {
-                balloonTip.setAttachedComponent(compCAmount);
-                balloonTip.setTextContents("This marketing seller has no more to sell.");
-                TimingUtils.showTimedBalloon(balloonTip, 2500);
-                compCAmount.setBackground(Color.RED);
-                return;
-            }
-            try {
-                if (Consts.sd.parse(selectedDate).after(Consts.sd.parse(compDate))) {
-                    balloonTip.setAttachedComponent(compCAmount);
-                    balloonTip.setTextContents("Please select a date before or on the sellers needed by date.");
-                    TimingUtils.showTimedBalloon(balloonTip, 2500);
-                    compCAmount.setBackground(Color.RED);
-                    return;
-                }
-            } catch (ParseException e1) {
-                e1.printStackTrace();
-            }
-            while (marketingSector == null) {
-                marketingSector = Consts.DB.getMarketingComp(Consts.COMPANY_C_NAME);
-            }
-            amount = Integer.valueOf(compCAmount.getText());
-            compCAmount.setText("");
+            buttonHandler(datePickerC, compCDate, compCAmount, Consts.COMPANY_C_NAME);
         } else if (btn.equals(compDBtn)) {
-            selectedDate = Consts.sd.format(datePickerD.getModel().getValue());
-            compDate = compDDate.getText();
-            if (compDAmount.getText().isEmpty()) {
-                balloonTip.setAttachedComponent(compDAmount);
-                balloonTip.setTextContents("Please enter a number to sell.");
-                TimingUtils.showTimedBalloon(balloonTip, 2500);
-                compDAmount.setBackground(Color.RED);
-                return;
-            } else if (compDBushels.getText().equals("SOLD OUT")) {
-                balloonTip.setAttachedComponent(compDAmount);
-                balloonTip.setTextContents("This marketing seller has no more to sell.");
-                TimingUtils.showTimedBalloon(balloonTip, 2500);
-                compDAmount.setBackground(Color.RED);
-                return;
-            }
-            try {
-                if (Consts.sd.parse(selectedDate).after(Consts.sd.parse(compDate))) {
-                    balloonTip.setAttachedComponent(compDAmount);
-                    balloonTip.setTextContents("Please select a date before or on the sellers needed by date.");
-                    TimingUtils.showTimedBalloon(balloonTip, 2500);
-                    compDAmount.setBackground(Color.RED);
-                    return;
-                }
-            } catch (ParseException e1) {
-                e1.printStackTrace();
-            }
-            while (marketingSector == null) {
-                marketingSector = Consts.DB.getMarketingComp(Consts.COMPANY_D_NAME);
-            }
-            amount = Integer.valueOf(compDAmount.getText());
-            compDAmount.setText("");
+            buttonHandler(datePickerD, compDDate, compDAmount, Consts.COMPANY_D_NAME);
         } else if (btn.equals(compEBtn)) {
-            selectedDate = Consts.sd.format(datePickerE.getModel().getValue());
-            compDate = compEDate.getText();
-            if (compEAmount.getText().isEmpty()) {
-                balloonTip.setAttachedComponent(compEAmount);
-                balloonTip.setTextContents("Please enter a number to sell.");
-                TimingUtils.showTimedBalloon(balloonTip, 2500);
-                compEAmount.setBackground(Color.RED);
-                return;
-            } else if (compEBushels.getText().equals("SOLD OUT")) {
-                balloonTip.setAttachedComponent(compEAmount);
-                balloonTip.setTextContents("This marketing seller has no more to sell.");
-                TimingUtils.showTimedBalloon(balloonTip, 2500);
-                compEAmount.setBackground(Color.RED);
-                return;
-            }
-            try {
-                if (Consts.sd.parse(selectedDate).after(Consts.sd.parse(compDate))) {
-                    balloonTip.setAttachedComponent(compEAmount);
-                    balloonTip.setTextContents("Please select a date before or on the sellers needed by date.");
-                    TimingUtils.showTimedBalloon(balloonTip, 2500);
-                    compEAmount.setBackground(Color.RED);
-                    return;
-                }
-            } catch (ParseException e1) {
-                e1.printStackTrace();
-            }
-            while (marketingSector == null) {
-                marketingSector = Consts.DB.getMarketingComp(Consts.COMPANY_E_NAME);
-            }
-            amount = Integer.valueOf(compEAmount.getText());
-            compEAmount.setText("");
+            buttonHandler(datePickerE, compEDate, compEAmount, Consts.COMPANY_E_NAME);
         }
-        if (amount < 0) return;
-        BushelLegerEntry varEntry = new BushelLegerEntry(selectedDate, -amount);
-        stu.farm.addToLedger(varEntry);
-        //tableModel.addRow(new Object[]{compDate, amount});
-        if (marketingSector != null && (!printBalSheet() || !marketingSector.updateBshls(amount))) {
-            //invalid request error
-            stu.farm.removeFromLedger(varEntry);
-            printBalSheet();
-        }
-        Consts.DB.saveStudent(stu);
     }
 
     boolean printBalSheet() {
@@ -348,6 +185,72 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
         }
         bshlBalSheet.setModel(nModel);
         return true;
+    }
+
+    private void buttonHandler(JDatePickerImpl jDatePicker, JLabel dateLabel, JFormattedTextField amntField, String compName) {
+        if (amntField.getText().isEmpty()) {
+            balloonTip.setAttachedComponent(amntField);
+            balloonTip.setTextContents("Please enter a number to sell.");
+            TimingUtils.showTimedBalloon(balloonTip, 2500);
+            return;
+        }
+        if (dateLabel.getText().equals("SOLD OUT")) {
+            balloonTip.setAttachedComponent(amntField);
+            balloonTip.setTextContents("This marketing seller has no more to sell.");
+            TimingUtils.showTimedBalloon(balloonTip, 2500);
+            return;
+        }
+        String selectedDate = Consts.sd.format(jDatePicker.getModel().getValue());
+        try {
+            if (Consts.sd.parse(selectedDate).after(
+                    Consts.sd.parse(dateLabel.getText()))) {
+                balloonTip.setAttachedComponent(jDatePicker);
+                balloonTip.setTextContents("Please select a date before or on the sellers needed by date.");
+                TimingUtils.showTimedBalloon(balloonTip, 2500);
+                return;
+            }
+        } catch (ParseException e1) {
+            e1.printStackTrace();
+        }
+        int amount = Integer.valueOf(amntField.getText());
+        if (amount <= 0) return;
+        MarketingSector marketingSector = Consts.DB.getMarketingComp(compName);
+        while (marketingSector == null) {
+            marketingSector = Consts.DB.getMarketingComp(compName);
+        }
+        if (marketingSector.getBshls() == 0) {
+            balloonTip.setAttachedComponent(amntField);
+            balloonTip.setTextContents("This marketing seller has no more to sell.");
+            TimingUtils.showTimedBalloon(balloonTip, 2500);
+
+            return;
+        }
+        if (!marketingSector.updateBshls(amount)) {
+            balloonTip.setAttachedComponent(amntField);
+            balloonTip.setTextContents("This seller does not need this much.");
+            TimingUtils.showTimedBalloon(balloonTip, 2500);
+            return;
+        }
+        BushelLegerEntry varEntry = new BushelLegerEntry(selectedDate, -amount);
+        stu.farm.addToLedger(varEntry);
+        if (!printBalSheet()) {
+            balloonTip.setAttachedComponent(amntField);
+            balloonTip.setTextContents("You will not have enough available to do this deal on this day.");
+            TimingUtils.showTimedBalloon(balloonTip, 2500);
+
+            marketingSector.updateBshls(-amount);
+            stu.farm.removeFromLedger(varEntry);
+            printBalSheet();
+            return;
+        }
+        amntField.setText("");
+        Consts.DB.saveMarketing(marketingSector);
+        Consts.DB.saveStudent(stu);
+
+        successBalloon.setAttachedComponent(amntField);
+        successBalloon.setTextContents("Successful deal.");
+        TimingUtils.showTimedBalloon(successBalloon, 2500);
+
     }
 
     class DateLabelFormatter extends JFormattedTextField.AbstractFormatter {

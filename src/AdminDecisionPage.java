@@ -16,20 +16,11 @@ import static java.lang.Math.ceil;
  *
  */
 public class AdminDecisionPage extends JFrame implements ActionListener {
-    JLabel nameLabel;
-    JLabel numOfPlayersLabel;
     JPanel rootPanel;
-    JLabel gameYearLabel;
-    JLabel startingYearLabel;
-    JButton nextYearBtn;
-    JButton prevYearBtn;
-    JButton createAdminButton;
+    JLabel nameLabel, numOfPlayersLabel, gameYearLabel, startingYearLabel, numOfAdminsLabel;
+    JButton nextYearBtn, prevYearBtn, createAdminButton, generateInputSectorButton, generateMarketingSectorButton, logoutButton;
     JTable studentTable;
     JTable adminTbl;
-    JLabel numOfAdminsLabel;
-    JButton generateInputSectorButton;
-    JButton generateMarketingSectorButton;
-    JButton logoutButton;
 
     public AdminDecisionPage(final Admin admin) {
         super("Admin Page");
@@ -47,99 +38,90 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
 
         prevYearBtn.addActionListener(this);
 
-        createAdminButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new CreateAdminPage(admin);
-                setVisible(false);
-                dispose();
-            }
+        createAdminButton.addActionListener(e -> {
+            new CreateAdminPage(admin);
+            setVisible(false);
+            dispose();
         });
 
-        generateInputSectorButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int compMax = 0, early = 0, mid = 0, full = 0, rn = 0, var = 0;
-                Double maxPrice = 3.50, minPrice = 1.50;
-                double ttlSeedsNeeded = Consts.DB.getSeedsNeeded();
-                for (char i = 'A'; i <= 'E'; i++) {
-                    compMax = (int) ceil(ttlSeedsNeeded / 5d);
-                    early = 0;
-                    mid = 0;
-                    full = 0;
-                    while (compMax > 0) {
-                        rn = new Random().nextInt(compMax) + 1;
-                        var = new Random().nextInt(3);
-                        switch (var) {
-                            case 0:
-                                early += rn;
-                                break;
-                            case 1:
-                                mid += rn;
-                                break;
-                            case 2:
-                                full += rn;
-                                break;
-                        }
-                        compMax -= rn;
-                    }
-                    try {
-                        Consts.DB.addInputComp(new InputSector("Company" + i, early, Consts.round(minPrice +
-                                new Random().nextDouble() * (maxPrice - minPrice)), mid, Consts.round(minPrice +
-                                new Random().nextDouble() * (maxPrice - minPrice)), full,
-                                Consts.round(minPrice + new Random().nextDouble() * (maxPrice - minPrice))));
-                    } catch (MongoException v) {
-                        Consts.DB.removeInput("Company" + i);
-                        Consts.DB.addInputComp(new InputSector("Company" + i, early, Consts.round(minPrice +
-                                new Random().nextDouble() * (maxPrice - minPrice)), mid, Consts.round(minPrice +
-                                new Random().nextDouble() * (maxPrice - minPrice)), full,
-                                Consts.round(minPrice + new Random().nextDouble() * (maxPrice - minPrice))));
-                    }
-                }
-            }
-        });
-
-        generateMarketingSectorButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Double maxPrice = 4.50, minPrice = 3.70;
-                int bshlsNeeded = Consts.DB.getBshlsNeeded();
-                int var = 0, compBshls = 0;
-                String compDate = "";
-
-                for (char i = 'A'; i <= 'E'; i++) {
+        generateInputSectorButton.addActionListener(e -> {
+            int compMax = 0, early = 0, mid = 0, full = 0, rn = 0, var = 0;
+            Double maxPrice = 3.50, minPrice = 1.50;
+            double ttlSeedsNeeded = Consts.DB.getSeedsNeeded();
+            for (char i = 'A'; i <= 'E'; i++) {
+                compMax = (int) ceil(ttlSeedsNeeded / 5d);
+                early = 0;
+                mid = 0;
+                full = 0;
+                while (compMax > 0) {
+                    rn = new Random().nextInt(compMax) + 1;
                     var = new Random().nextInt(3);
-                    compBshls = 0;
                     switch (var) {
                         case 0:
-                            compDate = Consts.getEarlyHarvDt();
+                            early += rn;
                             break;
                         case 1:
-                            compDate = Consts.getMidHarvDt();
+                            mid += rn;
                             break;
                         case 2:
-                            compDate = Consts.getFullHarvDt();
+                            full += rn;
                             break;
                     }
-                    switch (i) {
-                        case 'A':
-                            compBshls = (int) ceil(bshlsNeeded * .5);
-                            break;
-                        case 'B':
-                            compBshls = (int) ceil(bshlsNeeded * .15);
-                            break;
-                        case 'C':
-                            compBshls = (int) ceil(bshlsNeeded * .13);
-                            break;
-                        case 'D':
-                            compBshls = (int) ceil(bshlsNeeded * .12);
-                            break;
-                        case 'E':
-                            compBshls = (int) ceil(bshlsNeeded * .10);
-                    }
-                    genDBMarketComp(new MarketingSector("Company" + i, compDate, Consts.round(minPrice +
-                            new Random().nextDouble() * (maxPrice - minPrice)), compBshls));
+                    compMax -= rn;
                 }
+                try {
+                    Consts.DB.addInputComp(new InputSector("Company" + i, early, Consts.round(minPrice +
+                            new Random().nextDouble() * (maxPrice - minPrice)), mid, Consts.round(minPrice +
+                            new Random().nextDouble() * (maxPrice - minPrice)), full,
+                            Consts.round(minPrice + new Random().nextDouble() * (maxPrice - minPrice))));
+                } catch (MongoException v) {
+                    Consts.DB.removeInput("Company" + i);
+                    Consts.DB.addInputComp(new InputSector("Company" + i, early, Consts.round(minPrice +
+                            new Random().nextDouble() * (maxPrice - minPrice)), mid, Consts.round(minPrice +
+                            new Random().nextDouble() * (maxPrice - minPrice)), full,
+                            Consts.round(minPrice + new Random().nextDouble() * (maxPrice - minPrice))));
+                }
+            }
+        });
+
+        generateMarketingSectorButton.addActionListener(e -> {
+            Double maxPrice = 4.50, minPrice = 3.70;
+            int bshlsNeeded = Consts.DB.getBshlsNeeded();
+            int var = 0, compBshls = 0;
+            String compDate = "";
+
+            for (char i = 'A'; i <= 'E'; i++) {
+                var = new Random().nextInt(3);
+                compBshls = 0;
+                switch (var) {
+                    case 0:
+                        compDate = Consts.getEarlyHarvDt();
+                        break;
+                    case 1:
+                        compDate = Consts.getMidHarvDt();
+                        break;
+                    case 2:
+                        compDate = Consts.getFullHarvDt();
+                        break;
+                }
+                switch (i) {
+                    case 'A':
+                        compBshls = (int) ceil(bshlsNeeded * .5);
+                        break;
+                    case 'B':
+                        compBshls = (int) ceil(bshlsNeeded * .15);
+                        break;
+                    case 'C':
+                        compBshls = (int) ceil(bshlsNeeded * .13);
+                        break;
+                    case 'D':
+                        compBshls = (int) ceil(bshlsNeeded * .12);
+                        break;
+                    case 'E':
+                        compBshls = (int) ceil(bshlsNeeded * .10);
+                }
+                genDBMarketComp(new MarketingSector("Company" + i, compDate, Consts.round(minPrice +
+                        new Random().nextDouble() * (maxPrice - minPrice)), compBshls));
             }
         });
         pack();
@@ -147,13 +129,10 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        logoutButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new WelcomePage();
-                setVisible(false);
-                dispose();
-            }
+        logoutButton.addActionListener(e -> {
+            new WelcomePage();
+            setVisible(false);
+            dispose();
         });
     }
 
