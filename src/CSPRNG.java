@@ -2,6 +2,7 @@ import com.mongodb.BasicDBObject;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.Arrays;
 
 /**
  * Created by Lorenzo on 9/22/2015.
@@ -33,6 +34,6 @@ public class CSPRNG extends BasicDBObject {
     }
 
     public String getAll() {
-        return (this.randomBytes.toString() + this.randomInt + this.randomBoolean);
+        return (Arrays.toString(this.randomBytes) + this.randomInt + this.randomBoolean);
     }
 }

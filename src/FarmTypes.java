@@ -14,24 +14,21 @@ import static java.util.Collections.sort;
 @Embedded
 public final class FarmTypes {
     private char size;
-    private int acres, ttlYield, ttlBushels, seedsNeeded, ttlSeedsOwned;
-    private Double totalCost = (double) 0;
+    private int acres, ttlBushels, seedsNeeded, ttlSeedsOwned;
     private HashMap<String, Double> staticCosts = new HashMap<>();
     private HashMap<String, Consts.SeedStat> seedCosts = new HashMap<>();
-    private ArrayList<BushelLegerEntry> bshlLedger = new ArrayList<>();
-    private HashMap<Consts.Seed_Name, Integer> seedsOwned;
+    private ArrayList<BushelLedgerEntry> bshlLedger = new ArrayList<>();
+    private HashMap<Consts.Seed_Type, Integer> seedsOwned;
     //HashMap<>;
 
     public FarmTypes(char size) {
         setSize(size);
         setAcres(size);
         setStaticCosts();
-        setTtlYield(0);
-        setTtlBushels(ttlYield / 56);
+        setTtlBushels(0);
         setSeedsNeeded(10 * acres);
         setTtlSeedsOwned(0);
         setSeedsOwned(new HashMap<>());
-        setTotalCost();
     }
 
     public FarmTypes() {
@@ -49,14 +46,6 @@ public final class FarmTypes {
         this.seedsNeeded = seedsNeeded;
     }
 
-    public int getTtlYield() {
-        return ttlYield;
-    }
-
-    public void setTtlYield(int ttlYield) {
-        this.ttlYield = ttlYield;
-    }
-
     public double getTtlBushels() {
         return ttlBushels;
     }
@@ -69,7 +58,7 @@ public final class FarmTypes {
         return staticCosts;
     }
 
-    public ArrayList<BushelLegerEntry> getBshlLedger() {
+    public ArrayList<BushelLedgerEntry> getBshlLedger() {
         return this.bshlLedger;
     }
 
@@ -120,19 +109,6 @@ public final class FarmTypes {
         seedCosts.put(who, new Consts.SeedStat(seedVar, amount, price, Consts.round(price * amount)));
     }
 
-    public void setTotalCost() {
-        totalCost = 0d;
-        for (Double staticCost : staticCosts.values()) {
-            totalCost += staticCost;
-        }
-
-        for (Consts.SeedStat seedStat : seedCosts.values()) {
-            totalCost += seedStat.getTtlCst();
-        }
-
-        totalCost = Consts.round(totalCost);
-    }
-
     public char getSize() {
         return size;
     }
@@ -159,10 +135,6 @@ public final class FarmTypes {
                 break;
         }
         setSeedsNeeded(10 * acres);
-    }
-
-    public Double getTotalCost() {
-        return totalCost;
     }
 
     boolean checkIfEmpty() {
@@ -219,15 +191,15 @@ public final class FarmTypes {
         double midAcres = Consts.round((double) seedsOwned.get(Consts.Seed_Name.MID) / 10);
         double fullAcres = Consts.round((double) seedsOwned.get(Consts.Seed_Name.FULL) / 10);
 
-        BushelLegerEntry earlyEntry = new BushelLegerEntry(Consts.getEarlyHarvDt(), (int) ceil(earlyAcres * Consts.ACRE_YIELD));
+        BushelLedgerEntry earlyEntry = new BushelLedgerEntry(Consts.getEarlyHarvDt(), (int) ceil(earlyAcres * Consts.ACRE_YIELD), 0, null);
         if (!bshlLedger.contains(earlyEntry)) {
             this.bshlLedger.add(earlyEntry);
         }
-        BushelLegerEntry midEntry = new BushelLegerEntry(Consts.getMidHarvDt(), (int) ceil((midAcres * Consts.ACRE_YIELD)));
+        BushelLedgerEntry midEntry = new BushelLedgerEntry(Consts.getMidHarvDt(), (int) ceil((midAcres * Consts.ACRE_YIELD)), 0, null);
         if (!bshlLedger.contains(midEntry)) {
             this.bshlLedger.add(midEntry);
         }
-        BushelLegerEntry fullEntry = new BushelLegerEntry(Consts.getFullHarvDt(), (int) ceil((fullAcres * Consts.ACRE_YIELD)));
+        BushelLedgerEntry fullEntry = new BushelLedgerEntry(Consts.getFullHarvDt(), (int) ceil((fullAcres * Consts.ACRE_YIELD)), 0, null);
         if (!bshlLedger.contains(fullEntry)) {
             this.bshlLedger.add(fullEntry);
         }
@@ -237,12 +209,12 @@ public final class FarmTypes {
 
     }
 
-    public void addToLedger(BushelLegerEntry entry) {
+    public void addToBshlLedger(BushelLedgerEntry entry) {
         bshlLedger.add(entry);
         sort(bshlLedger);
     }
 
-    public void removeFromLedger(BushelLegerEntry entry) {
+    public void removeFromBshlLedger(BushelLedgerEntry entry) {
         bshlLedger.remove(entry);
     }
 }

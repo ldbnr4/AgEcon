@@ -1,5 +1,3 @@
-import org.mongodb.morphia.annotations.Embedded;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
@@ -103,59 +101,8 @@ public class Consts {
         return sd.format(cal.getTime());
     }
 
-    public enum Seed_Name {
+    public enum Seed_Type {
         EARLY, MID, FULL
-    }
-
-    @Embedded
-    static class SeedStat {
-        Seed_Name seedType;
-        int amount;
-        double price;
-        double ttlCst;
-
-        public SeedStat(Seed_Name seedType, int amount, double price, double totalCst) {
-            setSeedType(seedType);
-            setAmount(amount);
-            setPrice(price);
-            setTtlCst(totalCst);
-        }
-
-        public SeedStat() {
-
-        }
-
-        public Seed_Name getSeedType() {
-            return seedType;
-        }
-
-        public void setSeedType(Seed_Name seedType) {
-            this.seedType = seedType;
-        }
-
-        public int getAmount() {
-            return amount;
-        }
-
-        public void setAmount(int amount) {
-            this.amount = amount;
-        }
-
-        public double getPrice() {
-            return price;
-        }
-
-        public void setPrice(double price) {
-            this.price = price;
-        }
-
-        public double getTtlCst() {
-            return ttlCst;
-        }
-
-        public void setTtlCst(double ttlCst) {
-            this.ttlCst = ttlCst;
-        }
     }
 
     public static class RoundJTextField extends JTextField {

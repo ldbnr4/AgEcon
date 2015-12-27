@@ -23,19 +23,12 @@ public class MongoDBConnection{
 
     private MongoDBConnection() {
         morphia.map(Student.class).map(FarmTypes.class).map(GameFlow.class).map(Admin.class).map(InputSector.class)
-                .map(Consts.SeedStat.class).map(MarketingSector.class);
+                .map(MarketingSector.class);
     }
 
     public static MongoDBConnection getInstance() {
         return ourInstance;
     }
-
-    /*public int countFarmPpl(){
-        DB db = openConnection();
-        int count = (int) db.getCollection("users").count(new BasicDBObject("sector.className", FarmSector.class.getName()));
-
-        return count;
-    }*/
 
     public void removeStudent(Student student){
         usersColl.remove(new BasicDBObject("_id", student.id));

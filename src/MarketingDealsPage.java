@@ -31,6 +31,7 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
     JFormattedTextField compAAmount, compBAmount, compCAmount, compDAmount, compEAmount;
     JTable bshlBalSheet;
     private JDatePickerImpl datePickerA, datePickerB, datePickerC, datePickerD, datePickerE;
+    private JButton endSeasonButton;
 
     private BalloonTip balloonTip, successBalloon;
 
@@ -83,6 +84,12 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
         successBalloon = new BalloonTip(bshlBalSheet, new JLabel(), greenModern, BalloonTip.Orientation.RIGHT_ABOVE,
                 BalloonTip.AttachLocation.ALIGNED, 10, 10, false);
         this.successBalloon.setVisible(false);
+
+        endSeasonButton.addActionListener(e -> {
+            new EndofSeasonPage(stu);
+            setVisible(false);
+            dispose();
+        });
 
     }
 
@@ -149,15 +156,20 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         JButton btn = (JButton) e.getSource();
         if (btn.equals(compABtn)) {
-            buttonHandler(datePickerA, compADate, compAAmount, Consts.COMPANY_A_NAME);
+            buttonHandler(datePickerA, compADate, compAAmount, Consts.COMPANY_A_NAME,
+                    Double.valueOf(compAPrice.getText()));
         } else if (btn.equals(compBBtn)) {
-            buttonHandler(datePickerB, compBDate, compBAmount, Consts.COMPANY_B_NAME);
+            buttonHandler(datePickerB, compBDate, compBAmount, Consts.COMPANY_B_NAME,
+                    Double.valueOf(compBPrice.getText()));
         } else if (btn.equals(compCBtn)) {
-            buttonHandler(datePickerC, compCDate, compCAmount, Consts.COMPANY_C_NAME);
+            buttonHandler(datePickerC, compCDate, compCAmount, Consts.COMPANY_C_NAME,
+                    Double.valueOf(compCPrice.getText()));
         } else if (btn.equals(compDBtn)) {
-            buttonHandler(datePickerD, compDDate, compDAmount, Consts.COMPANY_D_NAME);
+            buttonHandler(datePickerD, compDDate, compDAmount, Consts.COMPANY_D_NAME,
+                    Double.valueOf(compDPrice.getText()));
         } else if (btn.equals(compEBtn)) {
-            buttonHandler(datePickerE, compEDate, compEAmount, Consts.COMPANY_E_NAME);
+            buttonHandler(datePickerE, compEDate, compEAmount, Consts.COMPANY_E_NAME,
+                    Double.valueOf(compEPrice.getText()));
         }
     }
 
@@ -169,7 +181,7 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
             }
         };
         int row = 0;
-        for (BushelLegerEntry ledger : stu.farm.getBshlLedger()) {
+        for (BushelLedgerEntry ledger : stu.farm.getBshlLedger()) {
             runTtl += ledger.getAmount();
             if (runTtl < 0) {
                 return false;
@@ -187,7 +199,8 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
         return true;
     }
 
-    private void buttonHandler(JDatePickerImpl jDatePicker, JLabel dateLabel, JFormattedTextField amntField, String compName) {
+    void buttonHandler(JDatePickerImpl jDatePicker, JLabel dateLabel, JFormattedTextField amntField, String compName,
+                       double bndlPrice) {
         if (amntField.getText().isEmpty()) {
             balloonTip.setAttachedComponent(amntField);
             balloonTip.setTextContents("Please enter a number to sell.");
@@ -231,15 +244,15 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
             TimingUtils.showTimedBalloon(balloonTip, 2500);
             return;
         }
-        BushelLegerEntry varEntry = new BushelLegerEntry(selectedDate, -amount);
-        stu.farm.addToLedger(varEntry);
+        BushelLedgerEntry varEntry = new BushelLedgerEntry(selectedDate, -amount, bndlPrice, compName);
+        stu.farm.addToBshlLedger(varEntry);
         if (!printBalSheet()) {
             balloonTip.setAttachedComponent(amntField);
             balloonTip.setTextContents("You will not have enough available to do this deal on this day.");
             TimingUtils.showTimedBalloon(balloonTip, 2500);
 
             marketingSector.updateBshls(-amount);
-            stu.farm.removeFromLedger(varEntry);
+            stu.farm.removeFromBshlLedger(varEntry);
             printBalSheet();
             return;
         }

@@ -5,16 +5,20 @@ import java.util.Date;
  * Created by Lorenzo on 12/20/2015.
  *
  */
-public class BushelLegerEntry implements Comparable {
+public class BushelLedgerEntry implements Comparable {
     private String date;
     private int amount;
+    private double ppbndl;
+    private String seller;
 
-    public BushelLegerEntry(String date, int amount) {
+    public BushelLedgerEntry(String date, int amount, double ppbndl, String seller) {
         setDate(date);
         setAmount(amount);
+        setPpbndl(ppbndl);
+        setSeller(seller);
     }
 
-    public BushelLegerEntry() {
+    public BushelLedgerEntry() {
     }
 
     public String getDate() {
@@ -33,12 +37,28 @@ public class BushelLegerEntry implements Comparable {
         this.amount = amount;
     }
 
+    public double getPpbndl() {
+        return ppbndl;
+    }
+
+    public void setPpbndl(double ppbndl) {
+        this.ppbndl = ppbndl;
+    }
+
+    public String getSeller() {
+        return seller;
+    }
+
+    public void setSeller(String seller) {
+        this.seller = seller;
+    }
+
     @Override
     public int compareTo(Object o) {
         Date compareDate = null;
         Date baseDate = null;
         try {
-            compareDate = Consts.sd.parse(((BushelLegerEntry) o).getDate());
+            compareDate = Consts.sd.parse(((BushelLedgerEntry) o).getDate());
             baseDate = Consts.sd.parse(getDate());
         } catch (ParseException e) {
             e.printStackTrace();

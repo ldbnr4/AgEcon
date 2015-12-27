@@ -37,8 +37,9 @@ public class GameDriver {
             Consts.DB.addStudent(student);
         }*/
         new AdminDecisionPage(Consts.DB.getAdmin("admin"));
-        new MarketingDealsPage(Consts.DB.getStudent("ldbnr4"));
+        //new MarketingDealsPage(Consts.DB.getStudent("ldbnr4"));
         //new HomePage(Consts.DB.getStudent("ldbnr4"));
+        new EndofSeasonPage(Consts.DB.getStudent("ldbnr4"));
         //System.out.println(Consts.DB.getSeedsNeeded(Consts.GAME_FLOW.currentYear));
         //System.out.println();
     }
