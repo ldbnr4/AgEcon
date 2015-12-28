@@ -69,17 +69,14 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
                     }
                     compMax -= rn;
                 }
+                InputSector theInput = new InputSector("Company" + i, early, Consts.round(minPrice +
+                        new Random().nextDouble() * (maxPrice - minPrice)), mid, Consts.round(minPrice +
+                        new Random().nextDouble() * (maxPrice - minPrice)), full,
+                        Consts.round(minPrice + new Random().nextDouble() * (maxPrice - minPrice)));
                 try {
-                    Consts.DB.addInputComp(new InputSector("Company" + i, early, Consts.round(minPrice +
-                            new Random().nextDouble() * (maxPrice - minPrice)), mid, Consts.round(minPrice +
-                            new Random().nextDouble() * (maxPrice - minPrice)), full,
-                            Consts.round(minPrice + new Random().nextDouble() * (maxPrice - minPrice))));
+                    Consts.DB.saveInput(theInput);
                 } catch (MongoException v) {
-                    Consts.DB.removeInput("Company" + i);
-                    Consts.DB.addInputComp(new InputSector("Company" + i, early, Consts.round(minPrice +
-                            new Random().nextDouble() * (maxPrice - minPrice)), mid, Consts.round(minPrice +
-                            new Random().nextDouble() * (maxPrice - minPrice)), full,
-                            Consts.round(minPrice + new Random().nextDouble() * (maxPrice - minPrice))));
+                   v.printStackTrace();
                 }
             }
         });
@@ -205,10 +202,9 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
 
     void genDBMarketComp(MarketingSector marketComp) {
         try {
-            Consts.DB.addMarketComp(marketComp);
+            Consts.DB.saveMarketing(marketComp);
         } catch (MongoException v) {
-            Consts.DB.removeMarketComp(marketComp.getName());
-            Consts.DB.addMarketComp(marketComp);
+            v.printStackTrace();
         }
     }
 }

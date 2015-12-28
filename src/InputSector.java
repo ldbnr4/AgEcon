@@ -43,6 +43,7 @@ public class InputSector {
             return false;
         }
         this.earlyAmnt += earlyAmnt;
+        Consts.DB.saveInput(this);
         return true;
     }
 
@@ -55,6 +56,7 @@ public class InputSector {
             return false;
         }
         this.midAmnt += midAmnt;
+        Consts.DB.saveInput(this);
         return true;
     }
 
@@ -67,6 +69,7 @@ public class InputSector {
             return false;
         }
         this.fullAmnt += fullAmnt;
+        Consts.DB.saveInput(this);
         return true;
     }
 

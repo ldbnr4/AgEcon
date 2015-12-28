@@ -52,7 +52,7 @@ public class CompanyThread implements Runnable {
                     }
                 } catch (Exception e) {
                     //System.out.println("Trouble updating labels on Home Page.");
-                    e.getMessage();
+                    e.printStackTrace();
 
                 }
             } else {
@@ -64,7 +64,7 @@ public class CompanyThread implements Runnable {
                         DBmarketingComp = Consts.DB.getMarketingComp(name);
                     }
                 } catch (Exception e) {
-                    e.getMessage();
+                    e.printStackTrace();
                 }
             }
         }

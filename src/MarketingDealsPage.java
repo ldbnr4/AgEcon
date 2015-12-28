@@ -86,6 +86,8 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
         this.successBalloon.setVisible(false);
 
         endSeasonButton.addActionListener(e -> {
+            stu.setStage(Consts.Student_Stage.End_of_Season);
+            Consts.DB.saveStudent(stu);
             new EndofSeasonPage(stu);
             setVisible(false);
             dispose();

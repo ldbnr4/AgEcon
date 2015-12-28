@@ -25,13 +25,10 @@ public class LoginPage extends JFrame implements ActionListener {
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        registerButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new CreatePage();
-                setVisible(false);
-                dispose();
-            }
+        registerButton.addActionListener(e -> {
+            new CreatePage();
+            setVisible(false);
+            dispose();
         });
 
         loginButton.addActionListener(this);
@@ -67,7 +64,6 @@ public class LoginPage extends JFrame implements ActionListener {
                     String inEncrypt = EncryptPassword.encrpyt(inPass, salt);
                     if (inEncrypt.equals(grabbedStudent.password)) {
                         passwordField.setBackground(Color.GREEN);
-                        //System.out.println(grabbedStudent.sector);
                         switch (grabbedStudent.getStage()){
                             case Select_Size:
                                 new FarmerDecisionPage(grabbedStudent);

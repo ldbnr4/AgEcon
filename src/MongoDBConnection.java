@@ -41,11 +41,11 @@ public class MongoDBConnection{
     }
 
     public void removeInput(String input) {
-        inputColl.remove(new BasicDBObject("_id", input).append("year", Consts.GAME_FLOW.currentYear));
+        inputColl.remove(new BasicDBObject("_id", input));
     }
 
     public void removeMarketComp(String marketName) {
-        marketColl.remove(new BasicDBObject("_id", marketName).append("year", Consts.GAME_FLOW.currentYear));
+        marketColl.remove(new BasicDBObject("_id", marketName));
     }
 
     public void saveStudent(Student student) {

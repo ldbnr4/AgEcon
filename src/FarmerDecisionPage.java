@@ -71,11 +71,12 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
             } else {
                 student.farm = new FarmTypes(Consts.LARGE_FARM);
             }
+            student.setStage(Consts.Student_Stage.Buy_Seeds);
+            Consts.DB.saveStudent(student);
+            new HomePage(student);
+            setVisible(false);
+            dispose();
         }
-        Consts.DB.saveStudent(student);
-        new HomePage(student);
-        setVisible(false);
-        dispose();
     }
 
     private void updateBtns() {

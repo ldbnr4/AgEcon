@@ -3,6 +3,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  * Created by Lorenzo on 12/26/2015.
+ *
  */
 public class EndofSeasonPage extends JFrame {
     private JPanel rootPanel;

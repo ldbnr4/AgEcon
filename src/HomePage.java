@@ -45,6 +45,7 @@ public class HomePage extends JFrame {
         neededLabel.setText(String.valueOf(stu.farm.getSeedsNeeded()));
         plantButton.addActionListener(e -> {
             stu.farm.plantAction();
+            stu.setStage(Consts.Student_Stage.Sell_Yields);
             Consts.DB.saveStudent(stu);
             new MarketingDealsPage(stu);
             setVisible(false);
@@ -66,7 +67,7 @@ public class HomePage extends JFrame {
                     stuMidLabel.setText(String.valueOf(stuSeeds.get(Consts.Seed_Type.MID)));
                     stuFullLabel.setText(String.valueOf(stuSeeds.get(Consts.Seed_Type.FULL)));
                 } catch (Exception e) {
-                    e.getMessage();
+                    e.printStackTrace();
                 }
             }
         }).start();

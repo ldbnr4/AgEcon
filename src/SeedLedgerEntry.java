@@ -12,6 +12,8 @@ public class SeedLedgerEntry {
     private int amount;
     private double price;
 
+    SeedLedgerEntry(){}
+
     public SeedLedgerEntry(String seller, Consts.Seed_Type seedType, int amount, double price){
         setSeller(seller);
         setSeedType(seedType);
