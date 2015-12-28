@@ -1,4 +1,3 @@
-import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 
@@ -9,23 +8,22 @@ import org.mongodb.morphia.annotations.Id;
 
 @Entity
 public class InputSector {
-    @Embedded
-    SeedTypes seedTypes;
     @Id
-    String name;
-    int year;
+    private String name;
+    private int earlyAmnt = 0, midAmnt = 0, fullAmnt = 0;
+    private double earlyPrice = 0, midPrice = 0, fullPrice = 0;
 
-    public InputSector() {
-        setSeedTypes(new SeedTypes());
-        setYear(Consts.GAME_FLOW.currentYear);
-        setName("");
-    }
+    public InputSector() {}
 
     public InputSector(String name, int earlyAmnt, double earlyCost, int midAmnt, double midCost, int fullAmnt,
                        double fullCost) {
         setName(name);
-        setYear(Consts.GAME_FLOW.currentYear);
-        setSeedTypes(new SeedTypes(earlyAmnt, earlyCost, midAmnt, midCost, fullAmnt, fullCost));
+        updateEarlyAmnt(earlyAmnt);
+        setEarlyPrice(earlyCost);
+        updateMidAmnt(midAmnt);
+        setMidPrice(midCost);
+        updateFullAmnt(fullAmnt);
+        setFullPrice(fullCost);
     }
 
     public String getName() {
@@ -36,87 +34,63 @@ public class InputSector {
         this.name = name;
     }
 
-    public void setSeedTypes(SeedTypes seedTypes) {
-        this.seedTypes = seedTypes;
+    public int getEarlyAmnt() {
+        return earlyAmnt;
     }
 
-    public void setEarlySeeds(int earlySale, double earlyPrice) {
-        seedTypes.setEarlySale(earlySale);
-        seedTypes.setEarlyPrice(earlyPrice);
+    public boolean updateEarlyAmnt(int earlyAmnt) {
+        if(-earlyAmnt > this.earlyAmnt){
+            return false;
+        }
+        this.earlyAmnt += earlyAmnt;
+        return true;
     }
 
-    public void setYear(int year) {
-        this.year = year;
+    public int getMidAmnt() {
+        return midAmnt;
     }
 
-    public int getEarlyAmnt(){
-        return seedTypes.getEarlySale();
+    public boolean updateMidAmnt(int midAmnt) {
+        if(-midAmnt > this.midAmnt){
+            return false;
+        }
+        this.midAmnt += midAmnt;
+        return true;
     }
 
-    public void setEarlyAmnt(int amnt) {
-        seedTypes.setEarlySale(amnt);
-        Consts.DB.saveInput(this);
+    public int getFullAmnt() {
+        return fullAmnt;
+    }
+
+    public boolean updateFullAmnt(int fullAmnt) {
+        if(-fullAmnt > this.fullAmnt){
+            return false;
+        }
+        this.fullAmnt += fullAmnt;
+        return true;
     }
 
     public double getEarlyPrice() {
-        return seedTypes.getEarlyPrice();
+        return earlyPrice;
+    }
+
+    public void setEarlyPrice(double earlyPrice) {
+        this.earlyPrice = earlyPrice;
     }
 
     public double getMidPrice() {
-        return seedTypes.getMidPrice();
+        return midPrice;
+    }
+
+    public void setMidPrice(double midPrice) {
+        this.midPrice = midPrice;
     }
 
     public double getFullPrice() {
-        return seedTypes.getFullPrice();
+        return fullPrice;
     }
 
-    public void setMidSeeds(int midSale, double midPrice) {
-        seedTypes.setMidSale(midSale);
-        seedTypes.setMidPrice(midPrice);
-    }
-
-    public int getMidAmnt(){
-        return seedTypes.getMidSale();
-    }
-
-    public void setMidAmnt(int amnt) {
-        seedTypes.setMidSale(amnt);
-        Consts.DB.saveInput(this);
-    }
-
-    public void setFullSeeds(int fullSale, double fullPrice) {
-        seedTypes.setFullSale(fullSale);
-        seedTypes.setFullPrice(fullPrice);
-    }
-
-    public int getFullAmnt(){
-        return seedTypes.getFullSale();
-    }
-
-    public void setFullAmnt(int amnt) {
-        seedTypes.setFullSale(amnt);
-        Consts.DB.saveInput(this);
-
-    }
-
-    public int getTtlSeedAmnt(){
-        return seedTypes.getTtlSeeds();
-    }
-
-    /*public HashMap<Consts.Seed_Name, Double> getVarietyMarketShare() {
-        HashMap<Consts.Seed_Name, Integer> db_ttls = Consts.DB.getSeedTotals(Consts.GAME_FLOW.currentYear);
-        HashMap<Consts.Seed_Name, Double> sect_shares = new HashMap<>();
-
-        sect_shares.put(Consts.Seed_Name.EARLY, Consts.round(((double) getEarlyAmnt() / (double) db_ttls.get(Consts.Seed_Name.EARLY)) * 100));
-        sect_shares.put(Consts.Seed_Name.MID, Consts.round(((double) getMidAmnt() / (double) db_ttls.get(Consts.Seed_Name.MID)) * 100));
-        sect_shares.put(Consts.Seed_Name.FULL, Consts.round(((double) getFullAmnt() / (double) db_ttls.get(Consts.Seed_Name.FULL)) * 100));
-        sect_shares.put(Consts.Seed_Name.TOTAL, Consts.round(((double) getTtlSeedAmnt() / (double) db_ttls.get(Consts.Seed_Name.TOTAL)) * 100));
-
-        return sect_shares;
-    }*/
-
-    public boolean checkIfEmpty() {
-        return seedTypes.getEarlyPrice() == 0 && seedTypes.getEarlySale() == 0 && seedTypes.getMidPrice() == 0
-                && seedTypes.getMidSale() == 0 && seedTypes.getFullPrice() == 0 && seedTypes.getFullSale() == 0;
+    public void setFullPrice(double fullPrice) {
+        this.fullPrice = fullPrice;
     }
 }

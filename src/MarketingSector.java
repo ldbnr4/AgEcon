@@ -12,7 +12,6 @@ public class MarketingSector {
     private String name;
     private String neededDate;
     private Double pricePerBush;
-    private int year;
 
     private int bshls;
 
@@ -24,7 +23,6 @@ public class MarketingSector {
         this.neededDate = neededDate;
         this.pricePerBush = pricePerBush;
         this.bshls = bshls;
-        this.year = Consts.GAME_FLOW.currentYear;
     }
 
     public String getName() {

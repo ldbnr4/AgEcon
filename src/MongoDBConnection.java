@@ -110,7 +110,7 @@ public class MongoDBConnection{
             InputSector inputSector;
             while (cursor.hasNext()) {
                 inputSector = morphia.fromDBObject(InputSector.class, cursor.next());
-                list.put(inputSector.name, inputSector);
+                list.put(inputSector.getName(), inputSector);
             }
         }
         return list;
@@ -158,31 +158,31 @@ public class MongoDBConnection{
         return (int) adminsColl.count();
     }
 
-   /* public HashMap<Consts.Seed_Name, Integer> getSeedTotals(int year) {
+   /* public HashMap<Consts.Seed_Type, Integer> getSeedTotals(int year) {
 
-        HashMap<Consts.Seed_Name, Integer> seedTtls = new HashMap<>();
-        seedTtls.put(Consts.Seed_Name.EARLY, 0);
-        seedTtls.put(Consts.Seed_Name.MID, 0);
-        seedTtls.put(Consts.Seed_Name.FULL, 0);
-        seedTtls.put(Consts.Seed_Name.TOTAL, 0);
+        HashMap<Consts.Seed_Type, Integer> seedTtls = new HashMap<>();
+        seedTtls.put(Consts.Seed_Type.EARLY, 0);
+        seedTtls.put(Consts.Seed_Type.MID, 0);
+        seedTtls.put(Consts.Seed_Type.FULL, 0);
+        seedTtls.put(Consts.Seed_Type.TOTAL, 0);
         Student student;
         InputSector studentSector;
         try (DBCursor cursor = openConnection().getCollection("users").find(querySector(Consts.INPUT_SECTOR_NAME, year))) {
             while (cursor.hasNext()) {
                 student = morphia.fromDBObject(Student.class, cursor.next());
                 studentSector = (InputSector) student.sector;
-                seedTtls.put(Consts.Seed_Name.EARLY,
-                        seedTtls.get(Consts.Seed_Name.EARLY) + studentSector.getEarlyAmnt());
-                seedTtls.put(Consts.Seed_Name.MID,
-                        seedTtls.get(Consts.Seed_Name.MID) + studentSector.getMidAmnt());
-                seedTtls.put(Consts.Seed_Name.FULL,
-                        seedTtls.get(Consts.Seed_Name.FULL) + studentSector.getFullAmnt());
+                seedTtls.put(Consts.Seed_Type.EARLY,
+                        seedTtls.get(Consts.Seed_Type.EARLY) + studentSector.getEarlyAmnt());
+                seedTtls.put(Consts.Seed_Type.MID,
+                        seedTtls.get(Consts.Seed_Type.MID) + studentSector.getMidAmnt());
+                seedTtls.put(Consts.Seed_Type.FULL,
+                        seedTtls.get(Consts.Seed_Type.FULL) + studentSector.getFullAmnt());
             }
         }
 
         for(int x : seedTtls.values()){
-            seedTtls.put(Consts.Seed_Name.TOTAL,
-                    seedTtls.get(Consts.Seed_Name.TOTAL) + x);
+            seedTtls.put(Consts.Seed_Type.TOTAL,
+                    seedTtls.get(Consts.Seed_Type.TOTAL) + x);
         }
         return seedTtls;
     }*/

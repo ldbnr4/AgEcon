@@ -18,8 +18,7 @@ public class BushelLedgerEntry implements Comparable {
         setSeller(seller);
     }
 
-    public BushelLedgerEntry() {
-    }
+    public BushelLedgerEntry() {}
 
     public String getDate() {
         return date;

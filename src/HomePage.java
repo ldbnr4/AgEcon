@@ -70,10 +70,10 @@ public class HomePage extends JFrame {
                             }
                         }
                         onHandLabel.setText(String.valueOf(stu.farm.getTtlSeedsOwned()));
-                        HashMap<Consts.Seed_Name, Integer> stuSeeds = stu.farm.getSeedsOwned();
-                        stuEarlyLabel.setText(String.valueOf(stuSeeds.get(Consts.Seed_Name.EARLY)));
-                        stuMidLabel.setText(String.valueOf(stuSeeds.get(Consts.Seed_Name.MID)));
-                        stuFullLabel.setText(String.valueOf(stuSeeds.get(Consts.Seed_Name.FULL)));
+                        HashMap<Consts.Seed_Type, Integer> stuSeeds = stu.farm.getSeedsOwned();
+                        stuEarlyLabel.setText(String.valueOf(stuSeeds.get(Consts.Seed_Type.EARLY)));
+                        stuMidLabel.setText(String.valueOf(stuSeeds.get(Consts.Seed_Type.MID)));
+                        stuFullLabel.setText(String.valueOf(stuSeeds.get(Consts.Seed_Type.FULL)));
                     } catch (Exception e) {
                         e.getMessage();
                     }

@@ -35,7 +35,7 @@ public class BuyingSeedsPage extends JFrame implements ActionListener {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         companyNameLabel.setText(inputSector.getName());
         input = inputSector;
-        inName = input.name;
+        inName = input.getName();
         stu = student;
         stuName = student.uName;
         modern = new MinimalBalloonStyle(Color.yellow, 5);
@@ -74,95 +74,62 @@ public class BuyingSeedsPage extends JFrame implements ActionListener {
             setVisible(false);
             dispose();
         } else if (btn.equals(earlyBuyBtn)) {
-            if (!earlyTF.getText().matches("\\d+")) {
-                balloonTip.setAttachedComponent(earlyTF);
-                balloonTip.setTextContents("Please enter a positive number order.");
-                TimingUtils.showTimedBalloon(balloonTip, 2500);
-                earlyTF.setBackground(Color.RED);
-            } else if (earlyAmntLabel.getText().equals("SOLD OUT")) {
-                balloonTip.setAttachedComponent(earlyTF);
-                balloonTip.setTextContents("The input supplier is sold out of this variety.");
-                TimingUtils.showTimedBalloon(balloonTip, 2500);
-                earlyTF.setBackground(Color.RED);
-            } else if (Integer.valueOf(earlyTF.getText()) > input.getEarlyAmnt()) {
-                balloonTip.setAttachedComponent(earlyTF);
+            btnHandler(earlyTF, earlyAmntLabel, Consts.Seed_Type.EARLY);
+        }
+        else if (btn.equals(midBuyBtn)) {
+            btnHandler(midTF, midAmntLabel, Consts.Seed_Type.MID);
+        }
+        else if (btn.equals(fullBuyBtn)) {
+            btnHandler(fullTF, fullAmntLabel, Consts.Seed_Type.FULL);
+        }
+    }
+
+    void btnHandler(JTextField txtField, JLabel amntLbl, Consts.Seed_Type seed_type){
+        if (!txtField.getText().matches("\\d+")) {
+            balloonTip.setAttachedComponent(txtField);
+            balloonTip.setTextContents("Please enter a positive number order.");
+            TimingUtils.showTimedBalloon(balloonTip, 2500);
+        } else if (amntLbl.getText().equals("SOLD OUT")) {
+            balloonTip.setAttachedComponent(txtField);
+            balloonTip.setTextContents("The input supplier is sold out of this variety.");
+            TimingUtils.showTimedBalloon(balloonTip, 2500);
+        } else {
+            boolean flag = true;
+            while (stu == null) {
+                stu = Consts.DB.getStudent(stuName);
+            }
+            while (input == null) {
+                input = Consts.DB.getInputSeller(inName);
+            }
+            switch (String.valueOf(seed_type)){
+                case "FULL":
+                    flag = input.updateFullAmnt(-Integer.valueOf(txtField.getText()));
+                    if(flag){
+                        stu.farm.updateSeedsOwned(0, 0, Integer.valueOf(txtField.getText()));
+                    }
+                    break;
+                case "MID":
+                    flag = input.updateMidAmnt(-Integer.valueOf(txtField.getText()));
+                    if(flag){
+                        stu.farm.updateSeedsOwned(0, Integer.valueOf(txtField.getText()), 0);
+                    }
+                    break;
+                case "EARLY":
+                    flag = input.updateEarlyAmnt(-Integer.valueOf(txtField.getText()));
+                    if(flag){
+                        stu.farm.updateSeedsOwned(Integer.valueOf(txtField.getText()), 0, 0);
+                    }
+                    break;
+            }
+            Consts.DB.saveInput(input);
+            if(!flag){
+                balloonTip.setAttachedComponent(txtField);
                 balloonTip.setTextContents("You cant purchase more than what is available.");
                 TimingUtils.showTimedBalloon(balloonTip, 2500);
-                earlyTF.setBackground(Color.RED);
-            } else {
-                earlyTF.setBackground(Color.GREEN);
-                balloonTip.setVisible(false);
-                input.setEarlyAmnt(input.getEarlyAmnt() - Integer.valueOf(earlyTF.getText()));
-                while (stu == null) {
-                    stu = Consts.DB.getStudent(stuName);
-                }
-                stu.farm.updateSeedsOwned(Integer.valueOf(earlyTF.getText()), 0, 0);
-                while (input == null) {
-                    input = Consts.DB.getInputSeller(inName);
-                }
-                stu.farm.addSeedCost(inName, Consts.Seed_Name.EARLY, Integer.valueOf(earlyTF.getText()), input.getEarlyPrice());
-                Consts.DB.saveStudent(stu);
             }
-        } else if (btn.equals(midBuyBtn)) {
-            if (!midTF.getText().matches("\\d+")) {
-                balloonTip.setAttachedComponent(midTF);
-                balloonTip.setTextContents("Please enter a positive number order.");
-                TimingUtils.showTimedBalloon(balloonTip, 2500);
-                midTF.setBackground(Color.RED);
-            } else if (midAmntLabel.getText().equals("SOLD OUT")) {
-                balloonTip.setAttachedComponent(midTF);
-                balloonTip.setTextContents("The input supplier is sold out of this variety.");
-                TimingUtils.showTimedBalloon(balloonTip, 2500);
-                midTF.setBackground(Color.RED);
-            } else if (Integer.valueOf(midTF.getText()) > input.getMidAmnt()) {
-                balloonTip.setAttachedComponent(midTF);
-                balloonTip.setTextContents("You cant purchase more than what is available.");
-                TimingUtils.showTimedBalloon(balloonTip, 2500);
-                midTF.setBackground(Color.RED);
-            } else {
-                midTF.setBackground(Color.GREEN);
-                balloonTip.setVisible(false);
-                input.setMidAmnt(input.getMidAmnt() - Integer.valueOf(midTF.getText()));
-                while (stu == null) {
-                    stu = Consts.DB.getStudent(stuName);
-                }
-                stu.farm.updateSeedsOwned(0, Integer.valueOf(midTF.getText()), 0);
-                while (input == null) {
-                    input = Consts.DB.getInputSeller(inName);
-                }
-                stu.farm.addSeedCost(inName, Consts.Seed_Name.MID, Integer.valueOf(midTF.getText()), input.getMidPrice());
-                Consts.DB.saveStudent(stu);
-            }
-        } else if (btn.equals(fullBuyBtn)) {
-            if (!fullTF.getText().matches("\\d+")) {
-                balloonTip.setAttachedComponent(fullTF);
-                balloonTip.setTextContents("Please enter a positive number order.");
-                TimingUtils.showTimedBalloon(balloonTip, 2500);
-                fullTF.setBackground(Color.RED);
-            } else if (fullAmntLabel.getText().equals("SOLD OUT")) {
-                balloonTip.setAttachedComponent(fullTF);
-                balloonTip.setTextContents("The input supplier is sold out of this variety.");
-                TimingUtils.showTimedBalloon(balloonTip, 2500);
-                fullTF.setBackground(Color.RED);
-            } else if (Integer.valueOf(fullTF.getText()) > input.getFullAmnt()) {
-                balloonTip.setAttachedComponent(fullTF);
-                balloonTip.setTextContents("You cant purchase more than what is available.");
-                TimingUtils.showTimedBalloon(balloonTip, 2500);
-                fullTF.setBackground(Color.RED);
-            } else {
-                fullTF.setBackground(Color.GREEN);
-                balloonTip.setVisible(false);
-                input.setFullAmnt(input.getFullAmnt() - Integer.valueOf(fullTF.getText()));
-                while (stu == null) {
-                    stu = Consts.DB.getStudent(stuName);
-                }
-                stu.farm.updateSeedsOwned(0, 0, Integer.valueOf(fullTF.getText()));
-                while (input == null) {
-                    input = Consts.DB.getInputSeller(inName);
-                }
-                stu.farm.addSeedCost(inName, Consts.Seed_Name.FULL, Integer.valueOf(fullTF.getText()), input.getFullPrice());
-                Consts.DB.saveStudent(stu);
-            }
+            stu.farm.addToSeedLedger(new SeedLedgerEntry(inName, seed_type, Integer.valueOf(txtField.getText()),
+                    input.getFullPrice()));
+            Consts.DB.saveStudent(stu);
         }
     }
 }

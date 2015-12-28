@@ -124,6 +124,7 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
                         new Random().nextDouble() * (maxPrice - minPrice)), compBshls));
             }
         });
+
         pack();
         setLocationRelativeTo(null);
         setVisible(true);

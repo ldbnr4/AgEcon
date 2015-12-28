@@ -16,10 +16,9 @@ public final class FarmTypes {
     private char size;
     private int acres, ttlBushels, seedsNeeded, ttlSeedsOwned;
     private HashMap<String, Double> staticCosts = new HashMap<>();
-    private HashMap<String, Consts.SeedStat> seedCosts = new HashMap<>();
     private ArrayList<BushelLedgerEntry> bshlLedger = new ArrayList<>();
     private HashMap<Consts.Seed_Type, Integer> seedsOwned;
-    //HashMap<>;
+    private ArrayList<SeedLedgerEntry> seedLedger = new ArrayList<>();
 
     public FarmTypes(char size) {
         setSize(size);
@@ -105,10 +104,6 @@ public final class FarmTypes {
         }
     }
 
-    public void addSeedCost(String who, Consts.Seed_Name seedVar, int amount, double price) {
-        seedCosts.put(who, new Consts.SeedStat(seedVar, amount, price, Consts.round(price * amount)));
-    }
-
     public char getSize() {
         return size;
     }
@@ -141,23 +136,23 @@ public final class FarmTypes {
         return size == Consts.NO_FARM && acres == 0;
     }
 
-    public HashMap<Consts.Seed_Name, Integer> getSeedsOwned() {
+    public HashMap<Consts.Seed_Type, Integer> getSeedsOwned() {
         return seedsOwned;
     }
 
-    public void setSeedsOwned(HashMap<Consts.Seed_Name, Integer> seedsOwned) {
+    public void setSeedsOwned(HashMap<Consts.Seed_Type, Integer> seedsOwned) {
         if (seedsOwned.isEmpty()) {
-            seedsOwned.put(Consts.Seed_Name.EARLY, 0);
-            seedsOwned.put(Consts.Seed_Name.MID, 0);
-            seedsOwned.put(Consts.Seed_Name.FULL, 0);
+            seedsOwned.put(Consts.Seed_Type.EARLY, 0);
+            seedsOwned.put(Consts.Seed_Type.MID, 0);
+            seedsOwned.put(Consts.Seed_Type.FULL, 0);
         }
         this.seedsOwned = seedsOwned;
     }
 
     public void updateSeedsOwned(int early, int mid, int full) {
-        seedsOwned.put(Consts.Seed_Name.EARLY, seedsOwned.get(Consts.Seed_Name.EARLY) + early);
-        seedsOwned.put(Consts.Seed_Name.MID, seedsOwned.get(Consts.Seed_Name.MID) + mid);
-        seedsOwned.put(Consts.Seed_Name.FULL, seedsOwned.get(Consts.Seed_Name.FULL) + full);
+        seedsOwned.put(Consts.Seed_Type.EARLY, seedsOwned.get(Consts.Seed_Type.EARLY) + early);
+        seedsOwned.put(Consts.Seed_Type.MID, seedsOwned.get(Consts.Seed_Type.MID) + mid);
+        seedsOwned.put(Consts.Seed_Type.FULL, seedsOwned.get(Consts.Seed_Type.FULL) + full);
 
         updateTtlSeedsOwned();
     }
@@ -178,18 +173,18 @@ public final class FarmTypes {
     }
 
     public void plantAction() {
-        double earlyPerc = Consts.round((double) seedsOwned.get(Consts.Seed_Name.EARLY) / getTtlSeedsOwned());
-        double midPerc = Consts.round((double) seedsOwned.get(Consts.Seed_Name.MID) / getTtlSeedsOwned());
-        double fullPerc = Consts.round((double) seedsOwned.get(Consts.Seed_Name.FULL) / getTtlSeedsOwned());
+        double earlyPerc = Consts.round((double) seedsOwned.get(Consts.Seed_Type.EARLY) / getTtlSeedsOwned());
+        double midPerc = Consts.round((double) seedsOwned.get(Consts.Seed_Type.MID) / getTtlSeedsOwned());
+        double fullPerc = Consts.round((double) seedsOwned.get(Consts.Seed_Type.FULL) / getTtlSeedsOwned());
         if (ttlSeedsOwned > seedsNeeded) {
             ttlSeedsOwned = seedsNeeded;
-            seedsOwned.put(Consts.Seed_Name.EARLY, (int) Consts.round(earlyPerc * ttlSeedsOwned));
-            seedsOwned.put(Consts.Seed_Name.MID, (int) Consts.round(midPerc * ttlSeedsOwned));
-            seedsOwned.put(Consts.Seed_Name.FULL, (int) Consts.round(fullPerc * ttlSeedsOwned));
+            seedsOwned.put(Consts.Seed_Type.EARLY, (int) Consts.round(earlyPerc * ttlSeedsOwned));
+            seedsOwned.put(Consts.Seed_Type.MID, (int) Consts.round(midPerc * ttlSeedsOwned));
+            seedsOwned.put(Consts.Seed_Type.FULL, (int) Consts.round(fullPerc * ttlSeedsOwned));
         }
-        double earlyAcres = Consts.round((double) seedsOwned.get(Consts.Seed_Name.EARLY) / 10);
-        double midAcres = Consts.round((double) seedsOwned.get(Consts.Seed_Name.MID) / 10);
-        double fullAcres = Consts.round((double) seedsOwned.get(Consts.Seed_Name.FULL) / 10);
+        double earlyAcres = Consts.round((double) seedsOwned.get(Consts.Seed_Type.EARLY) / 10);
+        double midAcres = Consts.round((double) seedsOwned.get(Consts.Seed_Type.MID) / 10);
+        double fullAcres = Consts.round((double) seedsOwned.get(Consts.Seed_Type.FULL) / 10);
 
         BushelLedgerEntry earlyEntry = new BushelLedgerEntry(Consts.getEarlyHarvDt(), (int) ceil(earlyAcres * Consts.ACRE_YIELD), 0, null);
         if (!bshlLedger.contains(earlyEntry)) {
@@ -216,5 +211,9 @@ public final class FarmTypes {
 
     public void removeFromBshlLedger(BushelLedgerEntry entry) {
         bshlLedger.remove(entry);
+    }
+
+    public void addToSeedLedger(SeedLedgerEntry entry){
+        seedLedger.add(entry);
     }
 }
