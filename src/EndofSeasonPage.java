@@ -33,7 +33,12 @@ public class EndofSeasonPage extends JFrame {
         );
 
         nModel.addRow(new Object[]{"Gross Sales Revenue", rev[0]});
-        nModel.addRow(new Object[]{"Static Cost", student.farm});
+
+        int cost = 0;
+        for(double x : student.farm.getStaticCosts().values()){
+            cost += x;
+        }
+        nModel.addRow(new Object[]{"Static Cost", cost});
 
         expenseTable.setModel(nModel);
 

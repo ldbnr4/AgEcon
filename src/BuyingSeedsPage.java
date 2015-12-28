@@ -101,20 +101,20 @@ public class BuyingSeedsPage extends JFrame implements ActionListener {
             while (input == null) {
                 input = Consts.DB.getInputSeller(inName);
             }
-            switch (String.valueOf(seed_type)){
-                case "FULL":
+            switch (seed_type){
+                case FULL:
                     flag = input.updateFullAmnt(-Integer.valueOf(txtField.getText()));
                     if(flag){
                         stu.farm.updateSeedsOwned(0, 0, Integer.valueOf(txtField.getText()));
                     }
                     break;
-                case "MID":
+                case MID:
                     flag = input.updateMidAmnt(-Integer.valueOf(txtField.getText()));
                     if(flag){
                         stu.farm.updateSeedsOwned(0, Integer.valueOf(txtField.getText()), 0);
                     }
                     break;
-                case "EARLY":
+                case EARLY:
                     flag = input.updateEarlyAmnt(-Integer.valueOf(txtField.getText()));
                     if(flag){
                         stu.farm.updateSeedsOwned(Integer.valueOf(txtField.getText()), 0, 0);

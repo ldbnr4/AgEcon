@@ -19,9 +19,9 @@ public class Student {
     protected String password;
     protected String salt;
     private int year;
+    private Consts.Student_Stage stage;
 
-    public Student() {
-    }
+    public Student() {}
 
     public Student(String name, String pass, FarmTypes farm) {
         this.uName = name;
@@ -31,15 +31,20 @@ public class Student {
         this.farm = farm;
         this.year = Consts.GAME_FLOW.currentYear;
         setId(this.year);
-    }
-
-    public int getYear(){
-        return this.year;
+        setStage(Consts.Student_Stage.Select_Size);
     }
 
     public void setId(int year) {
         this.id = new HashMap<>();
         this.year = year;
         id.put(this.uName, year);
+    }
+
+    public void setStage(Consts.Student_Stage stage) {
+        this.stage = stage;
+    }
+
+    public Consts.Student_Stage getStage() {
+        return stage;
     }
 }

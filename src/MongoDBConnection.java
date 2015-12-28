@@ -106,7 +106,7 @@ public class MongoDBConnection{
 
     public HashMap<String, InputSector> getInputSectorSellers() {
         HashMap<String, InputSector> list = new HashMap<>();
-        try (DBCursor cursor = inputColl.find(new BasicDBObject("year", Consts.GAME_FLOW.currentYear))) {
+        try (DBCursor cursor = inputColl.find()){
             InputSector inputSector;
             while (cursor.hasNext()) {
                 inputSector = morphia.fromDBObject(InputSector.class, cursor.next());
@@ -118,7 +118,7 @@ public class MongoDBConnection{
 
     public HashMap<String, MarketingSector> getMarketingComps() {
         HashMap<String, MarketingSector> list = new HashMap<>();
-        try (DBCursor cursor = marketColl.find(new BasicDBObject("year", Consts.GAME_FLOW.currentYear))) {
+        try (DBCursor cursor = marketColl.find()) {
             MarketingSector marketingSector;
             while (cursor.hasNext()) {
                 marketingSector = morphia.fromDBObject(MarketingSector.class, cursor.next());
@@ -129,7 +129,7 @@ public class MongoDBConnection{
     }
 
     public InputSector getInputSeller(String name) {
-        DBObject one = inputColl.findOne(new BasicDBObject("_id", name).append("year", Consts.GAME_FLOW.currentYear));
+        DBObject one = inputColl.findOne(new BasicDBObject("_id", name));
         if (one == null) {
             //System.out.println("RETURNED NULL");
             return null;
@@ -138,7 +138,7 @@ public class MongoDBConnection{
     }
 
     public MarketingSector getMarketingComp(String name) {
-        DBObject one = marketColl.findOne(new BasicDBObject("_id", name).append("year", Consts.GAME_FLOW.currentYear));
+        DBObject one = marketColl.findOne(new BasicDBObject("_id", name));
         if (one == null) {
             //System.out.println("RETURNED NULL");
             return null;

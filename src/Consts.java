@@ -105,6 +105,10 @@ public class Consts {
         EARLY, MID, FULL
     }
 
+    public enum Student_Stage{
+        Select_Size, Buy_Seeds, Sell_Yields, End_of_Season
+    }
+
     public static class RoundJTextField extends JTextField {
         private Shape shape;
 

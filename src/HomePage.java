@@ -1,5 +1,4 @@
 import javax.swing.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 
@@ -38,92 +37,77 @@ public class HomePage extends JFrame {
         stuName = student.uName;
         inSectsAvail = false;
         welcomeLabel.setText("Welcome " + stu.uName + "!");
-        logoutButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new WelcomePage();
-                setVisible(false);
-                dispose();
-            }
+        logoutButton.addActionListener(e -> {
+            new WelcomePage();
+            setVisible(false);
+            dispose();
         });
         neededLabel.setText(String.valueOf(stu.farm.getSeedsNeeded()));
-        plantButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                stu.farm.plantAction();
-                Consts.DB.saveStudent(stu);
-                new MarketingDealsPage(stu);
-                setVisible(false);
-                dispose();
-            }
+        plantButton.addActionListener(e -> {
+            stu.farm.plantAction();
+            Consts.DB.saveStudent(stu);
+            new MarketingDealsPage(stu);
+            setVisible(false);
+            dispose();
         });
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (isVisible()) {
-                    try {
-                        if (inSectsAvail) {
+        new Thread(() -> {
+            while (isVisible()) {
+                try {
+                    if (inSectsAvail) {
+                        stu = Consts.DB.getStudent(stuName);
+                        while (stu == null) {
                             stu = Consts.DB.getStudent(stuName);
-                            while (stu == null) {
-                                stu = Consts.DB.getStudent(stuName);
-                            }
                         }
-                        onHandLabel.setText(String.valueOf(stu.farm.getTtlSeedsOwned()));
-                        HashMap<Consts.Seed_Type, Integer> stuSeeds = stu.farm.getSeedsOwned();
-                        stuEarlyLabel.setText(String.valueOf(stuSeeds.get(Consts.Seed_Type.EARLY)));
-                        stuMidLabel.setText(String.valueOf(stuSeeds.get(Consts.Seed_Type.MID)));
-                        stuFullLabel.setText(String.valueOf(stuSeeds.get(Consts.Seed_Type.FULL)));
-                    } catch (Exception e) {
-                        e.getMessage();
                     }
+                    onHandLabel.setText(String.valueOf(stu.farm.getTtlSeedsOwned()));
+                    HashMap<Consts.Seed_Type, Integer> stuSeeds = stu.farm.getSeedsOwned();
+                    stuEarlyLabel.setText(String.valueOf(stuSeeds.get(Consts.Seed_Type.EARLY)));
+                    stuMidLabel.setText(String.valueOf(stuSeeds.get(Consts.Seed_Type.MID)));
+                    stuFullLabel.setText(String.valueOf(stuSeeds.get(Consts.Seed_Type.FULL)));
+                } catch (Exception e) {
+                    e.getMessage();
                 }
             }
         }).start();
 
-        final Runnable initInSects = new Runnable() {
-            @Override
-            public void run() {
-                while (!inSectsAvail) {
-                    inSectsAvail = !(Consts.DB.getInputSectorSellers()).isEmpty();
-                }
-                startCompThreads();
+        final Runnable initInSects = () -> {
+            while (!inSectsAvail) {
+                inSectsAvail = !(Consts.DB.getInputSectorSellers()).isEmpty();
             }
+            startCompThreads();
         };
         new Thread(initInSects).start();
 
-        final ActionListener buyNowAction = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (inSectsAvail) {
-                    JButton btn = (JButton) e.getSource();
-                    String btnTxt = btn.getText();
-                    InputSector company = null;
-                    if (btnTxt.contains(Consts.COMPANY_A_NAME)) {
-                        while (company == null) {
-                            company = Consts.DB.getInputSeller(Consts.COMPANY_A_NAME);
-                        }
-                    } else if (btnTxt.contains(Consts.COMPANY_B_NAME)) {
-                        while (company == null) {
-                            company = Consts.DB.getInputSeller(Consts.COMPANY_B_NAME);
-                        }
-                    } else if (btnTxt.contains(Consts.COMPANY_C_NAME)) {
-                        while (company == null) {
-                            company = Consts.DB.getInputSeller(Consts.COMPANY_C_NAME);
-                        }
-                    } else if (btnTxt.contains(Consts.COMPANY_D_NAME)) {
-                        while (company == null) {
-                            company = Consts.DB.getInputSeller(Consts.COMPANY_D_NAME);
-                        }
-                    } else if (btnTxt.contains(Consts.COMPANY_E_NAME)) {
-                        while (company == null) {
-                            company = Consts.DB.getInputSeller(Consts.COMPANY_E_NAME);
-                        }
-                    } else {
-                        System.out.println(btn.getName() + " does not have a case.");
+        final ActionListener buyNowAction = e -> {
+            if (inSectsAvail) {
+                JButton btn = (JButton) e.getSource();
+                String btnTxt = btn.getText();
+                InputSector company = null;
+                if (btnTxt.contains(Consts.COMPANY_A_NAME)) {
+                    while (company == null) {
+                        company = Consts.DB.getInputSeller(Consts.COMPANY_A_NAME);
                     }
-                    new BuyingSeedsPage(stu, company);
+                } else if (btnTxt.contains(Consts.COMPANY_B_NAME)) {
+                    while (company == null) {
+                        company = Consts.DB.getInputSeller(Consts.COMPANY_B_NAME);
+                    }
+                } else if (btnTxt.contains(Consts.COMPANY_C_NAME)) {
+                    while (company == null) {
+                        company = Consts.DB.getInputSeller(Consts.COMPANY_C_NAME);
+                    }
+                } else if (btnTxt.contains(Consts.COMPANY_D_NAME)) {
+                    while (company == null) {
+                        company = Consts.DB.getInputSeller(Consts.COMPANY_D_NAME);
+                    }
+                } else if (btnTxt.contains(Consts.COMPANY_E_NAME)) {
+                    while (company == null) {
+                        company = Consts.DB.getInputSeller(Consts.COMPANY_E_NAME);
+                    }
+                } else {
+                    System.out.println(btn.getName() + " does not have a case.");
                 }
+                new BuyingSeedsPage(stu, company);
             }
         };
 

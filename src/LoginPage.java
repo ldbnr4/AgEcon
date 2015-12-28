@@ -68,11 +68,19 @@ public class LoginPage extends JFrame implements ActionListener {
                     if (inEncrypt.equals(grabbedStudent.password)) {
                         passwordField.setBackground(Color.GREEN);
                         //System.out.println(grabbedStudent.sector);
-                        boolean emptyStudent = grabbedStudent.farm.checkIfEmpty();
-                        if (emptyStudent) {
-                            new FarmerDecisionPage(grabbedStudent);
-                        } else {
-                            new HomePage(grabbedStudent);
+                        switch (grabbedStudent.getStage()){
+                            case Select_Size:
+                                new FarmerDecisionPage(grabbedStudent);
+                                break;
+                            case Buy_Seeds:
+                                new HomePage(grabbedStudent);
+                                break;
+                            case Sell_Yields:
+                                new MarketingDealsPage(grabbedStudent);
+                                break;
+                            case End_of_Season:
+                                new EndofSeasonPage(grabbedStudent);
+                                break;
                         }
                         setVisible(false);
                         dispose();
