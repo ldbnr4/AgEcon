@@ -26,7 +26,7 @@ public final class FarmTypes {
         setStaticCosts();
         setTtlBushels(0);
         setSeedsNeeded(10 * acres);
-        setTtlSeedsOwned(0);
+        setTtlSeedsOwned();
         setSeedsOwned(new HashMap<>());
     }
 
@@ -34,7 +34,7 @@ public final class FarmTypes {
         size = Consts.NO_FARM;
         acres = 0;
         setSeedsOwned(new HashMap<>());
-        setTtlSeedsOwned(0);
+        setTtlSeedsOwned();
     }
 
     public int getSeedsNeeded() {
@@ -161,8 +161,8 @@ public final class FarmTypes {
         return ttlSeedsOwned;
     }
 
-    public void setTtlSeedsOwned(int ttlSeedsOwned) {
-        this.ttlSeedsOwned = ttlSeedsOwned;
+    public void setTtlSeedsOwned() {
+        this.ttlSeedsOwned = 0;
     }
 
     public void updateTtlSeedsOwned() {
@@ -206,6 +206,7 @@ public final class FarmTypes {
 
     public void addToBshlLedger(BushelLedgerEntry entry) {
         bshlLedger.add(entry);
+        //noinspection unchecked
         sort(bshlLedger);
     }
 

@@ -134,14 +134,14 @@ public class CreateAdminPage extends JFrame implements ActionListener {
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
-        username_tf = new Consts.RoundJTextField(15);
+        username_tf = new Consts.RoundJTextField();
         username_tf.setBorder(BorderFactory.createCompoundBorder(
                 username_tf.getBorder(),
                 BorderFactory.createEmptyBorder(5, 5, 5, 5)));
         username_tf.setText("Username");
         username_tf.setForeground(Color.GRAY);
 
-        password_pf = new Consts.RoundPasswordField(15);
+        password_pf = new Consts.RoundPasswordField();
         password_pf.setBorder(BorderFactory.createCompoundBorder(
                 password_pf.getBorder(),
                 BorderFactory.createEmptyBorder(5, 5, 5, 5)));
@@ -149,7 +149,7 @@ public class CreateAdminPage extends JFrame implements ActionListener {
         password_pf.setText("Password");
         password_pf.setForeground(Color.GRAY);
 
-        confimpassword_pf = new Consts.RoundPasswordField(15);
+        confimpassword_pf = new Consts.RoundPasswordField();
         confimpassword_pf.setBorder(BorderFactory.createCompoundBorder(
                 confimpassword_pf.getBorder(),
                 BorderFactory.createEmptyBorder(5, 5, 5, 5)));

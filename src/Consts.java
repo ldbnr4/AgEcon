@@ -112,8 +112,8 @@ public class Consts {
     public static class RoundJTextField extends JTextField {
         private Shape shape;
 
-        public RoundJTextField(int size) {
-            super(size);
+        public RoundJTextField() {
+            super(15);
             setOpaque(false); // As suggested by @AVD in comment.
         }
 
@@ -139,8 +139,8 @@ public class Consts {
     public static class RoundPasswordField extends JPasswordField {
         private Shape shape;
 
-        public RoundPasswordField(int size) {
-            super(size);
+        public RoundPasswordField() {
+            super(15);
             setOpaque(false); // As suggested by @AVD in comment.
         }
 

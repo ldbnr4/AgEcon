@@ -216,14 +216,14 @@ public class CreatePage extends JFrame implements ActionListener {
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
-        usernameTextField = new Consts.RoundJTextField(15);
+        usernameTextField = new Consts.RoundJTextField();
         usernameTextField.setBorder(BorderFactory.createCompoundBorder(
                 usernameTextField.getBorder(),
                 BorderFactory.createEmptyBorder(5, 5, 5, 5)));
         usernameTextField.setText("Username");
         usernameTextField.setForeground(Color.GRAY);
 
-        passwordPasswordField = new Consts.RoundPasswordField(15);
+        passwordPasswordField = new Consts.RoundPasswordField();
         passwordPasswordField.setBorder(BorderFactory.createCompoundBorder(
                 passwordPasswordField.getBorder(),
                 BorderFactory.createEmptyBorder(5, 5, 5, 5)));
@@ -231,7 +231,7 @@ public class CreatePage extends JFrame implements ActionListener {
         passwordPasswordField.setText("Password");
         passwordPasswordField.setForeground(Color.GRAY);
 
-        confirmPasswordPasswordField = new Consts.RoundPasswordField(15);
+        confirmPasswordPasswordField = new Consts.RoundPasswordField();
         confirmPasswordPasswordField.setBorder(BorderFactory.createCompoundBorder(
                 confirmPasswordPasswordField.getBorder(),
                 BorderFactory.createEmptyBorder(5, 5, 5, 5)));

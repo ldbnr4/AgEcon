@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 /**
  * Created by Lorenzo on 10/27/2015.
+ * 
  */
 
 @Entity
