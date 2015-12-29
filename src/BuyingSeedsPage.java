@@ -94,14 +94,17 @@ public class BuyingSeedsPage extends JFrame implements ActionListener {
             balloonTip.setTextContents("The input supplier is sold out of this variety.");
             TimingUtils.showTimedBalloon(balloonTip, 2500);
         } else {
-            boolean flag = true;
-            int desireAmnt = Integer.valueOf(txtField.getText());
-            while (stu == null) {
-                stu = Consts.DB.getStudent(stuName);
-            }
             while (input == null) {
                 input = Consts.DB.getInputSeller(inName);
             }
+
+            boolean flag = true;
+            int desireAmnt = Integer.valueOf(txtField.getText());
+
+            while (stu == null) {
+                stu = Consts.DB.getStudent(stuName);
+            }
+
             double price = input.getFullPrice();
             switch (seed_type){
                 case FULL:
@@ -131,7 +134,6 @@ public class BuyingSeedsPage extends JFrame implements ActionListener {
             stu.farm.addToSeedLedger(new SeedLedgerEntry(inName, seed_type, desireAmnt,
                     price));
             Consts.DB.saveStudent(stu);
-            Consts.DB.saveInput(input);
         }
     }
 }

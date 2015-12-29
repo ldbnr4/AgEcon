@@ -32,6 +32,7 @@ public class InputSector {
 
     public void setName(String name) {
         this.name = name;
+        Consts.DB.saveInput(this);
     }
 
     public int getEarlyAmnt() {
@@ -79,6 +80,7 @@ public class InputSector {
 
     public void setEarlyPrice(double earlyPrice) {
         this.earlyPrice = earlyPrice;
+        Consts.DB.saveInput(this);
     }
 
     public double getMidPrice() {
@@ -87,6 +89,7 @@ public class InputSector {
 
     public void setMidPrice(double midPrice) {
         this.midPrice = midPrice;
+        Consts.DB.saveInput(this);
     }
 
     public double getFullPrice() {
@@ -95,5 +98,6 @@ public class InputSector {
 
     public void setFullPrice(double fullPrice) {
         this.fullPrice = fullPrice;
+        Consts.DB.saveInput(this);
     }
 }

@@ -36,7 +36,7 @@ public class GameDriver {
             Student student = new Student("MedFarmers"+ String.valueOf(i), "passpass", new FarmTypes(Consts.MED_FARM));
             Consts.DB.addStudent(student);
         }*/
-        new AdminDecisionPage(Consts.DB.getAdmin("admin"));
+        //new AdminDecisionPage(Consts.DB.getAdmin("admin"));
         //new MarketingDealsPage(Consts.DB.getStudent("ldbnr4"));
         //new HomePage(Consts.DB.getStudent("ldbnr4"));
         //new EndofSeasonPage(Consts.DB.getStudent("ldbnr4"));

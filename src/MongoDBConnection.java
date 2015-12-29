@@ -131,7 +131,6 @@ public class MongoDBConnection{
     public InputSector getInputSeller(String name) {
         DBObject one = inputColl.findOne(new BasicDBObject("_id", name));
         if (one == null) {
-            //System.out.println("RETURNED NULL");
             return null;
         }
         return morphia.fromDBObject(InputSector.class, one);
