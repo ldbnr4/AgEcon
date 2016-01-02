@@ -24,7 +24,6 @@ public class UNameVerifier {
         String in = tf.getText().trim();
         boolean length = in.length() >= 5 && in.length() <= 10;
         boolean b = in.matches("\\w+");
-        //System.out.println(tf);
         balloonTip.setAttachedComponent(tf);
         if (!adminFlag) {
             Student student = Consts.DB.getStudent(in);

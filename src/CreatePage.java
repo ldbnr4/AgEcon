@@ -35,76 +35,7 @@ public class CreatePage extends JFrame implements ActionListener {
         super("Create Account");
         setContentPane(rootPanel);
 
-        modern = new MinimalBalloonStyle(Color.white, 5);
-        uNameBalloonTip = new BalloonTip(usernameTextField, new JLabel(), modern, BalloonTip.Orientation.RIGHT_ABOVE, BalloonTip.AttachLocation.ALIGNED, 10, 10, false);
-        this.uNameBalloonTip.setVisible(false);
-        passBalloonTip = new BalloonTip(passwordPasswordField, new JLabel(), modern, BalloonTip.Orientation.RIGHT_ABOVE, BalloonTip.AttachLocation.ALIGNED, 10, 10, false);
-        this.passBalloonTip.setVisible(false);
-        confPassBalloonTip = new BalloonTip(confirmPasswordPasswordField, new JLabel(), modern, BalloonTip.Orientation.RIGHT_ABOVE, BalloonTip.AttachLocation.ALIGNED, 10, 10, false);
-        this.confPassBalloonTip.setVisible(false);
 
-        loginButton.addActionListener(e -> {
-            new LoginPage();
-            setVisible(false);
-            dispose();
-        });
-
-        submitButton.addActionListener(this);
-
-        usernameVerifier = new UNameVerifier(uNameBalloonTip);
-        usernameTextField.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if (usernameTextField.getBackground() != Color.GREEN || usernameTextField.getBackground() != Color.RED) {
-                    usernameTextField.setText("");
-                    usernameTextField.setForeground(Color.BLACK);
-                }
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                usernameVerifier.verify(usernameTextField, Student.class);
-            }
-        });
-        passwordVerifier = new PassVerifier(passBalloonTip);
-        passwordPasswordField.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if (passwordPasswordField.getBackground() != Color.GREEN) {
-                    passwordPasswordField.setEchoChar('•');
-                    passwordPasswordField.setText("");
-                    passwordPasswordField.setForeground(Color.BLACK);
-                }
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (usernameTextField.getBackground() == Color.green) {
-                    passwordVerifier.verifyLive(passwordPasswordField);
-                }
-            }
-        });
-        confPassVerifier = new PassVerifier(confPassBalloonTip);
-        confirmPasswordPasswordField.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if (confirmPasswordPasswordField.getBackground() != Color.GREEN) {
-                    confirmPasswordPasswordField.setEchoChar('•');
-                    confirmPasswordPasswordField.setText("");
-                    confirmPasswordPasswordField.setForeground(Color.BLACK);
-                }
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (usernameTextField.getBackground() == Color.green && passwordPasswordField.getBackground() == Color.green) {
-                    if (confPassVerifier.verifyLive(confirmPasswordPasswordField)) {
-                        confPassVerifier.verifyMatch(passwordPasswordField, confirmPasswordPasswordField);
-                    }
-                }
-
-            }
-        });
 
         pack();
         setResizable(false);
@@ -208,7 +139,6 @@ public class CreatePage extends JFrame implements ActionListener {
             Student student = new Student(usernameTextField.getText(), String.valueOf(passwordPasswordField.getPassword()), new FarmTypes());
             new FarmerDecisionPage(student);
             Consts.DB.addStudent(student);
-            //new HomePage(student);
             setVisible(false);
             dispose();
         }
