@@ -5,11 +5,14 @@
 public class GameDriver {
 
     public static void main(String[] args) {
-        if (Consts.GAME_FLOW == null) {
-            Consts.GAME_FLOW = new GameFlow();
-            Consts.DB.addGameFlow(Consts.GAME_FLOW);
+        if (Consts.DB.getGameFlow() == null) {
+            Consts.DB.saveGameFlow();
         }
 
         new WelcomePage();
+
+        new SoftTestPage();
     }
+
+
 }

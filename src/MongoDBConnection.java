@@ -1,4 +1,5 @@
 import com.mongodb.*;
+import org.jetbrains.annotations.NotNull;
 import org.mongodb.morphia.Morphia;
 
 import java.net.UnknownHostException;
@@ -32,7 +33,7 @@ public class MongoDBConnection{
 
     public void removeStudent(Student student){
         usersColl.remove(new BasicDBObject("_id", student.id));
-        Consts.GAME_FLOW.setTotalPlayers();
+        Consts.DB.getGameFlow().setTotalPlayers();
         saveGameFlow();
     }
 
@@ -54,8 +55,9 @@ public class MongoDBConnection{
     }
 
     public void saveGameFlow() {
-        gameFlowColl.remove(new BasicDBObject("_id", Consts.GAME_FLOW.name));
-        addGameFlow(Consts.GAME_FLOW);
+        GameFlow gameFlow = getGameFlow();
+        gameFlowColl.remove(new BasicDBObject("_id", gameFlow.name));
+        addGameFlow(gameFlow);
     }
 
     public void saveInput(InputSector inputSector) {
@@ -70,7 +72,7 @@ public class MongoDBConnection{
 
     public Student getStudent(String username) {
         HashMap<String, Integer> id = new HashMap<>();
-        id.put(username, Consts.GAME_FLOW.currentYear);
+        id.put(username, getGameFlow().currentYear);
         DBObject person = usersColl.findOne(new BasicDBObject("_id", id));
         if (person == null) {
             return null;
@@ -128,10 +130,11 @@ public class MongoDBConnection{
         return list;
     }
 
+    @NotNull
     public InputSector getInputSeller(String name) {
         DBObject one = inputColl.findOne(new BasicDBObject("_id", name));
-        if (one == null) {
-            return null;
+        while (one == null) {
+            inputColl.findOne(new BasicDBObject("_id", name));
         }
         return morphia.fromDBObject(InputSector.class, one);
     }
@@ -146,7 +149,7 @@ public class MongoDBConnection{
     }
 
     public int getTotalPlayers() {
-        return (int) usersColl.count(new BasicDBObject("year", Consts.GAME_FLOW.currentYear));
+        return (int) usersColl.count(new BasicDBObject("year", getGameFlow().currentYear));
     }
 
     public int getTotalPlayers(int year) {
@@ -188,7 +191,7 @@ public class MongoDBConnection{
 
     public int getSeedsNeeded() {
         int seed_total = 0;
-        try (DBCursor cursor = usersColl.find(new BasicDBObject("year", Consts.GAME_FLOW.currentYear), new BasicDBObject("farm.seedsNeeded", true))) {
+        try (DBCursor cursor = usersColl.find(new BasicDBObject("year", getGameFlow().currentYear), new BasicDBObject("farm.seedsNeeded", true))) {
             while (cursor.hasNext()) {
                 seed_total += morphia.fromDBObject(Student.class, cursor.next()).farm.getSeedsNeeded();
             }
@@ -198,7 +201,7 @@ public class MongoDBConnection{
 
     public int getBshlsNeeded() {
         int bshl_ttl = 0;
-        try (DBCursor cursor = usersColl.find(new BasicDBObject("year", Consts.GAME_FLOW.currentYear))) {
+        try (DBCursor cursor = usersColl.find(new BasicDBObject("year", getGameFlow().currentYear))) {
             while (cursor.hasNext()) {
                 bshl_ttl += morphia.fromDBObject(Student.class, cursor.next()).farm.getTtlBushels();
             }
@@ -211,22 +214,22 @@ public class MongoDBConnection{
 
         numRes.put(Consts.SMALL_FARM,
                 (int) usersColl
-                        .count(new BasicDBObject("year", Consts.GAME_FLOW.currentYear).append("farm.size", Consts.SMALL_FARM)));
+                        .count(new BasicDBObject("year", getGameFlow().currentYear).append("farm.size", Consts.SMALL_FARM)));
         numRes.put(Consts.MED_FARM,
                 (int) usersColl
-                        .count(new BasicDBObject("year", Consts.GAME_FLOW.currentYear).append("farm.size", Consts.MED_FARM)));
+                        .count(new BasicDBObject("year", getGameFlow().currentYear).append("farm.size", Consts.MED_FARM)));
         numRes.put(Consts.LARGE_FARM,
                 (int) usersColl
-                        .count(new BasicDBObject("year", Consts.GAME_FLOW.currentYear).append("farm.size", Consts.LARGE_FARM)));
+                        .count(new BasicDBObject("year", getGameFlow().currentYear).append("farm.size", Consts.LARGE_FARM)));
         numRes.put(Consts.NO_FARM,
                 (int) usersColl
-                        .count(new BasicDBObject("year", Consts.GAME_FLOW.currentYear).append("farm.size", Consts.NO_FARM)));
+                        .count(new BasicDBObject("year", getGameFlow().currentYear).append("farm.size", Consts.NO_FARM)));
         return numRes;
     }
 
     public void addStudent(Student student) {
         usersColl.insert(morphia.toDBObject(student));
-        Consts.GAME_FLOW.setTotalPlayers();
+        getGameFlow().setTotalPlayers();
         saveGameFlow();
     }
 
@@ -239,7 +242,11 @@ public class MongoDBConnection{
     }
 
     public void addInputComp(InputSector inputComp) {
-        inputColl.insert(morphia.toDBObject(inputComp));
+        try {
+            inputColl.insert(morphia.toDBObject(inputComp));
+        } catch (MongoException ignored) {
+
+        }
     }
 
     public void addMarketComp(MarketingSector marketingSector) {
@@ -247,7 +254,7 @@ public class MongoDBConnection{
     }
 
     public void yearChange(int dir) {
-        int newYr = Consts.GAME_FLOW.currentYear;
+        int newYr = getGameFlow().currentYear;
         int oldYr = newYr + dir;
         int newTtl = getTotalPlayers(newYr);
         int oldTtl = getTotalPlayers(oldYr);
@@ -279,7 +286,7 @@ public class MongoDBConnection{
 
     ArrayList<Student> getAllStudents() {
         ArrayList<Student> list = new ArrayList<>();
-        try (DBCursor cursor = usersColl.find(new BasicDBObject("year", Consts.GAME_FLOW.currentYear))) {
+        try (DBCursor cursor = usersColl.find(new BasicDBObject("year", getGameFlow().currentYear))) {
             while (cursor.hasNext()) {
                 list.add(morphia.fromDBObject(Student.class, cursor.next()));
             }

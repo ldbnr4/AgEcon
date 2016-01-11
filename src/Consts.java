@@ -19,7 +19,6 @@ public class Consts {
     static final int FORWARD = -1;
     static final int BACK = 1;
     static final MongoDBConnection DB = MongoDBConnection.getInstance();
-    static GameFlow GAME_FLOW = DB.getGameFlow();
     static Double ACRE_YIELD = 62.5;
     static SimpleDateFormat sd = new SimpleDateFormat("MMM dd yyyy");
 

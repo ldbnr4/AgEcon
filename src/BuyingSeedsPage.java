@@ -20,7 +20,6 @@ public class BuyingSeedsPage extends JFrame implements ActionListener {
     JTextField earlyTF, midTF, fullTF;
     JButton doneButton;
 
-    InputSector input;
     String inName;
     Student stu;
     String stuName;
@@ -34,8 +33,6 @@ public class BuyingSeedsPage extends JFrame implements ActionListener {
         setVisible(true);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         companyNameLabel.setText(inputSector.getName());
-        input = inputSector;
-        inName = input.getName();
         stu = student;
         stuName = student.uName;
         modern = new MinimalBalloonStyle(Color.yellow, 5);
@@ -57,10 +54,7 @@ public class BuyingSeedsPage extends JFrame implements ActionListener {
     }
 
     private void updateLabels() {
-        input = Consts.DB.getInputSeller(inName);
-        while (input == null) {
-            input = Consts.DB.getInputSeller(inName);
-        }
+        InputSector input = Consts.DB.getInputSeller(inName);
         Consts.checkSetSoldOut(earlyAmntLabel, earlyPriceLabel, input.getEarlyAmnt(), input.getEarlyPrice());
         Consts.checkSetSoldOut(midAmntLabel, midPriceLabel, input.getMidAmnt(), input.getMidPrice());
         Consts.checkSetSoldOut(fullAmntLabel, fullPriceLabel, input.getFullAmnt(), input.getFullPrice());
@@ -94,46 +88,45 @@ public class BuyingSeedsPage extends JFrame implements ActionListener {
             balloonTip.setTextContents("The input supplier is sold out of this variety.");
             TimingUtils.showTimedBalloon(balloonTip, 2500);
         } else {
-            while (input == null) {
-                input = Consts.DB.getInputSeller(inName);
-            }
-
             boolean flag = true;
             int desireAmnt = Integer.valueOf(txtField.getText());
 
             while (stu == null) {
                 stu = Consts.DB.getStudent(stuName);
             }
-
-            double price = input.getFullPrice();
             switch (seed_type){
                 case FULL:
-                    flag = input.updateFullAmnt(-desireAmnt);
+                    flag = Consts.DB.getInputSeller(inName).updateFullAmnt(-desireAmnt);
                     if(flag){
                         stu.farm.updateSeedsOwned(0, 0, desireAmnt);
                     }
+                    stu.farm.addToSeedLedger(new SeedLedgerEntry(inName, seed_type, desireAmnt,
+                            Consts.DB.getInputSeller(inName).getFullPrice()));
                     break;
                 case MID:
-                    flag = input.updateMidAmnt(-desireAmnt);
+                    flag = Consts.DB.getInputSeller(inName).updateMidAmnt(-desireAmnt);
                     if(flag){
                         stu.farm.updateSeedsOwned(0, desireAmnt, 0);
                     }
+                    stu.farm.addToSeedLedger(new SeedLedgerEntry(inName, seed_type, desireAmnt,
+                            Consts.DB.getInputSeller(inName).getMidPrice()));
                     break;
                 case EARLY:
-                    flag = input.updateEarlyAmnt(-desireAmnt);
+                    flag = Consts.DB.getInputSeller(inName).updateEarlyAmnt(-desireAmnt);
                     if(flag){
                         stu.farm.updateSeedsOwned(desireAmnt, 0, 0);
                     }
+                    stu.farm.addToSeedLedger(new SeedLedgerEntry(inName, seed_type, desireAmnt,
+                            Consts.DB.getInputSeller(inName).getEarlyPrice()));
                     break;
             }
             if(!flag){
                 balloonTip.setAttachedComponent(txtField);
                 balloonTip.setTextContents("You cant purchase more than what is available.");
                 TimingUtils.showTimedBalloon(balloonTip, 2500);
+            } else {
+                Consts.DB.saveStudent(stu);
             }
-            stu.farm.addToSeedLedger(new SeedLedgerEntry(inName, seed_type, desireAmnt,
-                    price));
-            Consts.DB.saveStudent(stu);
         }
     }
 }

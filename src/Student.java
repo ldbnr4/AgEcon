@@ -29,7 +29,7 @@ public class Student {
         this.password = passInfo.get("password");
         this.salt = passInfo.get("salt");
         this.farm = farm;
-        this.year = Consts.GAME_FLOW.currentYear;
+        this.year = Consts.DB.getGameFlow().currentYear;
         setId(this.year);
         setStage(Consts.Student_Stage.Select_Size);
     }
@@ -40,11 +40,11 @@ public class Student {
         id.put(this.uName, year);
     }
 
-    public void setStage(Consts.Student_Stage stage) {
-        this.stage = stage;
-    }
-
     public Consts.Student_Stage getStage() {
         return stage;
+    }
+
+    public void setStage(Consts.Student_Stage stage) {
+        this.stage = stage;
     }
 }

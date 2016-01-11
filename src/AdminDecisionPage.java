@@ -28,8 +28,8 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
         setResizable(false);
         nameLabel.setText("Welcome " + admin.name + "!");
         //Consts.DB.saveGameFlow();
-        numOfPlayersLabel.setText(String.valueOf(Consts.GAME_FLOW.totalPlayers));
-        startingYearLabel.setText(String.valueOf(Consts.GAME_FLOW.startingYear));
+        numOfPlayersLabel.setText(String.valueOf(Consts.DB.getGameFlow().totalPlayers));
+        startingYearLabel.setText(String.valueOf(Consts.DB.getGameFlow().startingYear));
         setLabels();
         setNumOfAdminsLabel();
         rootPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -139,11 +139,11 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
         JButton button = (JButton) e.getSource();
         String buttonText = button.getText();
         if (buttonText.equals(nextYearBtn.getText())) {
-            Consts.GAME_FLOW.nextYear();
+            Consts.DB.getGameFlow().nextYear();
             Consts.DB.yearChange(Consts.FORWARD);
             setGameYearLabel();
         } else if (buttonText.equals(prevYearBtn.getText())) {
-            Consts.GAME_FLOW.prevYear();
+            Consts.DB.getGameFlow().prevYear();
             Consts.DB.yearChange(Consts.BACK);
             setGameYearLabel();
         }
@@ -155,7 +155,7 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
     }
 
     private void setGameYearLabel() {
-        gameYearLabel.setText(String.valueOf(Consts.GAME_FLOW.currentYear));
+        gameYearLabel.setText(String.valueOf(Consts.DB.getGameFlow().currentYear));
     }
 
     private void createUIComponents() {

@@ -47,9 +47,6 @@ public class CompanyThread implements Runnable {
                     Consts.checkSetSoldOut(midA, midP, DBinput.getMidAmnt(), DBinput.getMidPrice());
                     Consts.checkSetSoldOut(fullA, fullP, DBinput.getFullAmnt(), DBinput.getFullPrice());
                     DBinput = Consts.DB.getInputSeller(name);
-                    while (DBinput == null) {
-                        DBinput = Consts.DB.getInputSeller(name);
-                    }
                 } catch (Exception e) {
                     //System.out.println("Trouble updating labels on Home Page.");
                     e.printStackTrace();
