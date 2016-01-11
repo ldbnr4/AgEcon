@@ -33,6 +33,7 @@ public class BuyingSeedsPage extends JFrame implements ActionListener {
         setVisible(true);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         companyNameLabel.setText(inputSector.getName());
+        inName = inputSector.getName();
         stu = student;
         stuName = student.uName;
         modern = new MinimalBalloonStyle(Color.yellow, 5);

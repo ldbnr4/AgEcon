@@ -70,30 +70,33 @@ public class MongoDBConnection{
         addMarketComp(marketingSector);
     }
 
+    @NotNull
     public Student getStudent(String username) {
         HashMap<String, Integer> id = new HashMap<>();
         id.put(username, getGameFlow().currentYear);
         DBObject person = usersColl.findOne(new BasicDBObject("_id", id));
-        if (person == null) {
-            return null;
+        while (person == null) {
+            person = usersColl.findOne(new BasicDBObject("_id", id));
         }
         return morphia.fromDBObject(Student.class, person);
     }
 
+    @NotNull
     public Student getStudent(String username, int year) {
         HashMap<String, Integer> id = new HashMap<>();
         id.put(username, year);
         DBObject person = usersColl.findOne(new BasicDBObject("_id", id));
-        if (person == null) {
-            return null;
+        while (person == null) {
+            person = usersColl.findOne(new BasicDBObject("_id", id));
         }
         return morphia.fromDBObject(Student.class, person);
     }
 
+    @NotNull
     public Admin getAdmin(String username) {
         DBObject person = adminsColl.findOne(new BasicDBObject("_id", username));
-        if (person == null) {
-            return null;
+        while (person == null) {
+            person = adminsColl.findOne(new BasicDBObject("_id", username));
         }
         return morphia.fromDBObject(Admin.class, person);
     }
@@ -134,16 +137,16 @@ public class MongoDBConnection{
     public InputSector getInputSeller(String name) {
         DBObject one = inputColl.findOne(new BasicDBObject("_id", name));
         while (one == null) {
-            inputColl.findOne(new BasicDBObject("_id", name));
+            one = inputColl.findOne(new BasicDBObject("_id", name));
         }
         return morphia.fromDBObject(InputSector.class, one);
     }
 
+    @NotNull
     public MarketingSector getMarketingComp(String name) {
         DBObject one = marketColl.findOne(new BasicDBObject("_id", name));
-        if (one == null) {
-            //System.out.println("RETURNED NULL");
-            return null;
+        while (one == null) {
+            one = marketColl.findOne(new BasicDBObject("_id", name));
         }
         return morphia.fromDBObject(MarketingSector.class, one);
     }

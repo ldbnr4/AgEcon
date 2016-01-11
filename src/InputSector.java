@@ -43,9 +43,6 @@ public class InputSector {
         if(-earlyAmnt > this.earlyAmnt){
             return false;
         }
-        if (this.fullAmnt < 0) {
-            return false;
-        }
         this.earlyAmnt += earlyAmnt;
         Consts.DB.saveInput(this);
         return true;
@@ -57,9 +54,6 @@ public class InputSector {
 
     public boolean updateMidAmnt(int midAmnt) {
         if(-midAmnt > this.midAmnt){
-            return false;
-        }
-        if (this.midAmnt < 0) {
             return false;
         }
         this.midAmnt += midAmnt;
@@ -76,9 +70,6 @@ public class InputSector {
             return false;
         }
         this.fullAmnt += fullAmnt;
-        if (this.fullAmnt < 0) {
-            return false;
-        }
         Consts.DB.saveInput(this);
         return true;
     }

@@ -57,9 +57,6 @@ public class CompanyThread implements Runnable {
                     Consts.checkSetSoldOut(amnt, price, dt, DBmarketingComp.getBshls(), DBmarketingComp.getPricePerBush(),
                             DBmarketingComp.getNeededDate());
                     DBmarketingComp = Consts.DB.getMarketingComp(name);
-                    while (DBmarketingComp == null) {
-                        DBmarketingComp = Consts.DB.getMarketingComp(name);
-                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

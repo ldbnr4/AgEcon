@@ -229,18 +229,14 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
         }
         int amount = Integer.valueOf(amntField.getText());
         if (amount <= 0) return;
-        MarketingSector marketingSector = Consts.DB.getMarketingComp(compName);
-        while (marketingSector == null) {
-            marketingSector = Consts.DB.getMarketingComp(compName);
-        }
-        if (marketingSector.getBshls() == 0) {
+        if (Consts.DB.getMarketingComp(compName).getBshls() == 0) {
             balloonTip.setAttachedComponent(amntField);
             balloonTip.setTextContents("This marketing seller has no more to sell.");
             TimingUtils.showTimedBalloon(balloonTip, 2500);
 
             return;
         }
-        if (!marketingSector.updateBshls(amount)) {
+        if (!Consts.DB.getMarketingComp(compName).updateBshls(amount)) {
             balloonTip.setAttachedComponent(amntField);
             balloonTip.setTextContents("This seller does not need this much.");
             TimingUtils.showTimedBalloon(balloonTip, 2500);
@@ -253,13 +249,12 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
             balloonTip.setTextContents("You will not have enough available to do this deal on this day.");
             TimingUtils.showTimedBalloon(balloonTip, 2500);
 
-            marketingSector.updateBshls(-amount);
+            Consts.DB.getMarketingComp(compName).updateBshls(-amount);
             stu.farm.removeFromBshlLedger(varEntry);
             printBalSheet();
             return;
         }
         amntField.setText("");
-        Consts.DB.saveMarketing(marketingSector);
         Consts.DB.saveStudent(stu);
 
         successBalloon.setAttachedComponent(amntField);
