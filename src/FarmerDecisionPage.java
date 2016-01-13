@@ -21,6 +21,9 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
     JLabel largeAmntLbl;
     JButton backBtn;
 
+    boolean updateFlag = true;
+    Thread t1;
+
 
     public FarmerDecisionPage(final Student student) {
         super("Input Supply Decisions");
@@ -39,24 +42,26 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
         medFarmBtn.addActionListener(this);
         largeFarmBtn.addActionListener(this);
 
-        Runnable r = new Runnable() {
-            public void run() {
-                while (isVisible()) {
-                    updateBtns();
+        Runnable r = () -> {
+            while (updateFlag) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
+                updateBtns();
             }
         };
 
-        new Thread(r).start();
+        t1 = new Thread(r);
+        t1.start();
 
-        backBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Consts.DB.removeStudent(student);
-                new CreatePage(student.uName);
-                setVisible(false);
-                dispose();
-            }
+        backBtn.addActionListener(e -> {
+            updateFlag = false;
+            Consts.DB.removeStudent(student);
+            new WelcomePage(student.uName);
+            setVisible(false);
+            dispose();
         });
     }
 
@@ -71,6 +76,13 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
             } else {
                 student.farm = new FarmTypes(Consts.LARGE_FARM);
             }
+            updateFlag = false;
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
+            updateFlag = false;
             student.setStage(Consts.Student_Stage.Buy_Seeds);
             Consts.DB.saveStudent(student);
             new HomePage(student);
@@ -136,9 +148,13 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
             farmSize = Consts.LARGE_FARM;
         }
 
-        if (farmSizeAmounts.get(farmSize) >= farmLimit) {
-            JOptionPane.showMessageDialog(rootPanel, "This farm size has reached its limit. Please select another farm size.", "Farm Size Error", JOptionPane.ERROR_MESSAGE);
-            updateBtns();
+        try {
+            if (farmSizeAmounts.get(farmSize) >= farmLimit) {
+                JOptionPane.showMessageDialog(rootPanel, "This farm size has reached its limit. Please select another farm size.", "Farm Size Error", JOptionPane.ERROR_MESSAGE);
+                updateBtns();
+                return false;
+            }
+        } catch (NullPointerException e) {
             return false;
         }
         return true;

@@ -7,16 +7,17 @@ import org.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.text.DefaultFormatterFactory;
-import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.DecimalFormat;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Properties;
 
 /**
@@ -51,7 +52,7 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
         this.stu = student;
         this.stuName = student.uName;
         this.marketsAvail = false;
-        welcomeLabel.setText("Welcome " + this.stuName + "!");
+        welcomeLabel.setText("Hey " + this.stuName + "!");
         logoutButton.addActionListener(e -> {
             new WelcomePage();
             setVisible(false);
@@ -93,6 +94,12 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
             dispose();
         });
 
+        compAAmount.addKeyListener(customKeyListner(compAAmount));
+        compBAmount.addKeyListener(customKeyListner(compBAmount));
+        compCAmount.addKeyListener(customKeyListner(compCAmount));
+        compDAmount.addKeyListener(customKeyListner(compDAmount));
+        compEAmount.addKeyListener(customKeyListner(compEAmount));
+
     }
 
     void initCompThreads() {
@@ -105,33 +112,6 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
-        // create the formatters, default, display, edit
-        NumberFormatter defaultFormatter = new NumberFormatter(new DecimalFormat("#"));
-        NumberFormatter displayFormatter =
-                new NumberFormatter(new DecimalFormat("#"));
-        NumberFormatter editFormatter = new NumberFormatter(new DecimalFormat("#"));
-        // set their value classes
-        defaultFormatter.setValueClass(Integer.class);
-        displayFormatter.setValueClass(Integer.class);
-        editFormatter.setValueClass(Integer.class);
-        // create and set the DefaultFormatterFactory
-        DefaultFormatterFactory salaryFactory =
-                new DefaultFormatterFactory(defaultFormatter, displayFormatter, editFormatter);
-
-        this.compAAmount = new JFormattedTextField();
-        compAAmount.setFormatterFactory(salaryFactory);
-
-        this.compBAmount = new JFormattedTextField();
-        compBAmount.setFormatterFactory(salaryFactory);
-
-        this.compCAmount = new JFormattedTextField();
-        compCAmount.setFormatterFactory(salaryFactory);
-
-        this.compDAmount = new JFormattedTextField();
-        compDAmount.setFormatterFactory(salaryFactory);
-
-        this.compEAmount = new JFormattedTextField();
-        compEAmount.setFormatterFactory(salaryFactory);
 
         UtilDateModel model = new UtilDateModel();
         Date initDate = null;
@@ -159,19 +139,19 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
         JButton btn = (JButton) e.getSource();
         if (btn.equals(compABtn)) {
             buttonHandler(datePickerA, compADate, compAAmount, Consts.COMPANY_A_NAME,
-                    Double.valueOf(compAPrice.getText()));
+                    Double.valueOf(compAPrice.getText().replaceAll("$", "")));
         } else if (btn.equals(compBBtn)) {
             buttonHandler(datePickerB, compBDate, compBAmount, Consts.COMPANY_B_NAME,
-                    Double.valueOf(compBPrice.getText()));
+                    Double.valueOf(compBPrice.getText().replaceAll("$", "")));
         } else if (btn.equals(compCBtn)) {
             buttonHandler(datePickerC, compCDate, compCAmount, Consts.COMPANY_C_NAME,
-                    Double.valueOf(compCPrice.getText()));
+                    Double.valueOf(compCPrice.getText().replaceAll("$", "")));
         } else if (btn.equals(compDBtn)) {
             buttonHandler(datePickerD, compDDate, compDAmount, Consts.COMPANY_D_NAME,
-                    Double.valueOf(compDPrice.getText()));
+                    Double.valueOf(compDPrice.getText().replaceAll("$", "")));
         } else if (btn.equals(compEBtn)) {
             buttonHandler(datePickerE, compEDate, compEAmount, Consts.COMPANY_E_NAME,
-                    Double.valueOf(compEPrice.getText()));
+                    Double.valueOf(compEPrice.getText().replaceAll("$", "")));
         }
     }
 
@@ -190,13 +170,21 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
             }
             if (row != 0) {
                 if (ledger.getDate().equals(nModel.getValueAt(row - 1, 0))) {
-                    nModel.setValueAt(runTtl, row - 1, 1);
+                    nModel.setValueAt(NumberFormat.getNumberInstance(Locale.US).format(runTtl), row - 1, 1);
                     continue;
                 }
             }
-            nModel.addRow(new Object[]{ledger.getDate(), runTtl});
+            try {
+                nModel.addRow(new Object[]{Consts.sd2.format(Consts.sd.parse(ledger.getDate())), NumberFormat.getNumberInstance(Locale.US).format(runTtl)});
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             row++;
         }
+        bshlBalSheet.setFont(new Font("Segoe UI", 0, 18));
+        bshlBalSheet.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 20));
+        bshlBalSheet.setFillsViewportHeight(true);
+        bshlBalSheet.setRowHeight(25);
         bshlBalSheet.setModel(nModel);
         return true;
     }
@@ -227,7 +215,7 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
         } catch (ParseException e1) {
             e1.printStackTrace();
         }
-        int amount = Integer.valueOf(amntField.getText());
+        int amount = Integer.valueOf(amntField.getText().replaceAll(",", ""));
         if (amount <= 0) return;
         if (Consts.DB.getMarketingComp(compName).getBshls() == 0) {
             balloonTip.setAttachedComponent(amntField);
@@ -261,6 +249,31 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
         successBalloon.setTextContents("Successful deal.");
         TimingUtils.showTimedBalloon(successBalloon, 2500);
 
+    }
+
+    KeyListener customKeyListner(JFormattedTextField textField) {
+        return new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if (!String.valueOf(e.getKeyChar()).matches("\\d+")) {
+                    e.setKeyChar('\0');
+                }
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (textField.getText().length() >= 3) {
+                    textField.setText(NumberFormat.getNumberInstance().format(
+                            Integer.valueOf(textField.getText().replaceAll(",", ""))
+                    ));
+                }
+            }
+        };
     }
 
     class DateLabelFormatter extends JFormattedTextField.AbstractFormatter {

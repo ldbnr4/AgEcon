@@ -48,14 +48,22 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
             int compMax = 0, early = 0, mid = 0, full = 0, rn = 0, var = 0;
             Double maxPrice = 3.50, minPrice = 1.50;
             double ttlSeedsNeeded = Consts.DB.getSeedsNeeded();
+            int minAmnt = (int) ceil(ttlSeedsNeeded * .03);
+            int maxAmnt = (int) ceil(ttlSeedsNeeded * .06);
             for (char i = 'A'; i <= 'E'; i++) {
                 compMax = (int) ceil(ttlSeedsNeeded / 5d);
                 early = 0;
                 mid = 0;
                 full = 0;
                 while (compMax > 0) {
-                    rn = new Random().nextInt(compMax) + 1;
-                    var = new Random().nextInt(3);
+                    if (compMax < minAmnt) {
+                        rn = minAmnt;
+                    } else {
+                        rn = minAmnt + new Random().nextInt(maxAmnt - minAmnt);
+                    }
+                    if (var > 2) {
+                        var = 0;
+                    }
                     switch (var) {
                         case 0:
                             early += rn;
@@ -68,6 +76,7 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
                             break;
                     }
                     compMax -= rn;
+                    var++;
                 }
                 InputSector theInput = new InputSector("Company" + i, early, Consts.round(minPrice +
                         new Random().nextDouble() * (maxPrice - minPrice)), mid, Consts.round(minPrice +
@@ -82,7 +91,7 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
         });
 
         generateMarketingSectorButton.addActionListener(e -> {
-            Double maxPrice = 4.50, minPrice = 3.70;
+            Double maxPrice = 12.50, minPrice = 15.25;
             int bshlsNeeded = Consts.DB.getBshlsNeeded();
             int var = 0, compBshls = 0;
             String compDate = "";

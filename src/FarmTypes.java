@@ -74,7 +74,6 @@ public final class FarmTypes {
             staticCosts.put("Interest", Consts.round((0.09 * Consts.INFLATION) * acres));
             staticCosts.put("Labor", Consts.round((11 * Consts.INFLATION) * acres * 4));
             staticCosts.put("Equipment", Consts.round((40 * Consts.INFLATION) * acres));
-            staticCosts.put("Land Rent", Consts.round((175 * Consts.INFLATION) * acres));
         } else if (size == Consts.MED_FARM) {
             staticCosts.put("Nitrogen", Consts.round((0.68 * Consts.INFLATION * 0.96) * acres * 130));
             staticCosts.put("Phosphate", Consts.round((0.9 * Consts.INFLATION * 0.96) * acres * 50));
@@ -87,7 +86,6 @@ public final class FarmTypes {
             staticCosts.put("Interest", Consts.round((0.09 * Consts.INFLATION * 0.96) * acres));
             staticCosts.put("Labor", Consts.round((11 * Consts.INFLATION * 0.96) * acres * 4));
             staticCosts.put("Equipment", Consts.round((40 * Consts.INFLATION * 0.96) * acres));
-            staticCosts.put("Land Rent", Consts.round((175 * Consts.INFLATION * 0.96) * acres));
         } else {
             staticCosts.put("Nitrogen", Consts.round((0.68 * Consts.INFLATION * 0.94) * acres * 130));
             staticCosts.put("Phosphate", Consts.round((0.9 * Consts.INFLATION * 0.94) * acres * 50));
@@ -100,7 +98,6 @@ public final class FarmTypes {
             staticCosts.put("Interest", Consts.round((0.09 * Consts.INFLATION * 0.94) * acres));
             staticCosts.put("Labor", Consts.round((11 * Consts.INFLATION * 0.94) * acres * 4));
             staticCosts.put("Equipment", Consts.round((40 * Consts.INFLATION * 0.94) * acres));
-            staticCosts.put("Land Rent", Consts.round((175 * Consts.INFLATION * 0.94) * acres));
         }
     }
 

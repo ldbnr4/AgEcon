@@ -70,13 +70,13 @@ public class MongoDBConnection{
         addMarketComp(marketingSector);
     }
 
-    @NotNull
+    //@NotNull
     public Student getStudent(String username) {
         HashMap<String, Integer> id = new HashMap<>();
         id.put(username, getGameFlow().currentYear);
         DBObject person = usersColl.findOne(new BasicDBObject("_id", id));
-        while (person == null) {
-            person = usersColl.findOne(new BasicDBObject("_id", id));
+        if (person == null) {
+            return null;
         }
         return morphia.fromDBObject(Student.class, person);
     }
@@ -215,18 +215,21 @@ public class MongoDBConnection{
     public HashMap<Character, Integer> numInEachFarm() {
         HashMap<Character, Integer> numRes = new HashMap<>();
 
-        numRes.put(Consts.SMALL_FARM,
-                (int) usersColl
-                        .count(new BasicDBObject("year", getGameFlow().currentYear).append("farm.size", Consts.SMALL_FARM)));
-        numRes.put(Consts.MED_FARM,
-                (int) usersColl
-                        .count(new BasicDBObject("year", getGameFlow().currentYear).append("farm.size", Consts.MED_FARM)));
-        numRes.put(Consts.LARGE_FARM,
-                (int) usersColl
-                        .count(new BasicDBObject("year", getGameFlow().currentYear).append("farm.size", Consts.LARGE_FARM)));
-        numRes.put(Consts.NO_FARM,
-                (int) usersColl
-                        .count(new BasicDBObject("year", getGameFlow().currentYear).append("farm.size", Consts.NO_FARM)));
+        try {
+            numRes.put(Consts.SMALL_FARM,
+                    (int) usersColl
+                            .count(new BasicDBObject("year", getGameFlow().currentYear).append("farm.size", Consts.SMALL_FARM)));
+            numRes.put(Consts.MED_FARM,
+                    (int) usersColl
+                            .count(new BasicDBObject("year", getGameFlow().currentYear).append("farm.size", Consts.MED_FARM)));
+            numRes.put(Consts.LARGE_FARM, (int) usersColl
+                    .count(new BasicDBObject("year", getGameFlow().currentYear).append("farm.size", Consts.LARGE_FARM)));
+            numRes.put(Consts.NO_FARM,
+                    (int) usersColl
+                            .count(new BasicDBObject("year", getGameFlow().currentYear).append("farm.size", Consts.NO_FARM)));
+        } catch (NullPointerException e) {
+            return numRes;
+        }
         return numRes;
     }
 

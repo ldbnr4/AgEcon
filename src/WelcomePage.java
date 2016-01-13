@@ -142,6 +142,120 @@ public class WelcomePage extends JFrame implements ActionListener {
 
     }
 
+    public WelcomePage(String name) {
+        super("Welcome Page");
+        setContentPane(rootPanel);
+        setResizable(false);
+        pack();
+        setLocationRelativeTo(null);
+        setVisible(true);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        modern = new MinimalBalloonStyle(Color.yellow, 5);
+
+        createBalloon = new BalloonTip(usernameTextField, new JLabel(), modern,
+                BalloonTip.Orientation.RIGHT_ABOVE, BalloonTip.AttachLocation.ALIGNED, 10, 10, false);
+        this.createBalloon.setVisible(false);
+
+        loginBalloon = new BalloonTip(userNameField, new JLabel(), modern,
+                BalloonTip.Orientation.RIGHT_ABOVE, BalloonTip.AttachLocation.ALIGNED, 10, 10, false);
+        loginBalloon.setVisible(false);
+
+        submitButton.addActionListener(this);
+
+        usernameVerifier = new UNameVerifier(createBalloon);
+        usernameTextField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (usernameTextField.getBackground() != Color.GREEN) {
+                    usernameTextField.setText("");
+                    usernameTextField.setForeground(Color.BLACK);
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                usernameVerifier.verify(usernameTextField, Student.class);
+            }
+        });
+        passwordVerifier = new PassVerifier(createBalloon);
+        passwordPasswordField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (passwordPasswordField.getBackground() != Color.GREEN) {
+                    passwordPasswordField.setEchoChar('•');
+                    passwordPasswordField.setText("");
+                    passwordPasswordField.setForeground(Color.BLACK);
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (usernameTextField.getBackground() == Color.green) {
+                    passwordVerifier.verifyLive(passwordPasswordField);
+                }
+            }
+        });
+        confPassVerifier = new PassVerifier(createBalloon);
+        confirmPasswordPasswordField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (confirmPasswordPasswordField.getBackground() != Color.GREEN) {
+                    confirmPasswordPasswordField.setEchoChar('•');
+                    confirmPasswordPasswordField.setText("");
+                    confirmPasswordPasswordField.setForeground(Color.BLACK);
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (usernameTextField.getBackground() == Color.green && passwordPasswordField.getBackground() == Color.green) {
+                    if (confPassVerifier.verifyLive(confirmPasswordPasswordField)) {
+                        confPassVerifier.verifyMatch(passwordPasswordField, confirmPasswordPasswordField);
+                    }
+                }
+
+            }
+        });
+
+        userNameField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (userNameField.getForeground().equals(Color.GRAY)) {
+                    userNameField.setText("");
+                    userNameField.setForeground(Color.BLACK);
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+
+            }
+        });
+        passwordField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (passwordField.getForeground().equals(Color.GRAY)) {
+                    passwordField.setEchoChar('•');
+                    passwordField.setText("");
+                    passwordField.setForeground(Color.BLACK);
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+
+            }
+        });
+
+        loginButton.addActionListener(this);
+        studentRadioButton.setSelected(true);
+
+        usernameTextField.setText(name);
+        usernameTextField.setForeground(Color.BLACK);
+
+    }
+
     private void createUIComponents() {
         // TODO: place custom component creation code here
         usernameTextField = new Consts.RoundJTextField();
