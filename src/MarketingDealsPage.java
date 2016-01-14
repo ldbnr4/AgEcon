@@ -10,8 +10,6 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -29,7 +27,7 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
     JLabel compABushels, compAPrice, compADate, compBBushels, compBDate, compBPrice, compCDate, compCBushels,
             compCPrice, compDDate, compDBushels, compDPrice, compEDate, compEBushels, compEPrice, welcomeLabel;
     JButton compABtn, compBBtn, compCBtn, compDBtn, logoutButton, compEBtn;
-    JFormattedTextField compAAmount, compBAmount, compCAmount, compDAmount, compEAmount;
+    JTextField compAAmount, compBAmount, compCAmount, compDAmount, compEAmount;
     JTable bshlBalSheet;
     private JDatePickerImpl datePickerA, datePickerB, datePickerC, datePickerD, datePickerE;
     private JButton endSeasonButton;
@@ -94,11 +92,11 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
             dispose();
         });
 
-        compAAmount.addKeyListener(customKeyListner(compAAmount));
-        compBAmount.addKeyListener(customKeyListner(compBAmount));
-        compCAmount.addKeyListener(customKeyListner(compCAmount));
-        compDAmount.addKeyListener(customKeyListner(compDAmount));
-        compEAmount.addKeyListener(customKeyListner(compEAmount));
+        compAAmount.addKeyListener(Consts.customKeyListner(compAAmount));
+        compBAmount.addKeyListener(Consts.customKeyListner(compBAmount));
+        compCAmount.addKeyListener(Consts.customKeyListner(compCAmount));
+        compDAmount.addKeyListener(Consts.customKeyListner(compDAmount));
+        compEAmount.addKeyListener(Consts.customKeyListner(compEAmount));
 
     }
 
@@ -116,7 +114,10 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
         UtilDateModel model = new UtilDateModel();
         Date initDate = null;
         try {
-            initDate = Consts.sd.parse(Consts.getEarlyHarvDt());
+            /*String string = "January 2, 2010";
+            DateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
+            Date date = format.parse();*/
+            initDate = Consts.sd2.parse(Consts.getEarlyHarvDt());
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -139,19 +140,19 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
         JButton btn = (JButton) e.getSource();
         if (btn.equals(compABtn)) {
             buttonHandler(datePickerA, compADate, compAAmount, Consts.COMPANY_A_NAME,
-                    Double.valueOf(compAPrice.getText().replaceAll("$", "")));
+                    Double.valueOf(compAPrice.getText().replace("$", "")));
         } else if (btn.equals(compBBtn)) {
             buttonHandler(datePickerB, compBDate, compBAmount, Consts.COMPANY_B_NAME,
-                    Double.valueOf(compBPrice.getText().replaceAll("$", "")));
+                    Double.valueOf(compBPrice.getText().replace("$", "")));
         } else if (btn.equals(compCBtn)) {
             buttonHandler(datePickerC, compCDate, compCAmount, Consts.COMPANY_C_NAME,
-                    Double.valueOf(compCPrice.getText().replaceAll("$", "")));
+                    Double.valueOf(compCPrice.getText().replace("$", "")));
         } else if (btn.equals(compDBtn)) {
             buttonHandler(datePickerD, compDDate, compDAmount, Consts.COMPANY_D_NAME,
-                    Double.valueOf(compDPrice.getText().replaceAll("$", "")));
+                    Double.valueOf(compDPrice.getText().replace("$", "")));
         } else if (btn.equals(compEBtn)) {
             buttonHandler(datePickerE, compEDate, compEAmount, Consts.COMPANY_E_NAME,
-                    Double.valueOf(compEPrice.getText().replaceAll("$", "")));
+                    Double.valueOf(compEPrice.getText().replace("$", "")));
         }
     }
 
@@ -168,14 +169,14 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
             if (runTtl < 0) {
                 return false;
             }
-            if (row != 0) {
+            if (row > 0) {
                 if (ledger.getDate().equals(nModel.getValueAt(row - 1, 0))) {
                     nModel.setValueAt(NumberFormat.getNumberInstance(Locale.US).format(runTtl), row - 1, 1);
                     continue;
                 }
             }
             try {
-                nModel.addRow(new Object[]{Consts.sd2.format(Consts.sd.parse(ledger.getDate())), NumberFormat.getNumberInstance(Locale.US).format(runTtl)});
+                nModel.addRow(new Object[]{Consts.sd2.format(Consts.sd2.parse(ledger.getDate())), NumberFormat.getNumberInstance(Locale.US).format(runTtl)});
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -189,7 +190,7 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
         return true;
     }
 
-    void buttonHandler(JDatePickerImpl jDatePicker, JLabel dateLabel, JFormattedTextField amntField, String compName,
+    void buttonHandler(JDatePickerImpl jDatePicker, JLabel dateLabel, JTextField amntField, String compName,
                        double bndlPrice) {
         if (amntField.getText().isEmpty()) {
             balloonTip.setAttachedComponent(amntField);
@@ -203,10 +204,10 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
             TimingUtils.showTimedBalloon(balloonTip, 2500);
             return;
         }
-        String selectedDate = Consts.sd.format(jDatePicker.getModel().getValue());
+        String selectedDate = Consts.sd2.format(jDatePicker.getModel().getValue());
         try {
-            if (Consts.sd.parse(selectedDate).after(
-                    Consts.sd.parse(dateLabel.getText()))) {
+            if (Consts.sd2.parse(selectedDate).after(
+                    Consts.sd2.parse(dateLabel.getText()))) {
                 balloonTip.setAttachedComponent(jDatePicker);
                 balloonTip.setTextContents("Please select a date before or on the sellers needed by date.");
                 TimingUtils.showTimedBalloon(balloonTip, 2500);
@@ -249,31 +250,6 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
         successBalloon.setTextContents("Successful deal.");
         TimingUtils.showTimedBalloon(successBalloon, 2500);
 
-    }
-
-    KeyListener customKeyListner(JFormattedTextField textField) {
-        return new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                if (!String.valueOf(e.getKeyChar()).matches("\\d+")) {
-                    e.setKeyChar('\0');
-                }
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                if (textField.getText().length() >= 3) {
-                    textField.setText(NumberFormat.getNumberInstance().format(
-                            Integer.valueOf(textField.getText().replaceAll(",", ""))
-                    ));
-                }
-            }
-        };
     }
 
     class DateLabelFormatter extends JFormattedTextField.AbstractFormatter {

@@ -234,15 +234,13 @@
                               <text value="Make deal with CompanyA"/>
                             </properties>
                           </component>
-                          <component id="2fc99" class="javax.swing.JFormattedTextField" binding="compAAmount">
+                          <component id="6c0d6" class="javax.swing.JTextField" binding="compAAmount">
                             <constraints>
                               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                                 <preferred-size width="150" height="-1"/>
                               </grid>
                             </constraints>
-                            <properties>
-                              <focusLostBehavior value="1"/>
-                            </properties>
+                            <properties/>
                           </component>
                           <component id="1b017" class="org.jdatepicker.impl.JDatePickerImpl" binding="datePickerA" custom-create="true">
                             <constraints>
@@ -471,15 +469,13 @@
                               <text value="Make deal with CompanyB"/>
                             </properties>
                           </component>
-                          <component id="51aa1" class="javax.swing.JFormattedTextField" binding="compBAmount">
+                          <component id="22161" class="javax.swing.JTextField" binding="compBAmount">
                             <constraints>
                               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                                 <preferred-size width="150" height="-1"/>
                               </grid>
                             </constraints>
-                            <properties>
-                              <focusLostBehavior value="1"/>
-                            </properties>
+                            <properties/>
                           </component>
                           <component id="12cc9" class="org.jdatepicker.impl.JDatePickerImpl" binding="datePickerB" custom-create="true">
                             <constraints>
@@ -701,15 +697,13 @@
                               <text value="Make deal with CompanyC"/>
                             </properties>
                           </component>
-                          <component id="d7cc" class="javax.swing.JFormattedTextField" binding="compCAmount">
+                          <component id="de54" class="javax.swing.JTextField" binding="compCAmount">
                             <constraints>
                               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                                 <preferred-size width="150" height="-1"/>
                               </grid>
                             </constraints>
-                            <properties>
-                              <focusLostBehavior value="1"/>
-                            </properties>
+                            <properties/>
                           </component>
                           <component id="67cc" class="org.jdatepicker.impl.JDatePickerImpl" binding="datePickerC" custom-create="true">
                             <constraints>
@@ -931,15 +925,13 @@
                               <text value="Make deal with CompanyD"/>
                             </properties>
                           </component>
-                          <component id="9c316" class="javax.swing.JFormattedTextField" binding="compDAmount">
+                          <component id="d558" class="javax.swing.JTextField" binding="compDAmount">
                             <constraints>
                               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                                 <preferred-size width="150" height="-1"/>
                               </grid>
                             </constraints>
-                            <properties>
-                              <focusLostBehavior value="1"/>
-                            </properties>
+                            <properties/>
                           </component>
                           <component id="f9648" class="javax.swing.JLabel">
                             <constraints>
@@ -1161,15 +1153,13 @@
                               <text value="Make deal with CompanyE"/>
                             </properties>
                           </component>
-                          <component id="c7e60" class="javax.swing.JFormattedTextField" binding="compEAmount">
+                          <component id="4d026" class="javax.swing.JTextField" binding="compEAmount">
                             <constraints>
                               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                                 <preferred-size width="150" height="-1"/>
                               </grid>
                             </constraints>
-                            <properties>
-                              <focusLostBehavior value="1"/>
-                            </properties>
+                            <properties/>
                           </component>
                           <component id="5ec49" class="javax.swing.JLabel">
                             <constraints>

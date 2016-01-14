@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 
+import static java.lang.Thread.sleep;
+
 /**
  * Created by Lorenzo on 10/1/2015.
  *
@@ -22,7 +24,7 @@ public class HomePage extends JFrame {
 
     Student stu;
     String stuName;
-    Boolean inSectsAvail;
+    boolean inSectsAvail;
 
     public HomePage(Student student) {
         super("Home Page");
@@ -38,12 +40,24 @@ public class HomePage extends JFrame {
         inSectsAvail = false;
         welcomeLabel.setText("Welcome " + stu.uName + "!");
         logoutButton.addActionListener(e -> {
+            inSectsAvail = false;
+            try {
+                sleep(500);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
             new WelcomePage();
             setVisible(false);
             dispose();
         });
         neededLabel.setText(String.valueOf(stu.farm.getSeedsNeeded()));
         plantButton.addActionListener(e -> {
+            inSectsAvail = false;
+            try {
+                sleep(500);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
             stu.farm.plantAction();
             stu.setStage(Consts.Student_Stage.Sell_Yields);
             Consts.DB.saveStudent(stu);

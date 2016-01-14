@@ -321,7 +321,7 @@ public class WelcomePage extends JFrame implements ActionListener {
                 usernameTextField.setBackground(Color.green);
                 confirmPasswordPasswordField.setBackground(Color.GREEN);
                 passwordPasswordField.setBackground(Color.GREEN);
-                Student student = new Student(usernameTextField.getText(), String.valueOf(passwordPasswordField.getPassword()), new FarmTypes());
+                Student student = new Student(usernameTextField.getText(), String.valueOf(passwordPasswordField.getPassword()), new Farm());
                 new FarmerDecisionPage(student);
                 Consts.DB.addStudent(student);
                 setVisible(false);

@@ -52,6 +52,10 @@ public class BuyingSeedsPage extends JFrame implements ActionListener {
         earlyBuyBtn.addActionListener(this);
         midBuyBtn.addActionListener(this);
         fullBuyBtn.addActionListener(this);
+
+        earlyTF.addKeyListener(Consts.customKeyListner(earlyTF));
+        midTF.addKeyListener(Consts.customKeyListner(midTF));
+        fullTF.addKeyListener(Consts.customKeyListner(fullTF));
     }
 
     private void updateLabels() {
@@ -80,17 +84,13 @@ public class BuyingSeedsPage extends JFrame implements ActionListener {
     }
 
     void btnHandler(JTextField txtField, JLabel amntLbl, Consts.Seed_Type seed_type){
-        if (!txtField.getText().matches("\\d+")) {
-            balloonTip.setAttachedComponent(txtField);
-            balloonTip.setTextContents("Please enter a positive number order.");
-            TimingUtils.showTimedBalloon(balloonTip, 2500);
-        } else if (amntLbl.getText().equals("SOLD OUT")) {
+        if (amntLbl.getText().equals("SOLD OUT")) {
             balloonTip.setAttachedComponent(txtField);
             balloonTip.setTextContents("The input supplier is sold out of this variety.");
             TimingUtils.showTimedBalloon(balloonTip, 2500);
         } else {
             boolean flag = true;
-            int desireAmnt = Integer.valueOf(txtField.getText());
+            int desireAmnt = Integer.valueOf(txtField.getText().replaceAll(",", ""));
 
             while (stu == null) {
                 stu = Consts.DB.getStudent(stuName);

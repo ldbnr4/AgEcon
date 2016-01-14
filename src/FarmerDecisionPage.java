@@ -10,7 +10,7 @@ import java.util.HashMap;
  */
 public class FarmerDecisionPage extends JFrame implements ActionListener {
     Student student;
-    HashMap<Character, Integer> farmSizeAmounts;
+    HashMap<Consts.Farm_Size, Integer> farmSizeAmounts;
     JPanel rootPanel;
     JLabel farmerLabel;
     JButton smallFarmBtn;
@@ -70,11 +70,11 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
         JButton button = (JButton) e.getSource();
         if (farmCheck(button)) {
             if (button.equals(smallFarmBtn)) {
-                student.farm = new FarmTypes(Consts.SMALL_FARM);
+                student.farm = new Farm(Consts.Farm_Size.SMALL_FARM);
             } else if (button.equals(medFarmBtn)) {
-                student.farm = new FarmTypes(Consts.MED_FARM);
+                student.farm = new Farm(Consts.Farm_Size.MED_FARM);
             } else {
-                student.farm = new FarmTypes(Consts.LARGE_FARM);
+                student.farm = new Farm(Consts.Farm_Size.LARGE_FARM);
             }
             updateFlag = false;
             try {
@@ -93,14 +93,17 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
 
     private void updateBtns() {
         farmSizeAmounts = Consts.DB.numInEachFarm();
+        while (farmSizeAmounts.equals(null)) {
+            farmSizeAmounts = Consts.DB.numInEachFarm();
+        }
         //System.out.println(farmSizeAmounts);
-        int dbNumOfSmall = farmSizeAmounts.get(Consts.SMALL_FARM);
+        int dbNumOfSmall = farmSizeAmounts.get(Consts.Farm_Size.SMALL_FARM);
         setAvailableLabel(smallAmntLbl, dbNumOfSmall, Consts.S_FARM_CAP);
 
-        int dbNumOfMed = farmSizeAmounts.get(Consts.MED_FARM);
+        int dbNumOfMed = farmSizeAmounts.get(Consts.Farm_Size.MED_FARM);
         setAvailableLabel(medAmntLbl, dbNumOfMed, Consts.M_FARM_CAP);
 
-        int dbNumOfLrg = farmSizeAmounts.get(Consts.LARGE_FARM);
+        int dbNumOfLrg = farmSizeAmounts.get(Consts.Farm_Size.LARGE_FARM);
         setAvailableLabel(largeAmntLbl, dbNumOfLrg, Consts.L_FARM_CAP);
 
         if (dbNumOfSmall >= Consts.S_FARM_CAP) {
@@ -135,17 +138,17 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
 
     private boolean farmCheck(JButton farm) {
         int farmLimit;
-        char farmSize;
+        Consts.Farm_Size farmSize;
         if (farm.equals(smallFarmBtn)) {
             farmLimit = Consts.S_FARM_CAP;
-            farmSize = Consts.SMALL_FARM;
+            farmSize = Consts.Farm_Size.SMALL_FARM;
 
         } else if (farm.equals(medFarmBtn)) {
             farmLimit = Consts.M_FARM_CAP;
-            farmSize = Consts.MED_FARM;
+            farmSize = Consts.Farm_Size.MED_FARM;
         } else {
             farmLimit = Consts.L_FARM_CAP;
-            farmSize = Consts.LARGE_FARM;
+            farmSize = Consts.Farm_Size.LARGE_FARM;
         }
 
         try {

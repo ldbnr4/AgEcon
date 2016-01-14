@@ -95,6 +95,7 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
             int bshlsNeeded = Consts.DB.getBshlsNeeded();
             int var = 0, compBshls = 0;
             String compDate = "";
+            int minAmnt = new Farm(Consts.Farm_Size.SMALL_FARM).getAcres() * Consts.ACRE_YIELD;
 
             for (char i = 'A'; i <= 'E'; i++) {
                 var = new Random().nextInt(3);
@@ -125,6 +126,9 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
                         break;
                     case 'E':
                         compBshls = (int) ceil(bshlsNeeded * .10);
+                }
+                if (compBshls < minAmnt) {
+                    compBshls = minAmnt;
                 }
                 genDBMarketComp(new MarketingSector("Company" + i, compDate, Consts.round(minPrice +
                         new Random().nextDouble() * (maxPrice - minPrice)), compBshls));

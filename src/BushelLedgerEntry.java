@@ -57,8 +57,8 @@ public class BushelLedgerEntry implements Comparable {
         Date compareDate = null;
         Date baseDate = null;
         try {
-            compareDate = Consts.sd.parse(((BushelLedgerEntry) o).getDate());
-            baseDate = Consts.sd.parse(getDate());
+            compareDate = Consts.sd2.parse(((BushelLedgerEntry) o).getDate());
+            baseDate = Consts.sd2.parse(getDate());
         } catch (ParseException e) {
             e.printStackTrace();
         }

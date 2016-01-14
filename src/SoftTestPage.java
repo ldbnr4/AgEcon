@@ -7,21 +7,27 @@ import static java.lang.Thread.sleep;
 
 /**
  * Created by Lorenzo on 1/10/2016.
+ *
  */
 public class SoftTestPage extends JFrame implements ActionListener {
     private JButton buyingSeedsLoadTestButton;
     private JPanel rootPanel;
+    private JButton generateFarmersButton;
+    private JTextField TF_stuName;
+    private JButton removeStudentButton;
 
     public SoftTestPage() {
         super("Soft Test Page");
-        setContentPane(rootPanel);
+        setContentPane(this.rootPanel);
         setResizable(false);
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        buyingSeedsLoadTestButton.addActionListener(this);
+        this.buyingSeedsLoadTestButton.addActionListener(this);
+        this.generateFarmersButton.addActionListener(this);
+        removeStudentButton.addActionListener(this);
     }
 
     @Override
@@ -56,6 +62,15 @@ public class SoftTestPage extends JFrame implements ActionListener {
                     }
                 }
             }).start();
+        } else if (btn.equals(generateFarmersButton)) {
+            for (int i = 0; i < Consts.TOTAL_STUS - 1; i++) {
+                Student student = new Student("farmer" + i, "password", new Farm(Consts.randomFarmSize()));
+                student.setStage(Consts.Student_Stage.Buy_Seeds);
+                Consts.DB.saveStudent(student);
+                System.out.println("Created Farmer " + i);
+            }
+        } else if (btn.equals(removeStudentButton)) {
+            Consts.DB.removeStudent(Consts.DB.getStudent(TF_stuName.getText()));
         }
     }
 

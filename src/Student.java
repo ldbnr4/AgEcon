@@ -15,7 +15,7 @@ public class Student {
     public HashMap<String, Integer> id;
     public String uName;
     @Embedded
-    public FarmTypes farm;
+    public Farm farm;
     protected String password;
     protected String salt;
     private int year;
@@ -23,7 +23,7 @@ public class Student {
 
     public Student() {}
 
-    public Student(String name, String pass, FarmTypes farm) {
+    public Student(String name, String pass, Farm farm) {
         this.uName = name;
         HashMap<String, String> passInfo = EncryptPassword.encrypt(pass);
         this.password = passInfo.get("password");

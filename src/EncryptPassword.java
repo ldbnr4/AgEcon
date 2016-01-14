@@ -2,6 +2,7 @@ import java.util.HashMap;
 
 /**
  * Created by Lorenzo on 9/24/2015.
+ *
  */
 public class EncryptPassword {
     public static HashMap<String, String> encrypt(String password) {
