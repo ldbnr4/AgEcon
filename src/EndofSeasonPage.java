@@ -28,18 +28,32 @@ public class EndofSeasonPage extends JFrame {
             }
         };
 
-        final int[] rev = {0};
+        nModel.addRow(new Object[]{"Fixed Costs"});
+        final double[] fixedCost = {0};
+        student.farm.getStaticCosts().forEach((name, amount) -> {
+            nModel.addRow(new Object[]{name, amount});
+            fixedCost[0] += amount;
+        });
+        nModel.addRow(new Object[]{"Total Fixed Costs", fixedCost[0]});
+
+        nModel.addRow(new Object[]{"Seed Costs"});
+        final double[] seedCost = {0};
+        student.farm.getSeedLedger().forEach(entry1 -> {
+            nModel.addRow(new Object[]{entry1.getSeller(), entry1.getAmount() * entry1.getPrice()});
+            seedCost[0] += entry1.getAmount() * entry1.getPrice();
+        });
+        nModel.addRow(new Object[]{"Total Seed Costs", seedCost[0]});
+        nModel.addRow(new Object[]{"TOTAL OVERALL COSTS", seedCost[0] + fixedCost[0]});
+
+        nModel.addRow(new Object[]{"Revenue"});
+        final double[] rev = {0};
         student.farm.getBshlLedger().stream().filter(entry -> entry.getSeller() != null).forEach(
-                entry -> rev[0] += (-entry.getAmount()) * entry.getPpbndl()
+                entry -> {
+                    nModel.addRow(new Object[]{entry.getSeller(), -entry.getAmount() * entry.getPpbndl()});
+                    rev[0] += (-entry.getAmount()) * entry.getPpbndl();
+                }
         );
-
-        nModel.addRow(new Object[]{"Gross Sales Revenue", rev[0]});
-
-        int cost = 0;
-        for(double x : student.farm.getStaticCosts().values()){
-            cost += x;
-        }
-        nModel.addRow(new Object[]{"Static Cost", cost});
+        nModel.addRow(new Object[]{"Total Sales Revenue", rev[0]});
 
         expenseTable.setModel(nModel);
 

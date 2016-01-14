@@ -215,4 +215,8 @@ public final class Farm {
     public void addToSeedLedger(SeedLedgerEntry entry){
         seedLedger.add(entry);
     }
+
+    public ArrayList<SeedLedgerEntry> getSeedLedger() {
+        return seedLedger;
+    }
 }
