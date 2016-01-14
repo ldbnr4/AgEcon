@@ -169,7 +169,7 @@
                             </constraints>
                             <properties>
                               <font name="Perpetua" size="22" style="1"/>
-                              <text value="Amount (bushels)"/>
+                              <text value="Amount (cwt)"/>
                             </properties>
                           </component>
                           <component id="63bce" class="javax.swing.JLabel">
@@ -178,7 +178,7 @@
                             </constraints>
                             <properties>
                               <font name="Perpetua" size="22" style="1"/>
-                              <text value="Price (per bushel)"/>
+                              <text value="Price (per cwt)"/>
                             </properties>
                           </component>
                           <component id="2bf4f" class="javax.swing.JSeparator">
@@ -261,7 +261,7 @@
                               <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                             </constraints>
                             <properties>
-                              <text value="When"/>
+                              <text value="Date to transfer yield"/>
                             </properties>
                           </component>
                         </children>
@@ -404,7 +404,7 @@
                             </constraints>
                             <properties>
                               <font name="Perpetua" size="22" style="1"/>
-                              <text value="Amount (bushels)"/>
+                              <text value="Amount (cwt)"/>
                             </properties>
                           </component>
                           <component id="8894f" class="javax.swing.JLabel">
@@ -413,7 +413,7 @@
                             </constraints>
                             <properties>
                               <font name="Perpetua" size="22" style="1"/>
-                              <text value="Price (per bushel)"/>
+                              <text value="Price (per cwt)"/>
                             </properties>
                           </component>
                           <component id="4c312" class="javax.swing.JSeparator">
@@ -496,7 +496,7 @@
                               <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                             </constraints>
                             <properties>
-                              <text value="When"/>
+                              <text value="Date to transfer yield"/>
                             </properties>
                           </component>
                         </children>
@@ -632,7 +632,7 @@
                             </constraints>
                             <properties>
                               <font name="Perpetua" size="22" style="1"/>
-                              <text value="Amount (bushels)"/>
+                              <text value="Amount (cwt)"/>
                             </properties>
                           </component>
                           <component id="a4e10" class="javax.swing.JLabel">
@@ -641,7 +641,7 @@
                             </constraints>
                             <properties>
                               <font name="Perpetua" size="22" style="1"/>
-                              <text value="Price (per bushel)"/>
+                              <text value="Price (per cwt)"/>
                             </properties>
                           </component>
                           <component id="52c6f" class="javax.swing.JSeparator">
@@ -724,7 +724,7 @@
                               <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                             </constraints>
                             <properties>
-                              <text value="When"/>
+                              <text value="Date to transfer yield"/>
                             </properties>
                           </component>
                         </children>
@@ -860,7 +860,7 @@
                             </constraints>
                             <properties>
                               <font name="Perpetua" size="22" style="1"/>
-                              <text value="Amount (bushels)"/>
+                              <text value="Amount (cwt)"/>
                             </properties>
                           </component>
                           <component id="d0f3f" class="javax.swing.JLabel">
@@ -869,7 +869,7 @@
                             </constraints>
                             <properties>
                               <font name="Perpetua" size="22" style="1"/>
-                              <text value="Price (per bushel)"/>
+                              <text value="Price (per cwt)"/>
                             </properties>
                           </component>
                           <component id="c419b" class="javax.swing.JSeparator">
@@ -952,7 +952,7 @@
                               <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                             </constraints>
                             <properties>
-                              <text value="When"/>
+                              <text value="Date to transfer yield"/>
                             </properties>
                           </component>
                         </children>
@@ -1088,7 +1088,7 @@
                             </constraints>
                             <properties>
                               <font name="Perpetua" size="22" style="1"/>
-                              <text value="Amount (bushels)"/>
+                              <text value="Amount (cwt)"/>
                             </properties>
                           </component>
                           <component id="90b43" class="javax.swing.JLabel">
@@ -1097,7 +1097,7 @@
                             </constraints>
                             <properties>
                               <font name="Perpetua" size="22" style="1"/>
-                              <text value="Price (per bushel)"/>
+                              <text value="Price (per cwt)"/>
                             </properties>
                           </component>
                           <component id="7bdfa" class="javax.swing.JSeparator">
@@ -1180,7 +1180,7 @@
                               <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                             </constraints>
                             <properties>
-                              <text value="When"/>
+                              <text value="Date to transfer yield"/>
                             </properties>
                           </component>
                         </children>
@@ -1318,7 +1318,7 @@
                 </constraints>
                 <properties>
                   <font name="Segoe UI" size="26"/>
-                  <text value="Running Total of Available Bushels by Date"/>
+                  <text value="Running Total of Available yield by Date"/>
                 </properties>
               </component>
               <scrollpane id="7503d">
