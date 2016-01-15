@@ -25,8 +25,13 @@ public class Consts {
     static final MongoDBConnection DB = MongoDBConnection.getInstance();
     static final int ACRE_YIELD = 50;
     static SimpleDateFormat sd2 = new SimpleDateFormat("MMMM dd, yyyy");
+
     private Consts() {
         throw new AssertionError();
+    }
+
+    public static String htmlWrapper(String msg, int size) {
+        return "<html><font size=\"" + size + "\"><b>" + msg + "</b></font></html>";
     }
 
     public static Farm_Size randomFarmSize() {
