@@ -9,24 +9,26 @@ import java.util.HashMap;
  *
  */
 public class FarmerDecisionPage extends JFrame implements ActionListener {
-    Student student;
-    HashMap<Consts.Farm_Size, Integer> farmSizeAmounts;
-    JPanel rootPanel;
-    JLabel farmerLabel;
-    JButton smallFarmBtn;
-    JButton medFarmBtn;
-    JButton largeFarmBtn;
-    JLabel smallAmntLbl;
-    JLabel medAmntLbl;
-    JLabel largeAmntLbl;
-    JButton backBtn;
-
     boolean updateFlag = true;
     Thread t1;
+    private Student student;
+    private HashMap<Consts.Farm_Size, Integer> farmSizeAmounts;
+    private JPanel rootPanel;
+    private JLabel farmerLabel;
+    private JButton smallFarmBtn;
+    private JButton medFarmBtn;
+    private JButton largeFarmBtn;
+    private JLabel smallAmntLbl;
+    private JLabel medAmntLbl;
+    private JLabel largeAmntLbl;
+    private JButton backBtn;
+    private JLabel lbl_acre_large;
+    private JLabel lbl_acre_sml;
+    private JLabel lbl_acre_med;
 
 
     public FarmerDecisionPage(final Student student) {
-        super("Input Supply Decisions");
+        super("Farm Size Decision");
 
         setContentPane(rootPanel);
         setResizable(false);
@@ -63,6 +65,10 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
             setVisible(false);
             dispose();
         });
+
+        lbl_acre_large.setText(Consts.L_ACRE + " acres");
+        lbl_acre_sml.setText(Consts.M_ACRE + " acres");
+        lbl_acre_med.setText(Consts.S_ACRE + " acres");
     }
 
     @Override
@@ -93,7 +99,7 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
 
     private void updateBtns() {
         farmSizeAmounts = Consts.DB.numInEachFarm();
-        while (farmSizeAmounts.equals(null)) {
+        while (farmSizeAmounts == null) {
             farmSizeAmounts = Consts.DB.numInEachFarm();
         }
         //System.out.println(farmSizeAmounts);
@@ -163,4 +169,23 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
         return true;
     }
 
+    public void setLargeFarmBtn(JButton largeFarmBtn) {
+        this.largeFarmBtn = largeFarmBtn;
+    }
+
+    public void setMedFarmBtn(JButton medFarmBtn) {
+        this.medFarmBtn = medFarmBtn;
+    }
+
+    public void setSmallFarmBtn(JButton smallFarmBtn) {
+        this.smallFarmBtn = smallFarmBtn;
+    }
+
+    public void setFarmerLabel(JLabel farmerLabel) {
+        this.farmerLabel = farmerLabel;
+    }
+
+    public void setRootPanel(JPanel rootPanel) {
+        this.rootPanel = rootPanel;
+    }
 }

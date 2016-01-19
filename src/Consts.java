@@ -19,6 +19,9 @@ public class Consts {
     static final int M_FARM_CAP = 14;
     static final int L_FARM_CAP = 8;
     static final int TOTAL_STUS = S_FARM_CAP + M_FARM_CAP + L_FARM_CAP;
+    static final int S_ACRE = 100;
+    static final int M_ACRE = 250;
+    static final int L_ACRE = 500;
     static final double INFLATION = 1.05;
     static final int FORWARD = -1;
     static final int BACK = 1;

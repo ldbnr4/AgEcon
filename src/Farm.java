@@ -122,13 +122,13 @@ public final class Farm {
     public void setAcres(Consts.Farm_Size size) {
         switch (size) {
             case SMALL_FARM:
-                acres = 100;
+                acres = Consts.S_ACRE;
                 break;
             case MED_FARM:
-                acres = 250;
+                acres = Consts.M_ACRE;
                 break;
             case LARGE_FARM:
-                acres = 500;
+                acres = Consts.L_ACRE;
                 break;
         }
         setSeedsNeeded(10 * acres);

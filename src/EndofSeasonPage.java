@@ -12,6 +12,7 @@ public class EndofSeasonPage extends JFrame {
     private JPanel rootPanel;
     private JLabel incomeStatementLabel;
     private JTable expenseTable;
+    private JButton logoutButton;
 
 
     public EndofSeasonPage(Student student) {
@@ -69,6 +70,8 @@ public class EndofSeasonPage extends JFrame {
         expenseTable.setFillsViewportHeight(true);
         expenseTable.setRowHeight(25);
         expenseTable.setModel(nModel);
+
+        //logoutButton.addActionListener();
 
     }
 }
