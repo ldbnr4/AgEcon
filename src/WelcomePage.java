@@ -356,7 +356,7 @@ public class WelcomePage extends JFrame implements ActionListener {
                                     new FarmerDecisionPage(grabbedStudent);
                                     break;
                                 case Buy_Seeds:
-                                    new HomePage(grabbedStudent);
+                                    new BuySeedsPage(grabbedStudent);
                                     break;
                                 case Sell_Yields:
                                     new MarketingDealsPage(grabbedStudent);

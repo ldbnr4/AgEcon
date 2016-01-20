@@ -91,7 +91,7 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
             updateFlag = false;
             student.setStage(Consts.Student_Stage.Buy_Seeds);
             Consts.DB.saveStudent(student);
-            new HomePage(student);
+            new BuySeedsPage(student);
             setVisible(false);
             dispose();
         }

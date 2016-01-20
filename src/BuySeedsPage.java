@@ -8,7 +8,7 @@ import static java.lang.Thread.sleep;
  * Created by Lorenzo on 10/1/2015.
  *
  */
-public class HomePage extends JFrame {
+public class BuySeedsPage extends JFrame {
     JLabel welcomeLabel;
     JPanel rootPanel;
     JButton logoutButton, buyNowButtonA, buyNowButtonB, buyNowButtonC, buyNowButtonD, buyNowButtonE;
@@ -26,8 +26,8 @@ public class HomePage extends JFrame {
     String stuName;
     boolean inSectsAvail;
 
-    public HomePage(Student student) {
-        super("Home Page");
+    public BuySeedsPage(Student student) {
+        super("Buy Seeds Page");
         setContentPane(rootPanel);
         setResizable(false);
         pack();
@@ -38,7 +38,7 @@ public class HomePage extends JFrame {
         this.stu = student;
         stuName = student.uName;
         inSectsAvail = false;
-        welcomeLabel.setText("Welcome " + stu.uName + "!");
+        welcomeLabel.setText("Hey " + stu.uName + "!");
         logoutButton.addActionListener(e -> {
             inSectsAvail = false;
             try {
@@ -58,12 +58,17 @@ public class HomePage extends JFrame {
             } catch (InterruptedException e1) {
                 e1.printStackTrace();
             }
-            stu.farm.plantAction();
-            stu.setStage(Consts.Student_Stage.Sell_Yields);
-            Consts.DB.saveStudent(stu);
-            new MarketingDealsPage(stu);
-            setVisible(false);
-            dispose();
+            String msg = Consts.htmlWrapper("Are you sure you are done ordering seeds? You will not be able to make any" +
+                    " additional orders after continuing.", 4);
+            int option = JOptionPane.showConfirmDialog(rootPanel, msg, "Order confirmation", JOptionPane.YES_NO_OPTION);
+            if (option == JOptionPane.YES_OPTION) {
+                stu.farm.plantAction();
+                stu.setStage(Consts.Student_Stage.Sell_Yields);
+                Consts.DB.saveStudent(stu);
+                new MarketingDealsPage(stu);
+                setVisible(false);
+                dispose();
+            }
         });
 
         new Thread(() -> {

@@ -11,9 +11,12 @@ public class GameDriver {
 
         new WelcomePage();
 
-        //new EndofSeasonPage(Consts.DB.getStudent("ldbnr4"));
-        //new MarketingDealsPage(Consts.DB.getStudent("farmerJoe"));
-        //new SoftTestPage();
+        Student student = Consts.DB.getStudent("ldbnr4");
+
+        new BuySeedsPage(student);
+        //new MarketingDealsPage(student);
+        //new EndofSeasonPage(student);
+        new SoftTestPage();
     }
 
 

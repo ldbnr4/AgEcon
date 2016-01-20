@@ -34,7 +34,7 @@ public class Consts {
     }
 
     public static String htmlWrapper(String msg, int size) {
-        return "<html><font size=\"" + size + "\"><b>" + msg + "</b></font></html>";
+        return "<html><font size=\"" + size + "\">" + msg + "</font></html>";
     }
 
     public static Farm_Size randomFarmSize() {
