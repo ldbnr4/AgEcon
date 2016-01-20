@@ -13,7 +13,9 @@ import java.awt.event.ActionListener;
  */
 public class BuyingSeedsPage extends JFrame implements ActionListener {
     private final MinimalBalloonStyle modern;
+    private final MinimalBalloonStyle greenModern;
     private final BalloonTip balloonTip;
+    private final BalloonTip greenBalloonTip;
     JPanel rootPanel;
     JLabel earlyAmntLabel, midAmntLabel, fullAmntLabel, earlyPriceLabel, midPriceLabel, fullPriceLabel, companyNameLabel;
     JButton earlyBuyBtn, midBuyBtn, fullBuyBtn;
@@ -37,9 +39,15 @@ public class BuyingSeedsPage extends JFrame implements ActionListener {
         stu = student;
         stuName = student.uName;
         modern = new MinimalBalloonStyle(Color.yellow, 5);
+        greenModern = new MinimalBalloonStyle(Color.green, 5);
         balloonTip = new BalloonTip(earlyTF, new JLabel(), modern, BalloonTip.Orientation.RIGHT_ABOVE,
                 BalloonTip.AttachLocation.ALIGNED, 10, 10, false);
+        greenBalloonTip = new BalloonTip(earlyTF, new JLabel(), greenModern, BalloonTip.Orientation.RIGHT_ABOVE,
+                BalloonTip.AttachLocation.ALIGNED, 10, 10, false);
+        greenBalloonTip.setTextContents("Successful order");
+
         this.balloonTip.setVisible(false);
+        greenBalloonTip.setVisible(false);
 
         Runnable r = () -> {
             while (isVisible()) {
@@ -56,6 +64,10 @@ public class BuyingSeedsPage extends JFrame implements ActionListener {
         earlyTF.addKeyListener(Consts.customKeyListner(earlyTF));
         midTF.addKeyListener(Consts.customKeyListner(midTF));
         fullTF.addKeyListener(Consts.customKeyListner(fullTF));
+
+        earlyTF.addFocusListener(Consts.greyFocusListener(earlyTF));
+        midTF.addFocusListener(Consts.greyFocusListener(midTF));
+        fullTF.addFocusListener(Consts.greyFocusListener(fullTF));
     }
 
     private void updateLabels() {
@@ -127,7 +139,35 @@ public class BuyingSeedsPage extends JFrame implements ActionListener {
                 TimingUtils.showTimedBalloon(balloonTip, 2500);
             } else {
                 Consts.DB.saveStudent(stu);
+                greenBalloonTip.setAttachedComponent(txtField);
+                TimingUtils.showTimedBalloon(greenBalloonTip, 2500);
+                txtField.setText("");
             }
         }
+    }
+
+    private void createUIComponents() {
+        // TODO: place custom component creation code here
+
+        earlyTF = new Consts.RoundJTextField();
+        earlyTF.setBorder(BorderFactory.createCompoundBorder(
+                earlyTF.getBorder(),
+                BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+        earlyTF.setText("Enter amount to order");
+        earlyTF.setForeground(Color.GRAY);
+
+        midTF = new Consts.RoundJTextField();
+        midTF.setBorder(BorderFactory.createCompoundBorder(
+                midTF.getBorder(),
+                BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+        midTF.setText("Enter amount to order");
+        midTF.setForeground(Color.GRAY);
+
+        fullTF = new Consts.RoundJTextField();
+        fullTF.setBorder(BorderFactory.createCompoundBorder(
+                fullTF.getBorder(),
+                BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+        fullTF.setText("Enter amount to order");
+        fullTF.setForeground(Color.GRAY);
     }
 }

@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.RoundRectangle2D;
@@ -31,6 +33,23 @@ public class Consts {
 
     private Consts() {
         throw new AssertionError();
+    }
+
+    public static FocusListener greyFocusListener(JTextField textField) {
+        return new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (textField.getForeground().equals(Color.GRAY)) {
+                    textField.setText("");
+                    textField.setForeground(Color.BLACK);
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+
+            }
+        };
     }
 
     public static String htmlWrapper(String msg, int size) {
@@ -185,6 +204,7 @@ public class Consts {
             }
             return shape.contains(x, y);
         }
+
     }
 
     public static class RoundPasswordField extends JPasswordField {
