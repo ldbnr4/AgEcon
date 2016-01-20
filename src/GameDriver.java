@@ -15,11 +15,12 @@ public class GameDriver {
         Admin admin = Consts.DB.getAdmin("ldbnr4");
 
 
-        new BuySeedsPage(student);
-        //new MarketingDealsPage(student);
+        //new BuySeedsPage(student);
+        new MarketingDealsPage(student);
+        new ViewSeedOrdersPage(student);
         //new EndofSeasonPage(student);
 
-        new SoftTestPage();
+        //new SoftTestPage();
         new AdminDecisionPage(admin);
     }
 

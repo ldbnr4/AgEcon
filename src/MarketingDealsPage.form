@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="MarketingDealsPage">
-  <grid id="27dc6" binding="rootPanel" layout-manager="GridLayoutManager" row-count="4" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+  <grid id="27dc6" binding="rootPanel" layout-manager="GridLayoutManager" row-count="5" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="15" left="15" bottom="15" right="15"/>
     <constraints>
       <xy x="20" y="116" width="1167" height="1399"/>
     </constraints>
     <properties>
-      <preferredSize width="1330" height="838"/>
+      <preferredSize width="1200" height="838"/>
     </properties>
     <border type="none"/>
     <children>
       <grid id="92564" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
-          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties/>
         <border type="none"/>
@@ -232,7 +232,7 @@
                               <text value="Sign Contract"/>
                             </properties>
                           </component>
-                          <component id="6c0d6" class="javax.swing.JTextField" binding="compAAmount">
+                          <component id="6c0d6" class="javax.swing.JTextField" binding="compAAmount" custom-create="true">
                             <constraints>
                               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                                 <preferred-size width="150" height="-1"/>
@@ -469,7 +469,7 @@
                               <text value="Sign Contract"/>
                             </properties>
                           </component>
-                          <component id="22161" class="javax.swing.JTextField" binding="compBAmount">
+                          <component id="22161" class="javax.swing.JTextField" binding="compBAmount" custom-create="true">
                             <constraints>
                               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                                 <preferred-size width="150" height="-1"/>
@@ -699,7 +699,7 @@
                               <text value="Sign Contract"/>
                             </properties>
                           </component>
-                          <component id="de54" class="javax.swing.JTextField" binding="compCAmount">
+                          <component id="de54" class="javax.swing.JTextField" binding="compCAmount" custom-create="true">
                             <constraints>
                               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                                 <preferred-size width="150" height="-1"/>
@@ -929,7 +929,7 @@
                               <text value="Sign Contract"/>
                             </properties>
                           </component>
-                          <component id="d558" class="javax.swing.JTextField" binding="compDAmount">
+                          <component id="d558" class="javax.swing.JTextField" binding="compDAmount" custom-create="true">
                             <constraints>
                               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                                 <preferred-size width="150" height="-1"/>
@@ -1159,7 +1159,7 @@
                               <text value="Sign Contract"/>
                             </properties>
                           </component>
-                          <component id="4d026" class="javax.swing.JTextField" binding="compEAmount">
+                          <component id="4d026" class="javax.swing.JTextField" binding="compEAmount" custom-create="true">
                             <constraints>
                               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                                 <preferred-size width="150" height="-1"/>
@@ -1243,10 +1243,10 @@
         <properties/>
         <border type="none"/>
         <children>
-          <grid id="a1525" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="a1525" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties/>
             <border type="none"/>
@@ -1264,9 +1264,18 @@
                   <verticalTextPosition value="0"/>
                 </properties>
               </component>
+              <component id="f537c" class="javax.swing.JButton" binding="viewSeedOrdersButton" default-binding="true">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <font name="Perpetua" size="20"/>
+                  <text value="View Seed Orders"/>
+                </properties>
+              </component>
             </children>
           </grid>
-          <grid id="a8852" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="a8852" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
               <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -1284,6 +1293,15 @@
                   <icon value="img/popcorn.png"/>
                   <text value="Welcome Label!"/>
                   <verticalTextPosition value="1"/>
+                </properties>
+              </component>
+              <component id="6b960" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <font name="Perpetua" size="24"/>
+                  <text value="Sell your yields to these marketing companies"/>
                 </properties>
               </component>
             </children>
@@ -1310,7 +1328,7 @@
       <grid id="76a4" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
-          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties/>
         <border type="none"/>
@@ -1359,12 +1377,18 @@
       </grid>
       <component id="152bb" class="javax.swing.JButton" binding="endSeasonButton" default-binding="true">
         <constraints>
-          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <font name="Perpetua" size="24" style="1"/>
           <text value="Submit"/>
         </properties>
+      </component>
+      <component id="7409d" class="javax.swing.JSeparator">
+        <constraints>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties/>
       </component>
     </children>
   </grid>

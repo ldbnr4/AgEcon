@@ -31,6 +31,7 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
     JTable bshlBalSheet;
     private JDatePickerImpl datePickerA, datePickerB, datePickerC, datePickerD, datePickerE;
     private JButton endSeasonButton;
+    private JButton viewSeedOrdersButton;
 
     private BalloonTip balloonTip, successBalloon;
 
@@ -92,11 +93,23 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
             dispose();
         });
 
+        viewSeedOrdersButton.addActionListener(e -> {
+            new ViewSeedOrdersPage(stu);
+        });
+
+
+
         compAAmount.addKeyListener(Consts.customKeyListner(compAAmount));
         compBAmount.addKeyListener(Consts.customKeyListner(compBAmount));
         compCAmount.addKeyListener(Consts.customKeyListner(compCAmount));
         compDAmount.addKeyListener(Consts.customKeyListner(compDAmount));
         compEAmount.addKeyListener(Consts.customKeyListner(compEAmount));
+
+        compAAmount.addFocusListener(Consts.greyFocusListener(compAAmount));
+        compBAmount.addFocusListener(Consts.greyFocusListener(compBAmount));
+        compCAmount.addFocusListener(Consts.greyFocusListener(compCAmount));
+        compDAmount.addFocusListener(Consts.greyFocusListener(compDAmount));
+        compEAmount.addFocusListener(Consts.greyFocusListener(compEAmount));
 
     }
 
@@ -133,6 +146,41 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
         datePickerC = new JDatePickerImpl(datePanel, new DateLabelFormatter());
         datePickerD = new JDatePickerImpl(datePanel, new DateLabelFormatter());
         datePickerE = new JDatePickerImpl(datePanel, new DateLabelFormatter());
+
+        compAAmount = new Consts.RoundJTextField();
+        compAAmount.setBorder(BorderFactory.createCompoundBorder(
+                compAAmount.getBorder(),
+                BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+        compAAmount.setText("Enter amount");
+        compAAmount.setForeground(Color.GRAY);
+
+        compBAmount = new Consts.RoundJTextField();
+        compBAmount.setBorder(BorderFactory.createCompoundBorder(
+                compBAmount.getBorder(),
+                BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+        compBAmount.setText("Enter amount");
+        compBAmount.setForeground(Color.GRAY);
+
+        compCAmount = new Consts.RoundJTextField();
+        compCAmount.setBorder(BorderFactory.createCompoundBorder(
+                compCAmount.getBorder(),
+                BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+        compCAmount.setText("Enter amount");
+        compCAmount.setForeground(Color.GRAY);
+
+        compDAmount = new Consts.RoundJTextField();
+        compDAmount.setBorder(BorderFactory.createCompoundBorder(
+                compDAmount.getBorder(),
+                BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+        compDAmount.setText("Enter amount");
+        compDAmount.setForeground(Color.GRAY);
+
+        compEAmount = new Consts.RoundJTextField();
+        compEAmount.setBorder(BorderFactory.createCompoundBorder(
+                compEAmount.getBorder(),
+                BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+        compEAmount.setText("Enter amount");
+        compEAmount.setForeground(Color.GRAY);
     }
 
     @Override
@@ -253,7 +301,7 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
     }
 
     class DateLabelFormatter extends JFormattedTextField.AbstractFormatter {
-        private String datePattern = "MMM dd yyyy";
+        private String datePattern = "MMMM dd, yyyy";
         private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
 
         @Override
