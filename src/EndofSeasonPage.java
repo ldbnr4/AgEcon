@@ -97,7 +97,11 @@ public class EndofSeasonPage extends JFrame {
         expenseTable.setRowHeight(25);
         expenseTable.setModel(nModel);
 
-        //logoutButton.addActionListener();
+        logoutButton.addActionListener(e -> {
+            setVisible(false);
+            dispose();
+            new WelcomePage();
+        });
 
     }
 }

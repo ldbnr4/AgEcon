@@ -21,10 +21,14 @@ public class BuySeedsPage extends JFrame {
     JLabel onHandLabel;
     JLabel stuEarlyLabel, stuMidLabel, stuFullLabel;
     JButton plantButton;
-
     Student stu;
     String stuName;
     boolean inSectsAvail;
+    private JLabel companyALabel;
+    private JLabel companyBLabel;
+    private JLabel companyCLabel;
+    private JLabel companyDLabel;
+    private JLabel companyELabel;
 
     public BuySeedsPage(Student student) {
         super("Buy Seeds Page");
@@ -102,27 +106,26 @@ public class BuySeedsPage extends JFrame {
         final ActionListener buyNowAction = e -> {
             if (inSectsAvail) {
                 JButton btn = (JButton) e.getSource();
-                String btnTxt = btn.getText();
                 InputSector company = null;
-                if (btnTxt.contains(Consts.COMPANY_A_NAME)) {
+                if (btn.equals(buyNowButtonA)) {
                     while (company == null) {
-                        company = Consts.DB.getInputSeller(Consts.COMPANY_A_NAME);
+                        company = Consts.DB.getInputSeller(Consts.SUPPLY_COMPANY_A_NAME);
                     }
-                } else if (btnTxt.contains(Consts.COMPANY_B_NAME)) {
+                } else if (btn.equals(buyNowButtonB)) {
                     while (company == null) {
-                        company = Consts.DB.getInputSeller(Consts.COMPANY_B_NAME);
+                        company = Consts.DB.getInputSeller(Consts.SUPPLY_COMPANY_B_NAME);
                     }
-                } else if (btnTxt.contains(Consts.COMPANY_C_NAME)) {
+                } else if (btn.equals(buyNowButtonC)) {
                     while (company == null) {
-                        company = Consts.DB.getInputSeller(Consts.COMPANY_C_NAME);
+                        company = Consts.DB.getInputSeller(Consts.SUPPLY_COMPANY_C_NAME);
                     }
-                } else if (btnTxt.contains(Consts.COMPANY_D_NAME)) {
+                } else if (btn.equals(buyNowButtonD)) {
                     while (company == null) {
-                        company = Consts.DB.getInputSeller(Consts.COMPANY_D_NAME);
+                        company = Consts.DB.getInputSeller(Consts.SUPPLY_COMPANY_D_NAME);
                     }
-                } else if (btnTxt.contains(Consts.COMPANY_E_NAME)) {
+                } else if (btn.equals(buyNowButtonE)) {
                     while (company == null) {
-                        company = Consts.DB.getInputSeller(Consts.COMPANY_E_NAME);
+                        company = Consts.DB.getInputSeller(Consts.SUPPLY_COMPANY_E_NAME);
                     }
                 } else {
                     System.out.println(btn.getName() + " does not have a case.");
@@ -136,18 +139,31 @@ public class BuySeedsPage extends JFrame {
         buyNowButtonC.addActionListener(buyNowAction);
         buyNowButtonD.addActionListener(buyNowAction);
         buyNowButtonE.addActionListener(buyNowAction);
+
+        buyNowButtonA.setText(buyNowButtonA.getText() + " " + Consts.SUPPLY_COMPANY_A_NAME);
+        buyNowButtonB.setText(buyNowButtonB.getText() + " " + Consts.SUPPLY_COMPANY_B_NAME);
+        buyNowButtonC.setText(buyNowButtonC.getText() + " " + Consts.SUPPLY_COMPANY_C_NAME);
+        buyNowButtonD.setText(buyNowButtonD.getText() + " " + Consts.SUPPLY_COMPANY_D_NAME);
+        buyNowButtonE.setText(buyNowButtonE.getText() + " " + Consts.SUPPLY_COMPANY_E_NAME);
+
+        companyALabel.setText(Consts.SUPPLY_COMPANY_A_NAME);
+        companyBLabel.setText(Consts.SUPPLY_COMPANY_B_NAME);
+        companyCLabel.setText(Consts.SUPPLY_COMPANY_C_NAME);
+        companyDLabel.setText(Consts.SUPPLY_COMPANY_D_NAME);
+        companyELabel.setText(Consts.SUPPLY_COMPANY_E_NAME);
+
     }
 
     void startCompThreads() {
-        new Thread(new CompanyThread(Consts.COMPANY_A_NAME, earlyAmntLabelA, earlyPriceLabelA, midAmntLabelA,
+        new Thread(new CompanyThread(Consts.SUPPLY_COMPANY_A_NAME, earlyAmntLabelA, earlyPriceLabelA, midAmntLabelA,
                 midPriceLabelA, fullAmntLabelA, fullPriceLabelA)).start();
-        new Thread(new CompanyThread(Consts.COMPANY_B_NAME, earlyAmntLabelB, earlyPriceLabelB, midAmntLabelB,
+        new Thread(new CompanyThread(Consts.SUPPLY_COMPANY_B_NAME, earlyAmntLabelB, earlyPriceLabelB, midAmntLabelB,
                 midPriceLabelB, fullAmntLabelB, fullPriceLabelB)).start();
-        new Thread(new CompanyThread(Consts.COMPANY_C_NAME, earlyAmntLabelC, earlyPriceLabelC, midAmntLabelC,
+        new Thread(new CompanyThread(Consts.SUPPLY_COMPANY_C_NAME, earlyAmntLabelC, earlyPriceLabelC, midAmntLabelC,
                 midPriceLabelC, fullAmntLabelC, fullPriceLabelC)).start();
-        new Thread(new CompanyThread(Consts.COMPANY_D_NAME, earlyAmntLabelD, earlyPriceLabelD, midAmntLabelD,
+        new Thread(new CompanyThread(Consts.SUPPLY_COMPANY_D_NAME, earlyAmntLabelD, earlyPriceLabelD, midAmntLabelD,
                 midPriceLabelD, fullAmntLabelD, fullPriceLabelD)).start();
-        new Thread(new CompanyThread(Consts.COMPANY_E_NAME, earlyAmntLabelE, earlyPriceLabelE, midAmntLabelE,
+        new Thread(new CompanyThread(Consts.SUPPLY_COMPANY_E_NAME, earlyAmntLabelE, earlyPriceLabelE, midAmntLabelE,
                 midPriceLabelE, fullAmntLabelE, fullPriceLabelE)).start();
     }
 }

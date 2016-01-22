@@ -78,7 +78,7 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
                     compMax -= rn;
                     var++;
                 }
-                InputSector theInput = new InputSector("Company" + i, early, Consts.round(minPrice +
+                InputSector theInput = new InputSector("Supply Company " + i, early, Consts.round(minPrice +
                         new Random().nextDouble() * (maxPrice - minPrice)), mid, Consts.round(minPrice +
                         new Random().nextDouble() * (maxPrice - minPrice)), full,
                         Consts.round(minPrice + new Random().nextDouble() * (maxPrice - minPrice)));
@@ -130,7 +130,7 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
                 if (compBshls < minAmnt) {
                     compBshls = minAmnt;
                 }
-                genDBMarketComp(new MarketingSector("Company" + i, compDate, Consts.round(minPrice +
+                genDBMarketComp(new MarketingSector("Marketing Company " + i, compDate, Consts.round(minPrice +
                         new Random().nextDouble() * (maxPrice - minPrice)), compBshls));
             }
         });

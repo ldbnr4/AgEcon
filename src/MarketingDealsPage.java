@@ -114,11 +114,11 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
     }
 
     void initCompThreads() {
-        new Thread(new CompanyThread(Consts.COMPANY_A_NAME, compABushels, compAPrice, compADate)).start();
-        new Thread(new CompanyThread(Consts.COMPANY_B_NAME, compBBushels, compBPrice, compBDate)).start();
-        new Thread(new CompanyThread(Consts.COMPANY_C_NAME, compCBushels, compCPrice, compCDate)).start();
-        new Thread(new CompanyThread(Consts.COMPANY_D_NAME, compDBushels, compDPrice, compDDate)).start();
-        new Thread(new CompanyThread(Consts.COMPANY_E_NAME, compEBushels, compEPrice, compEDate)).start();
+        new Thread(new CompanyThread(Consts.MARKETING_COMPANY_A_NAME, compABushels, compAPrice, compADate)).start();
+        new Thread(new CompanyThread(Consts.MARKETING_COMPANY_B_NAME, compBBushels, compBPrice, compBDate)).start();
+        new Thread(new CompanyThread(Consts.MARKETING_COMPANY_C_NAME, compCBushels, compCPrice, compCDate)).start();
+        new Thread(new CompanyThread(Consts.MARKETING_COMPANY_D_NAME, compDBushels, compDPrice, compDDate)).start();
+        new Thread(new CompanyThread(Consts.MARKETING_COMPANY_E_NAME, compEBushels, compEPrice, compEDate)).start();
     }
 
     private void createUIComponents() {
@@ -187,19 +187,19 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         JButton btn = (JButton) e.getSource();
         if (btn.equals(compABtn)) {
-            buttonHandler(datePickerA, compADate, compAAmount, Consts.COMPANY_A_NAME,
+            buttonHandler(datePickerA, compADate, compAAmount, Consts.MARKETING_COMPANY_A_NAME,
                     Double.valueOf(compAPrice.getText().replace("$", "")));
         } else if (btn.equals(compBBtn)) {
-            buttonHandler(datePickerB, compBDate, compBAmount, Consts.COMPANY_B_NAME,
+            buttonHandler(datePickerB, compBDate, compBAmount, Consts.MARKETING_COMPANY_B_NAME,
                     Double.valueOf(compBPrice.getText().replace("$", "")));
         } else if (btn.equals(compCBtn)) {
-            buttonHandler(datePickerC, compCDate, compCAmount, Consts.COMPANY_C_NAME,
+            buttonHandler(datePickerC, compCDate, compCAmount, Consts.MARKETING_COMPANY_C_NAME,
                     Double.valueOf(compCPrice.getText().replace("$", "")));
         } else if (btn.equals(compDBtn)) {
-            buttonHandler(datePickerD, compDDate, compDAmount, Consts.COMPANY_D_NAME,
+            buttonHandler(datePickerD, compDDate, compDAmount, Consts.MARKETING_COMPANY_D_NAME,
                     Double.valueOf(compDPrice.getText().replace("$", "")));
         } else if (btn.equals(compEBtn)) {
-            buttonHandler(datePickerE, compEDate, compEAmount, Consts.COMPANY_E_NAME,
+            buttonHandler(datePickerE, compEDate, compEAmount, Consts.MARKETING_COMPANY_E_NAME,
                     Double.valueOf(compEPrice.getText().replace("$", "")));
         }
     }

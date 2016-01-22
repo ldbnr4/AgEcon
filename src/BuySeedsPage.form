@@ -3,7 +3,7 @@
   <grid id="27dc6" binding="rootPanel" layout-manager="GridLayoutManager" row-count="5" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="15" left="15" bottom="15" right="15"/>
     <constraints>
-      <xy x="19" y="176" width="1053" height="1014"/>
+      <xy x="19" y="176" width="1053" height="758"/>
     </constraints>
     <properties>
       <toolTipText value=""/>
@@ -59,13 +59,13 @@
                     <properties/>
                     <border type="none"/>
                     <children>
-                      <component id="d0e60" class="javax.swing.JLabel">
+                      <component id="d0e60" class="javax.swing.JLabel" binding="companyALabel">
                         <constraints>
                           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
                           <font name="Perpetua" size="36" style="1"/>
-                          <text value="CompanyA"/>
+                          <text value="Supply Company A"/>
                         </properties>
                       </component>
                       <grid id="8e1c6" layout-manager="GridLayoutManager" row-count="3" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -343,7 +343,7 @@
                             </constraints>
                             <properties>
                               <font name="Perpetua" size="22" style="1"/>
-                              <text value="Order from CompanyA"/>
+                              <text value="Order from"/>
                             </properties>
                           </component>
                         </children>
@@ -359,7 +359,7 @@
                     <properties/>
                     <border type="none"/>
                     <children>
-                      <component id="d6dde" class="javax.swing.JLabel">
+                      <component id="d6dde" class="javax.swing.JLabel" binding="companyBLabel">
                         <constraints>
                           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>
@@ -643,7 +643,7 @@
                             </constraints>
                             <properties>
                               <font name="Perpetua" size="22" style="1"/>
-                              <text value="Order from CompanyB"/>
+                              <text value="Order from"/>
                             </properties>
                           </component>
                         </children>
@@ -659,7 +659,7 @@
                     <properties/>
                     <border type="none"/>
                     <children>
-                      <component id="1e8a2" class="javax.swing.JLabel">
+                      <component id="1e8a2" class="javax.swing.JLabel" binding="companyCLabel">
                         <constraints>
                           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>
@@ -943,7 +943,7 @@
                             </constraints>
                             <properties>
                               <font name="Perpetua" size="22" style="1"/>
-                              <text value="Order from CompanyC"/>
+                              <text value="Order from"/>
                             </properties>
                           </component>
                         </children>
@@ -959,7 +959,7 @@
                     <properties/>
                     <border type="none"/>
                     <children>
-                      <component id="a1c0e" class="javax.swing.JLabel">
+                      <component id="a1c0e" class="javax.swing.JLabel" binding="companyDLabel">
                         <constraints>
                           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>
@@ -1237,7 +1237,7 @@
                             </constraints>
                             <properties>
                               <font name="Perpetua" size="22" style="1"/>
-                              <text value="Order from CompanyD"/>
+                              <text value="Order from"/>
                             </properties>
                           </component>
                         </children>
@@ -1259,7 +1259,7 @@
                     <properties/>
                     <border type="none"/>
                     <children>
-                      <component id="4d3" class="javax.swing.JLabel">
+                      <component id="4d3" class="javax.swing.JLabel" binding="companyELabel">
                         <constraints>
                           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>
@@ -1543,7 +1543,7 @@
                             </constraints>
                             <properties>
                               <font name="Perpetua" size="22" style="1"/>
-                              <text value="Order from CompanyE"/>
+                              <text value="Order from"/>
                             </properties>
                           </component>
                         </children>

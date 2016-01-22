@@ -15,8 +15,10 @@ import java.util.Random;
  *
  */
 public class Consts {
-    static final String COMPANY_A_NAME = "CompanyA", COMPANY_B_NAME = "CompanyB", COMPANY_C_NAME = "CompanyC",
-            COMPANY_D_NAME = "CompanyD", COMPANY_E_NAME = "CompanyE";
+    static final String SUPPLY_COMPANY_A_NAME = "Supply Company A", SUPPLY_COMPANY_B_NAME = "Supply Company B",
+            SUPPLY_COMPANY_C_NAME = "Supply Company C", SUPPLY_COMPANY_D_NAME = "Supply Company D", SUPPLY_COMPANY_E_NAME = "Supply Company E";
+    static final String MARKETING_COMPANY_A_NAME = "Marketing Company A", MARKETING_COMPANY_B_NAME = "Marketing Company B",
+            MARKETING_COMPANY_C_NAME = "Marketing Company C", MARKETING_COMPANY_D_NAME = "Marketing Company D", MARKETING_COMPANY_E_NAME = "Marketing Company E";
     static final int S_FARM_CAP = 8;
     static final int M_FARM_CAP = 14;
     static final int L_FARM_CAP = 8;
