@@ -6,6 +6,7 @@ import java.util.Locale;
 
 /**
  * Created by Lorenzo on 1/20/2016.
+ *
  */
 public class ViewSeedOrdersPage extends JFrame {
     private JPanel rootPanel;
@@ -20,8 +21,13 @@ public class ViewSeedOrdersPage extends JFrame {
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        DefaultTableModel nModel = new DefaultTableModel(new String[]{"Company Name", "Variety", "Amount(lb)",
-                "Price($/lb)", "Total Cost"}, 0) {
+        DefaultTableModel nModel = new DefaultTableModel(new String[]{
+                "Company Name",
+                "Variety",
+                "Amount(lb)",
+                "Price($/lb)",
+                "Total Cost"
+        }, 0) {
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
@@ -29,12 +35,25 @@ public class ViewSeedOrdersPage extends JFrame {
 
         double runningTtl = 0;
         for (SeedLedgerEntry entry : student.farm.getSeedLedger()) {
-            runningTtl += entry.getAmount() * entry.getPrice();
-            nModel.addRow(new Object[]{entry.getSeller(), entry.getSeedType(), NumberFormat.getNumberInstance(Locale.US).format(entry.getAmount()),
-                    NumberFormat.getCurrencyInstance(Locale.US).format(entry.getPrice()), NumberFormat.getCurrencyInstance(Locale.US).format(entry.getPrice() * entry.getAmount())});
+            runningTtl += -entry.getAmount() * entry.getPrice();
         }
-        nModel.addRow(new Object[]{null, null, null, Consts.htmlWrapper("<b><i>OVERALL TOTAL COST</i></b>", 5),
-                Consts.htmlWrapper("<b><i>" + NumberFormat.getCurrencyInstance(Locale.US).format(runningTtl) + "</b></i>", 5)});
+        nModel.addRow(new Object[]{
+                Consts.htmlWrapper("<b><i>OVERALL TOTAL COST</i></b>", 5),
+                null,
+                null,
+                null,
+                Consts.htmlWrapper("<b><i>" + NumberFormat.getCurrencyInstance(Locale.US).format(runningTtl) + "</b></i>", 5)
+        });
+
+        for (SeedLedgerEntry entry : student.farm.getSeedLedger()) {
+            nModel.addRow(new Object[]{
+                    entry.getSeller(),
+                    entry.getSeedType(),
+                    NumberFormat.getNumberInstance(Locale.US).format(entry.getAmount()),
+                    NumberFormat.getCurrencyInstance(Locale.US).format(entry.getPrice()),
+                    NumberFormat.getCurrencyInstance(Locale.US).format(-entry.getPrice() * entry.getAmount())
+            });
+        }
 
         seedPurchs.setFont(new Font("Segoe UI", 0, 18));
         seedPurchs.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 20));

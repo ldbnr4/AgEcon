@@ -16,9 +16,9 @@ public class GameDriver {
 
 
         //new BuySeedsPage(student);
-        new MarketingDealsPage(student);
-        new ViewSeedOrdersPage(student);
-        //new EndofSeasonPage(student);
+        //new MarketingDealsPage(student);
+        //new ViewSeedOrdersPage(student);
+        new EndofSeasonPage(student);
 
         //new SoftTestPage();
         new AdminDecisionPage(admin);
