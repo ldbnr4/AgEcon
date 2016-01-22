@@ -9,12 +9,13 @@ public class CompanyThread implements Runnable {
     String name;
     InputSector DBinput;
     Boolean inputComp;
+    JFrame page;
 
     JLabel amnt, price, dt;
     MarketingSector DBmarketingComp;
 
 
-    public CompanyThread(String name, JLabel eAmnt, JLabel ePrice, JLabel mAmnt, JLabel mPrice, JLabel fAmnt, JLabel fPrice) {
+    public CompanyThread(BuySeedsPage page, String name, JLabel eAmnt, JLabel ePrice, JLabel mAmnt, JLabel mPrice, JLabel fAmnt, JLabel fPrice) {
         this.erlA = eAmnt;
         this.erlP = ePrice;
         this.midA = mAmnt;
@@ -23,15 +24,17 @@ public class CompanyThread implements Runnable {
         this.fullP = fPrice;
         this.name = name;
         this.inputComp = true;
+        this.page = page;
         this.DBinput = Consts.DB.getInputSeller(name);
     }
 
-    public CompanyThread(String name, JLabel numOfBushels, JLabel pricePerBushel, JLabel date) {
+    public CompanyThread(MarketingDealsPage page, String name, JLabel numOfBushels, JLabel pricePerBushel, JLabel date) {
         this.inputComp = false;
         this.name = name;
         this.amnt = numOfBushels;
         this.price = pricePerBushel;
         this.dt = date;
+        this.page = page;
         this.DBmarketingComp = Consts.DB.getMarketingComp(name);
 
 
@@ -40,7 +43,7 @@ public class CompanyThread implements Runnable {
     @Override
     public void run() {
         //System.out.println(Consts.DB.getInputSeller(name, Consts.GAME_FLOW.currentYear));
-        while (true) {
+        while (page.isVisible()) {
             if (inputComp) {
                 try {
                     Consts.checkSetSoldOut(erlA, erlP, DBinput.getEarlyAmnt(), DBinput.getEarlyPrice());

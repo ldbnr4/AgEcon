@@ -9,19 +9,19 @@ public class GameDriver {
             Consts.DB.addGameFlow(new GameFlow());
         }
 
-        //new WelcomePage();
+        new WelcomePage();
 
-        Student student = Consts.DB.getStudent("newGuy");
-        Admin admin = Consts.DB.getAdmin("ldbnr4");
+        //Student student = Consts.DB.getStudent("newGuy");
+        //Admin admin = Consts.DB.getAdmin("ldbnr4");
 
 
-        new BuySeedsPage(student);
+        //new BuySeedsPage(student);
         //new MarketingDealsPage(student);
         //new ViewSeedOrdersPage(student);
         //new EndofSeasonPage(student);
 
-        //new SoftTestPage();
-        new AdminDecisionPage(admin);
+        new SoftTestPage();
+        //new AdminDecisionPage(admin);
     }
 
 

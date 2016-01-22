@@ -46,7 +46,7 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         this.stu = student;
         this.stuName = student.uName;
@@ -61,7 +61,7 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
         printBalSheet();
 
         final Runnable initMarket = () -> {
-            while (!marketsAvail) {
+            while (!marketsAvail && isVisible()) {
                 marketsAvail = !(Consts.DB.getMarketingComps()).isEmpty();
             }
             initCompThreads();
@@ -114,11 +114,11 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
     }
 
     void initCompThreads() {
-        new Thread(new CompanyThread(Consts.MARKETING_COMPANY_A_NAME, compABushels, compAPrice, compADate)).start();
-        new Thread(new CompanyThread(Consts.MARKETING_COMPANY_B_NAME, compBBushels, compBPrice, compBDate)).start();
-        new Thread(new CompanyThread(Consts.MARKETING_COMPANY_C_NAME, compCBushels, compCPrice, compCDate)).start();
-        new Thread(new CompanyThread(Consts.MARKETING_COMPANY_D_NAME, compDBushels, compDPrice, compDDate)).start();
-        new Thread(new CompanyThread(Consts.MARKETING_COMPANY_E_NAME, compEBushels, compEPrice, compEDate)).start();
+        new Thread(new CompanyThread(this, Consts.MARKETING_COMPANY_A_NAME, compABushels, compAPrice, compADate)).start();
+        new Thread(new CompanyThread(this, Consts.MARKETING_COMPANY_B_NAME, compBBushels, compBPrice, compBDate)).start();
+        new Thread(new CompanyThread(this, Consts.MARKETING_COMPANY_C_NAME, compCBushels, compCPrice, compCDate)).start();
+        new Thread(new CompanyThread(this, Consts.MARKETING_COMPANY_D_NAME, compDBushels, compDPrice, compDDate)).start();
+        new Thread(new CompanyThread(this, Consts.MARKETING_COMPANY_E_NAME, compEBushels, compEPrice, compEDate)).start();
     }
 
     private void createUIComponents() {

@@ -138,7 +138,7 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         logoutButton.addActionListener(e -> {
             new WelcomePage();

@@ -4,12 +4,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 
+import static java.lang.Thread.sleep;
+
 /**
  * Created by Lorenzo on 10/22/2015.
  *
  */
 public class FarmerDecisionPage extends JFrame implements ActionListener {
-    boolean updateFlag = true;
     Thread t1;
     private Student student;
     private HashMap<Consts.Farm_Size, Integer> farmSizeAmounts;
@@ -34,7 +35,7 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
         setResizable(false);
         pack();
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setVisible(true);
         farmerLabel.setText("Hey " + student.uName + "!");
 
@@ -45,21 +46,16 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
         largeFarmBtn.addActionListener(this);
 
         Runnable r = () -> {
-            while (updateFlag) {
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            while (isVisible()) {
                 updateBtns();
             }
+            //System.out.println("Killed a thread.");
         };
 
         t1 = new Thread(r);
         t1.start();
 
         backBtn.addActionListener(e -> {
-            updateFlag = false;
             Consts.DB.removeStudent(student);
             new WelcomePage(student.uName);
             setVisible(false);
@@ -67,8 +63,8 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
         });
 
         lbl_acre_large.setText(Consts.L_ACRE + " acres");
-        lbl_acre_sml.setText(Consts.M_ACRE + " acres");
-        lbl_acre_med.setText(Consts.S_ACRE + " acres");
+        lbl_acre_sml.setText(Consts.S_ACRE + " acres");
+        lbl_acre_med.setText(Consts.M_ACRE + " acres");
     }
 
     @Override
@@ -82,13 +78,6 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
             } else {
                 student.farm = new Farm(Consts.Farm_Size.LARGE_FARM);
             }
-            updateFlag = false;
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e1) {
-                e1.printStackTrace();
-            }
-            updateFlag = false;
             student.setStage(Consts.Student_Stage.Buy_Seeds);
             Consts.DB.saveStudent(student);
             new BuySeedsPage(student);
@@ -103,29 +92,38 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
             farmSizeAmounts = Consts.DB.numInEachFarm();
         }
         //System.out.println(farmSizeAmounts);
-        int dbNumOfSmall = farmSizeAmounts.get(Consts.Farm_Size.SMALL_FARM);
-        setAvailableLabel(smallAmntLbl, dbNumOfSmall, Consts.S_FARM_CAP);
+        try {
+            int dbNumOfSmall = farmSizeAmounts.get(Consts.Farm_Size.SMALL_FARM);
+            setAvailableLabel(smallAmntLbl, dbNumOfSmall, Consts.S_FARM_CAP);
 
-        int dbNumOfMed = farmSizeAmounts.get(Consts.Farm_Size.MED_FARM);
-        setAvailableLabel(medAmntLbl, dbNumOfMed, Consts.M_FARM_CAP);
+            int dbNumOfMed = farmSizeAmounts.get(Consts.Farm_Size.MED_FARM);
+            setAvailableLabel(medAmntLbl, dbNumOfMed, Consts.M_FARM_CAP);
 
-        int dbNumOfLrg = farmSizeAmounts.get(Consts.Farm_Size.LARGE_FARM);
-        setAvailableLabel(largeAmntLbl, dbNumOfLrg, Consts.L_FARM_CAP);
+            int dbNumOfLrg = farmSizeAmounts.get(Consts.Farm_Size.LARGE_FARM);
+            setAvailableLabel(largeAmntLbl, dbNumOfLrg, Consts.L_FARM_CAP);
 
-        if (dbNumOfSmall >= Consts.S_FARM_CAP) {
-            smallFarmBtn.setEnabled(false);
-        } else
-            smallFarmBtn.setEnabled(true);
+            if (dbNumOfSmall >= Consts.S_FARM_CAP) {
+                smallFarmBtn.setEnabled(false);
+            } else
+                smallFarmBtn.setEnabled(true);
 
-        if (dbNumOfMed >= Consts.M_FARM_CAP) {
-            medFarmBtn.setEnabled(false);
-        } else
-            medFarmBtn.setEnabled(true);
+            if (dbNumOfMed >= Consts.M_FARM_CAP) {
+                medFarmBtn.setEnabled(false);
+            } else
+                medFarmBtn.setEnabled(true);
 
-        if (dbNumOfLrg >= Consts.L_FARM_CAP) {
-            largeFarmBtn.setEnabled(false);
-        } else
-            largeFarmBtn.setEnabled(true);
+            if (dbNumOfLrg >= Consts.L_FARM_CAP) {
+                largeFarmBtn.setEnabled(false);
+            } else
+                largeFarmBtn.setEnabled(true);
+        } catch (NullPointerException e) {
+            try {
+                sleep(500);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
+            System.out.println("Ran into a problem " + e.getMessage());
+        }
     }
 
     private void setAvailableLabel(JLabel label, int num, int limit) {

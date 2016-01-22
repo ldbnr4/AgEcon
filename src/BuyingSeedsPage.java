@@ -34,6 +34,7 @@ public class BuyingSeedsPage extends JFrame implements ActionListener {
         setLocationRelativeTo(null);
         setVisible(true);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
         companyNameLabel.setText(inputSector.getName());
         inName = inputSector.getName();
         stu = student;

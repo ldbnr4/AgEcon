@@ -25,7 +25,7 @@ public class EndofSeasonPage extends JFrame {
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         incomeStatementLabel.setText(incomeStatementLabel.getText() + " for " + student.uName);
         lbl_year.setText("for the year " + Consts.DB.getGameFlow().currentYear);
