@@ -57,7 +57,7 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
 
         backBtn.addActionListener(e -> {
             Consts.DB.removeStudent(student);
-            new WelcomePage(student.uName);
+            new WelcomePage();
             setVisible(false);
             dispose();
         });

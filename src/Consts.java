@@ -39,6 +39,7 @@ public class Consts {
 
     public static FocusListener greyFocusListener(JTextField textField) {
         return new FocusListener() {
+            String originalTxt = textField.getText();
             @Override
             public void focusGained(FocusEvent e) {
                 if (textField.getForeground().equals(Color.GRAY)) {
@@ -49,7 +50,10 @@ public class Consts {
 
             @Override
             public void focusLost(FocusEvent e) {
-
+                if (textField.getText().isEmpty()) {
+                    textField.setForeground(Color.gray);
+                    textField.setText(originalTxt);
+                }
             }
         };
     }

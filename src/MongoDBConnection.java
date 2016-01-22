@@ -92,11 +92,11 @@ public class MongoDBConnection{
         return morphia.fromDBObject(Student.class, person);
     }
 
-    @NotNull
+    //@NotNull
     public Admin getAdmin(String username) {
         DBObject person = adminsColl.findOne(new BasicDBObject("_id", username));
-        while (person == null) {
-            person = adminsColl.findOne(new BasicDBObject("_id", username));
+        if (person == null) {
+            return null;
         }
         return morphia.fromDBObject(Admin.class, person);
     }

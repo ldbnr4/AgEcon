@@ -1,6 +1,8 @@
 import javax.swing.*;
 import java.awt.event.ActionListener;
+import java.text.NumberFormat;
 import java.util.HashMap;
+import java.util.Locale;
 
 import static java.lang.Thread.sleep;
 
@@ -54,7 +56,7 @@ public class BuySeedsPage extends JFrame {
             setVisible(false);
             dispose();
         });
-        neededLabel.setText(String.valueOf(stu.farm.getSeedsNeeded()));
+        neededLabel.setText(NumberFormat.getNumberInstance(Locale.US).format(stu.farm.getSeedsNeeded()));
         plantButton.addActionListener(e -> {
             inSectsAvail = false;
             try {
@@ -84,11 +86,11 @@ public class BuySeedsPage extends JFrame {
                             stu = Consts.DB.getStudent(stuName);
                         }
                     }
-                    onHandLabel.setText(String.valueOf(stu.farm.getTtlSeedsOwned()));
+                    onHandLabel.setText(NumberFormat.getNumberInstance(Locale.US).format(stu.farm.getTtlSeedsOwned()));
                     HashMap<Consts.Seed_Type, Integer> stuSeeds = stu.farm.getSeedsOwned();
-                    stuEarlyLabel.setText(String.valueOf(stuSeeds.get(Consts.Seed_Type.EARLY)));
-                    stuMidLabel.setText(String.valueOf(stuSeeds.get(Consts.Seed_Type.MID)));
-                    stuFullLabel.setText(String.valueOf(stuSeeds.get(Consts.Seed_Type.FULL)));
+                    stuEarlyLabel.setText(NumberFormat.getNumberInstance(Locale.US).format(stuSeeds.get(Consts.Seed_Type.EARLY)));
+                    stuMidLabel.setText(NumberFormat.getNumberInstance(Locale.US).format(stuSeeds.get(Consts.Seed_Type.MID)));
+                    stuFullLabel.setText(NumberFormat.getNumberInstance(Locale.US).format(stuSeeds.get(Consts.Seed_Type.FULL)));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
