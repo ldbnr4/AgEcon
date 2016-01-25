@@ -28,7 +28,7 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
             compCPrice, compDDate, compDBushels, compDPrice, compEDate, compEBushels, compEPrice, welcomeLabel;
     JButton compABtn, compBBtn, compCBtn, compDBtn, logoutButton, compEBtn;
     JTextField compAAmount, compBAmount, compCAmount, compDAmount, compEAmount;
-    JTable tbl_available;
+    JTable bshlBalSheet;
     private JDatePickerImpl datePickerA, datePickerB, datePickerC, datePickerD, datePickerE;
     private JButton endSeasonButton;
     private JButton viewSeedOrdersButton;
@@ -59,7 +59,7 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
             dispose();
         });
 
-        adjustTbls();
+        printBalSheet();
         printCurrentDeals();
 
         final Runnable initMarket = () -> {
@@ -83,7 +83,7 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
         this.balloonTip.setVisible(false);
 
         MinimalBalloonStyle greenModern = new MinimalBalloonStyle(Color.GREEN, 5);
-        successBalloon = new BalloonTip(tbl_available, new JLabel(), greenModern, BalloonTip.Orientation.RIGHT_ABOVE,
+        successBalloon = new BalloonTip(bshlBalSheet, new JLabel(), greenModern, BalloonTip.Orientation.RIGHT_ABOVE,
                 BalloonTip.AttachLocation.ALIGNED, 10, 10, false);
         this.successBalloon.setVisible(false);
 
@@ -95,7 +95,9 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
             dispose();
         });
 
-        viewSeedOrdersButton.addActionListener(e -> new ViewSeedOrdersPage(stu));
+        viewSeedOrdersButton.addActionListener(e -> {
+            new ViewSeedOrdersPage(stu);
+        });
 
 
 
@@ -204,65 +206,37 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
         }
     }
 
-    boolean adjustTbls() {
-        Farm stuFarm = stu.farm;
-        HarvestEntry[] harvest = stuFarm.getHarvestList().toArray(new HarvestEntry[stuFarm.getHarvestList().size()]);
-
-        tbl_available.setFont(new Font("Segoe UI", 0, 18));
-        tbl_available.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 20));
-        tbl_available.setFillsViewportHeight(true);
-        tbl_available.setRowHeight(25);
-
-        tbl_currentDeals.setFont(new Font("Segoe UI", 0, 18));
-        tbl_currentDeals.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 20));
-        tbl_currentDeals.setFillsViewportHeight(true);
-        tbl_currentDeals.setRowHeight(25);
-
+    boolean printBalSheet() {
+        int runTtl = 0;
         DefaultTableModel nModel = new DefaultTableModel(new String[]{"Date", "Amount(cwt)"}, 0) {
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
-        int current_harv = 0;
         int row = 0;
-        int i = 0;
-        int limit = harvest.length;
-        int leftOver = 0;
-        for (DealEntry ledger : stuFarm.getDealsList()) {
-            if (i >= limit) return false;
-
-            current_harv = harvest[i].getAmount();
-            if (current_harv == 0) {
-                i++;
-                continue;
+        for (BushelLedgerEntry ledger : stu.farm.getBshlLedger()) {
+            runTtl += ledger.getAmount();
+            if (runTtl < 0) {
+                return false;
             }
-
-            leftOver = current_harv + ledger.getAmount();
-            if (leftOver < 0) {
-                while (leftOver < 0) {
-                    if (i >= limit) return false;
-                    leftOver += harvest[i].getAmount();
-                    harvest[i].setAmount(0);
-                    i++;
-                }
-            }
-            harvest[i].setAmount(leftOver);
-
             if (row > 0) {
                 if (ledger.getDate().equals(nModel.getValueAt(row - 1, 0))) {
-                    nModel.setValueAt(NumberFormat.getNumberInstance(Locale.US).format(leftOver), row - 1, 1);
+                    nModel.setValueAt(NumberFormat.getNumberInstance(Locale.US).format(runTtl), row - 1, 1);
                     continue;
                 }
             }
             try {
-                nModel.addRow(new Object[]{Consts.sd2.format(Consts.sd2.parse(ledger.getDate())),
-                        NumberFormat.getNumberInstance(Locale.US).format(leftOver)});
+                nModel.addRow(new Object[]{Consts.sd2.format(Consts.sd2.parse(ledger.getDate())), NumberFormat.getNumberInstance(Locale.US).format(runTtl)});
             } catch (ParseException e) {
                 e.printStackTrace();
             }
             row++;
         }
-        tbl_available.setModel(nModel);
+        bshlBalSheet.setFont(new Font("Segoe UI", 0, 18));
+        bshlBalSheet.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 20));
+        bshlBalSheet.setFillsViewportHeight(true);
+        bshlBalSheet.setRowHeight(25);
+        bshlBalSheet.setModel(nModel);
         return true;
     }
 
@@ -275,15 +249,11 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
                 return false;
             }
         };
-        stu.farm.getDealsList().forEach(entry ->
-                nModel.addRow(
-                        new Object[]{
-                                entry.getSeller(),
-                                entry.getDate(),
-                                NumberFormat.getNumberInstance(Locale.US).format(-entry.getAmount()),
-                        }
-                )
-        );
+        stu.farm.getBshlLedger().stream().filter(entry -> entry.getSeller() != null).forEach(entry -> nModel.addRow(new Object[]{
+                entry.getSeller(),
+                entry.getDate(),
+                NumberFormat.getNumberInstance(Locale.US).format(-entry.getAmount()),
+        }));
 
         tbl_currentDeals.setFont(new Font("Segoe UI", 0, 18));
         tbl_currentDeals.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 20));
@@ -333,16 +303,16 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
             TimingUtils.showTimedBalloon(balloonTip, 3500);
             return;
         }
-        DealEntry varEntry = new DealEntry(selectedDate, -amount, bndlPrice, compName);
-        stu.farm.addToDealList(varEntry);
-        if (!adjustTbls()) {
+        BushelLedgerEntry varEntry = new BushelLedgerEntry(selectedDate, -amount, bndlPrice, compName);
+        stu.farm.addToBshlLedger(varEntry);
+        if (!printBalSheet()) {
             balloonTip.setAttachedComponent(amntField);
             balloonTip.setTextContents("You will not have enough available to do this deal on this day.");
             TimingUtils.showTimedBalloon(balloonTip, 4500);
 
             Consts.DB.getMarketingComp(compName).updateBshls(-amount);
-            stu.farm.removeFromDealList(varEntry);
-            adjustTbls();
+            stu.farm.removeFromBshlLedger(varEntry);
+            printBalSheet();
             return;
         }
         printCurrentDeals();

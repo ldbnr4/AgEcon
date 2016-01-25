@@ -5,6 +5,7 @@ import java.util.Date;
 
 /**
  * Created by Lorenzo on 1/25/2016.
+ *
  */
 public class HarvestEntry implements Comparable {
     private String date;

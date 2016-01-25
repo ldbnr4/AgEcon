@@ -7,20 +7,20 @@ import java.util.Date;
  * Created by Lorenzo on 12/20/2015.
  *
  */
-public class DealEntry implements Comparable {
+public class BushelLedgerEntry implements Comparable {
     private String date;
     private int amount;
     private double ppbndl;
     private String seller;
 
-    public DealEntry(String date, int amount, double ppbndl, String seller) {
+    public BushelLedgerEntry(String date, int amount, double ppbndl, String seller) {
         setDate(date);
         setAmount(amount);
         setPpbndl(ppbndl);
         setSeller(seller);
     }
 
-    public DealEntry() {
+    public BushelLedgerEntry() {
     }
 
     public String getDate() {
@@ -60,7 +60,7 @@ public class DealEntry implements Comparable {
         Date compareDate = null;
         Date baseDate = null;
         try {
-            compareDate = Consts.sd2.parse(((DealEntry) o).getDate());
+            compareDate = Consts.sd2.parse(((BushelLedgerEntry) o).getDate());
             baseDate = Consts.sd2.parse(getDate());
         } catch (ParseException e) {
             e.printStackTrace();
