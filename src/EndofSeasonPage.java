@@ -42,12 +42,12 @@ public class EndofSeasonPage extends JFrame {
 
         //nModel.addRow(new Object[]{Consts.htmlWrapper("<b>Revenue<b>", 5)});
         final double[] rev = {0};
-        student.farm.getBshlLedger().stream().filter(entry -> entry.getSeller() != null).forEach(
+        student.farm.getDealsList().forEach(
                 entry -> rev[0] += (-entry.getAmount()) * entry.getPpbndl()
         );
         nModel.addRow(new Object[]{Consts.htmlWrapper("<i><b>NET SALES REVENUE</b></i>", 5),
                 Consts.htmlWrapper("<i><b>" + NumberFormat.getCurrencyInstance(Locale.US).format(rev[0]) + "</b></i>", 5)});
-        student.farm.getBshlLedger().stream().filter(entry -> entry.getSeller() != null).forEach(
+        student.farm.getDealsList().forEach(
                 entry -> nModel.addRow(new Object[]{entry.getSeller(),
                         NumberFormat.getCurrencyInstance(Locale.US).format(-entry.getAmount() * entry.getPpbndl())})
         );

@@ -34,7 +34,7 @@ public class ViewMarketDealsPage extends JFrame {
         };
 
         final double[] runningTtl = {0};
-        student.farm.getBshlLedger().stream().filter(entry -> entry.getSeller() != null).forEach(
+        student.farm.getDealsList().forEach(
                 entry -> runningTtl[0] += -entry.getAmount() * entry.getPpbndl());
 
         nModel.addRow(new Object[]{
@@ -45,7 +45,7 @@ public class ViewMarketDealsPage extends JFrame {
                 Consts.htmlWrapper("<b><i>" + NumberFormat.getCurrencyInstance(Locale.US).format(runningTtl[0]) + "</b></i>", 5)
         });
 
-        student.farm.getBshlLedger().stream().filter(entry -> entry.getSeller() != null).forEach(entry -> nModel.addRow(new Object[]{
+        student.farm.getDealsList().forEach(entry -> nModel.addRow(new Object[]{
                 entry.getSeller(),
                 entry.getDate(),
                 NumberFormat.getNumberInstance(Locale.US).format(-entry.getAmount()),

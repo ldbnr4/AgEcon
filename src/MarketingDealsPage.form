@@ -1395,7 +1395,7 @@
                 </properties>
                 <border type="none"/>
                 <children>
-                  <component id="d03d1" class="javax.swing.JTable" binding="bshlBalSheet" default-binding="true">
+                  <component id="d03d1" class="javax.swing.JTable" binding="tbl_available">
                     <constraints/>
                     <properties>
                       <autoResizeMode value="4"/>
