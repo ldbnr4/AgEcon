@@ -23,7 +23,7 @@ public final class Farm {
     public Farm(Consts.Farm_Size size) {
         setSize(size);
         setAcres(size);
-        setStaticCosts();
+        //setStaticCosts();
         setTtlBushels(0);
         setSeedsNeeded(10 * acres);
         setTtlSeedsOwned();
@@ -57,11 +57,7 @@ public final class Farm {
         return staticCosts;
     }
 
-    public ArrayList<BushelLedgerEntry> getBshlLedger() {
-        return this.bshlLedger;
-    }
-
-    public void setStaticCosts() {
+    public void setStaticCosts(double acres) {
         switch (size) {
             case SMALL_FARM:
                 staticCosts.put("Nitrogen", Consts.round((0.68 * Consts.INFLATION) * acres * 130));
@@ -104,6 +100,10 @@ public final class Farm {
                 staticCosts.put("Equipment", Consts.round((40 * Consts.INFLATION * 0.94) * acres));
                 break;
         }
+    }
+
+    public ArrayList<BushelLedgerEntry> getBshlLedger() {
+        return this.bshlLedger;
     }
 
     public Consts.Farm_Size getSize() {
@@ -183,6 +183,8 @@ public final class Farm {
         double earlyAcres = Consts.round((double) seedsOwned.get(Consts.Seed_Type.EARLY) / 10);
         double midAcres = Consts.round((double) seedsOwned.get(Consts.Seed_Type.MID) / 10);
         double fullAcres = Consts.round((double) seedsOwned.get(Consts.Seed_Type.FULL) / 10);
+
+        setStaticCosts(earlyAcres + midAcres + fullAcres);
 
         BushelLedgerEntry earlyEntry = new BushelLedgerEntry(Consts.getEarlyHarvDt(), (int) ceil(earlyAcres * Consts.ACRE_YIELD), 0, null);
         if (!bshlLedger.contains(earlyEntry)) {

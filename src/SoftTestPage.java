@@ -15,6 +15,7 @@ public class SoftTestPage extends JFrame implements ActionListener {
     private JButton generateFarmersButton;
     private JTextField TF_stuName;
     private JButton removeStudentButton;
+    private JButton removeAllStudentsButton;
 
     public SoftTestPage() {
         super("Soft Test Page");
@@ -25,8 +26,9 @@ public class SoftTestPage extends JFrame implements ActionListener {
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        this.buyingSeedsLoadTestButton.addActionListener(this);
-        this.generateFarmersButton.addActionListener(this);
+        buyingSeedsLoadTestButton.addActionListener(this);
+        generateFarmersButton.addActionListener(this);
+        removeAllStudentsButton.addActionListener(this);
         removeStudentButton.addActionListener(this);
     }
 
@@ -71,6 +73,8 @@ public class SoftTestPage extends JFrame implements ActionListener {
             }
         } else if (btn.equals(removeStudentButton)) {
             Consts.DB.removeStudent(Consts.DB.getStudent(TF_stuName.getText()));
+        } else if (btn.equals(removeAllStudentsButton)) {
+            Consts.DB.removeAllStudents();
         }
     }
 

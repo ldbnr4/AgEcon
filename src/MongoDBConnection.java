@@ -13,14 +13,14 @@ import java.util.HashMap;
  */
 public class MongoDBConnection{
     private static MongoDBConnection ourInstance = new MongoDBConnection();
-    MongoClient mongoClient = null;
-    Morphia morphia = new Morphia();
-    DB db = openConnection();
-    DBCollection gameFlowColl = db.getCollection("gameFlow");
-    DBCollection adminsColl = db.getCollection("admins");
-    DBCollection usersColl = db.getCollection("users");
-    DBCollection inputColl = db.getCollection("inputSector");
-    DBCollection marketColl = db.getCollection("marketingSector");
+    private MongoClient mongoClient = null;
+    private Morphia morphia = new Morphia();
+    private DB db = openConnection();
+    private DBCollection gameFlowColl = db.getCollection("gameFlow");
+    private DBCollection adminsColl = db.getCollection("admins");
+    private DBCollection usersColl = db.getCollection("users");
+    private DBCollection inputColl = db.getCollection("inputSector");
+    private DBCollection marketColl = db.getCollection("marketingSector");
 
     private MongoDBConnection() {
         morphia.map(Student.class).map(Farm.class).map(GameFlow.class).map(Admin.class).map(InputSector.class)
@@ -47,6 +47,15 @@ public class MongoDBConnection{
 
     public void removeMarketComp(String marketName) {
         marketColl.remove(new BasicDBObject("_id", marketName));
+    }
+
+    public void removeAllStudents() {
+        try (DBCursor cursor = usersColl.find()) {
+            while (cursor.hasNext()) {
+                usersColl.remove(cursor.next());
+                //usersColl.remove(new BasicDBObject("_id",cursor.next().get("_id")));
+            }
+        }
     }
 
     public void saveStudent(Student student) {

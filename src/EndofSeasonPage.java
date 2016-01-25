@@ -34,7 +34,7 @@ public class EndofSeasonPage extends JFrame {
 
         viewMarketingDealsButton.addActionListener(e -> new ViewMarketDealsPage(student));
 
-        DefaultTableModel nModel = new DefaultTableModel(new String[]{"Category", "Dollar Amount"}, 0) {
+        DefaultTableModel nModel = new DefaultTableModel(new String[]{"Category", ""}, 0) {
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
@@ -77,19 +77,18 @@ public class EndofSeasonPage extends JFrame {
         nModel.addRow(new Object[]{});
 
         double taxableIncome = rev[0] + overallTotalCost;
-        nModel.addRow(new Object[]{Consts.htmlWrapper("<b>Taxable Income</b>", 5),
-                Consts.htmlWrapper("<b>" + NumberFormat.getCurrencyInstance(Locale.US).format(taxableIncome) + "</b>", 5)});
-
         double taxes = 0;
         if (taxableIncome > 0) {
             taxes = -taxableIncome * .34;
+            nModel.addRow(new Object[]{Consts.htmlWrapper("<b>Taxable Income</b>", 5),
+                    Consts.htmlWrapper("<b>" + NumberFormat.getCurrencyInstance(Locale.US).format(taxableIncome) + "</b>", 5)});
             nModel.addRow(new Object[]{Consts.htmlWrapper("<b>Taxes @34%</b>", 5), Consts.htmlWrapper("<b>" +
                     NumberFormat.getCurrencyInstance(Locale.US).format(taxes) + "</b>", 5)});
+            nModel.addRow(new Object[]{});
         }
-        nModel.addRow(new Object[]{});
 
         nModel.addRow(new Object[]{Consts.htmlWrapper("<b><i>NET INCOME</i></b>", 5), Consts.htmlWrapper("<b><i>" +
-                NumberFormat.getCurrencyInstance(Locale.US).format(rev[0] + taxes) + "</i></b>", 5)});
+                NumberFormat.getCurrencyInstance(Locale.US).format(taxableIncome + taxes) + "</i></b>", 5)});
 
         expenseTable.setFont(new Font("Segoe UI", 0, 18));
         expenseTable.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 20));

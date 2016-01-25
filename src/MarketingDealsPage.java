@@ -206,7 +206,7 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
 
     boolean printBalSheet() {
         int runTtl = 0;
-        DefaultTableModel nModel = new DefaultTableModel(new String[]{"Date", "Amount of Bushels"}, 0) {
+        DefaultTableModel nModel = new DefaultTableModel(new String[]{"Date", "CWTs"}, 0) {
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
@@ -240,16 +240,16 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
 
     void buttonHandler(JDatePickerImpl jDatePicker, JLabel dateLabel, JTextField amntField, String compName,
                        double bndlPrice) {
-        if (amntField.getText().isEmpty()) {
+        if (amntField.getText().isEmpty() || amntField.getForeground().equals(Color.GRAY)) {
             balloonTip.setAttachedComponent(amntField);
             balloonTip.setTextContents("Please enter a number to sell.");
-            TimingUtils.showTimedBalloon(balloonTip, 2500);
+            TimingUtils.showTimedBalloon(balloonTip, 3500);
             return;
         }
         if (dateLabel.getText().equals("SOLD OUT")) {
             balloonTip.setAttachedComponent(amntField);
             balloonTip.setTextContents("This marketing seller has no more to sell.");
-            TimingUtils.showTimedBalloon(balloonTip, 2500);
+            TimingUtils.showTimedBalloon(balloonTip, 3500);
             return;
         }
         String selectedDate = Consts.sd2.format(jDatePicker.getModel().getValue());
@@ -258,7 +258,7 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
                     Consts.sd2.parse(dateLabel.getText()))) {
                 balloonTip.setAttachedComponent(jDatePicker);
                 balloonTip.setTextContents("Please select a date before or on the sellers needed by date.");
-                TimingUtils.showTimedBalloon(balloonTip, 2500);
+                TimingUtils.showTimedBalloon(balloonTip, 4500);
                 return;
             }
         } catch (ParseException e1) {
@@ -276,7 +276,7 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
         if (!Consts.DB.getMarketingComp(compName).updateBshls(amount)) {
             balloonTip.setAttachedComponent(amntField);
             balloonTip.setTextContents("This seller does not need this much.");
-            TimingUtils.showTimedBalloon(balloonTip, 2500);
+            TimingUtils.showTimedBalloon(balloonTip, 3500);
             return;
         }
         BushelLedgerEntry varEntry = new BushelLedgerEntry(selectedDate, -amount, bndlPrice, compName);
@@ -284,7 +284,7 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
         if (!printBalSheet()) {
             balloonTip.setAttachedComponent(amntField);
             balloonTip.setTextContents("You will not have enough available to do this deal on this day.");
-            TimingUtils.showTimedBalloon(balloonTip, 2500);
+            TimingUtils.showTimedBalloon(balloonTip, 4500);
 
             Consts.DB.getMarketingComp(compName).updateBshls(-amount);
             stu.farm.removeFromBshlLedger(varEntry);
@@ -296,7 +296,7 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
 
         successBalloon.setAttachedComponent(amntField);
         successBalloon.setTextContents("Successful deal.");
-        TimingUtils.showTimedBalloon(successBalloon, 2500);
+        TimingUtils.showTimedBalloon(successBalloon, 3500);
 
     }
 

@@ -6,6 +6,7 @@ import java.util.Locale;
 
 /**
  * Created by Lorenzo on 1/21/2016.
+ *
  */
 public class ViewMarketDealsPage extends JFrame {
     private JTable marketDeals;
@@ -25,7 +26,7 @@ public class ViewMarketDealsPage extends JFrame {
                 "Date of yield transfer",
                 "Amount(cwt)",
                 "Price($/cwt)",
-                "Total Amount Made"
+                "Sales Revenue"
         }, 0) {
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -37,7 +38,7 @@ public class ViewMarketDealsPage extends JFrame {
                 entry -> runningTtl[0] += -entry.getAmount() * entry.getPpbndl());
 
         nModel.addRow(new Object[]{
-                Consts.htmlWrapper("<b><i>OVERALL TOTAL REVENUE</i></b>", 5),
+                Consts.htmlWrapper("<b><i>TOTAL REVENUE</i></b>", 5),
                 null,
                 null,
                 null,

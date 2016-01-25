@@ -26,7 +26,7 @@ public class ViewSeedOrdersPage extends JFrame {
                 "Variety",
                 "Amount(lb)",
                 "Price($/lb)",
-                "Total Cost"
+                "Cost"
         }, 0) {
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -38,7 +38,7 @@ public class ViewSeedOrdersPage extends JFrame {
             runningTtl += -entry.getAmount() * entry.getPrice();
         }
         nModel.addRow(new Object[]{
-                Consts.htmlWrapper("<b><i>OVERALL TOTAL COST</i></b>", 5),
+                Consts.htmlWrapper("<b><i>TOTAL COST</i></b>", 5),
                 null,
                 null,
                 null,
