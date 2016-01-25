@@ -90,13 +90,13 @@ public class MongoDBConnection{
         return morphia.fromDBObject(Student.class, person);
     }
 
-    @NotNull
+    //@NotNull
     public Student getStudent(String username, int year) {
         HashMap<String, Integer> id = new HashMap<>();
         id.put(username, year);
         DBObject person = usersColl.findOne(new BasicDBObject("_id", id));
-        while (person == null) {
-            person = usersColl.findOne(new BasicDBObject("_id", id));
+        if (person == null) {
+            return null;
         }
         return morphia.fromDBObject(Student.class, person);
     }

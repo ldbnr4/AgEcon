@@ -32,6 +32,7 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
     private JDatePickerImpl datePickerA, datePickerB, datePickerC, datePickerD, datePickerE;
     private JButton endSeasonButton;
     private JButton viewSeedOrdersButton;
+    private JTable tbl_currentDeals;
 
     private BalloonTip balloonTip, successBalloon;
 
@@ -59,6 +60,7 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
         });
 
         printBalSheet();
+        printCurrentDeals();
 
         final Runnable initMarket = () -> {
             while (!marketsAvail && isVisible()) {
@@ -206,7 +208,7 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
 
     boolean printBalSheet() {
         int runTtl = 0;
-        DefaultTableModel nModel = new DefaultTableModel(new String[]{"Date", "CWTs"}, 0) {
+        DefaultTableModel nModel = new DefaultTableModel(new String[]{"Date", "Amount(cwt)"}, 0) {
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
@@ -236,6 +238,28 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
         bshlBalSheet.setRowHeight(25);
         bshlBalSheet.setModel(nModel);
         return true;
+    }
+
+    void printCurrentDeals() {
+        DefaultTableModel nModel = new DefaultTableModel(new String[]{
+                "Company Name",
+                "Date of yield transfer",
+                "Amount(cwt)"}, 0) {
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        stu.farm.getBshlLedger().stream().filter(entry -> entry.getSeller() != null).forEach(entry -> nModel.addRow(new Object[]{
+                entry.getSeller(),
+                entry.getDate(),
+                NumberFormat.getNumberInstance(Locale.US).format(-entry.getAmount()),
+        }));
+
+        tbl_currentDeals.setFont(new Font("Segoe UI", 0, 18));
+        tbl_currentDeals.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 20));
+        tbl_currentDeals.setFillsViewportHeight(true);
+        tbl_currentDeals.setRowHeight(25);
+        tbl_currentDeals.setModel(nModel);
     }
 
     void buttonHandler(JDatePickerImpl jDatePicker, JLabel dateLabel, JTextField amntField, String compName,
@@ -291,6 +315,7 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
             printBalSheet();
             return;
         }
+        printCurrentDeals();
         amntField.setText("");
         Consts.DB.saveStudent(stu);
 
