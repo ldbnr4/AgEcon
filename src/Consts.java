@@ -139,7 +139,7 @@ public class Consts {
     }
 
     static String getEarlyHarvDt() {
-        return "September 1, " + DB.getGameFlow().currentYear;
+        return "September 01, " + DB.getGameFlow().currentYear;
     }
 
     static String getMidHarvDt() {

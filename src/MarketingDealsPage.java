@@ -13,22 +13,19 @@ import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * Created by Lorenzo on 12/15/2015.
  *
  */
 public class MarketingDealsPage extends JFrame implements ActionListener {
-    JPanel rootPanel;
-    JLabel compABushels, compAPrice, compADate, compBBushels, compBDate, compBPrice, compCDate, compCBushels,
+    private JPanel rootPanel;
+    private JLabel compABushels, compAPrice, compADate, compBBushels, compBDate, compBPrice, compCDate, compCBushels,
             compCPrice, compDDate, compDBushels, compDPrice, compEDate, compEBushels, compEPrice, welcomeLabel;
-    JButton compABtn, compBBtn, compCBtn, compDBtn, logoutButton, compEBtn;
-    JTextField compAAmount, compBAmount, compCAmount, compDAmount, compEAmount;
-    JTable bshlBalSheet;
+    private JButton compABtn, compBBtn, compCBtn, compDBtn, logoutButton, compEBtn;
+    private JTextField compAAmount, compBAmount, compCAmount, compDAmount, compEAmount;
+    private JTable bshlBalSheet;
     private JDatePickerImpl datePickerA, datePickerB, datePickerC, datePickerD, datePickerE;
     private JButton endSeasonButton;
     private JButton viewSeedOrdersButton;
@@ -39,6 +36,8 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
     private Student stu;
     private String stuName;
     private Boolean marketsAvail;
+
+    //private ArrayList<HarvestEntry> dynamicYields;
 
     public MarketingDealsPage(Student student) {
         super("Markets Page");
@@ -58,6 +57,8 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
             setVisible(false);
             dispose();
         });
+
+        //attemptTrans(new BushelLedgerEntry(Consts.getFullHarvDt(), 5000, 3.5, Consts.MARKETING_COMPANY_A_NAME));
 
         printBalSheet();
         printCurrentDeals();
@@ -95,11 +96,7 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
             dispose();
         });
 
-        viewSeedOrdersButton.addActionListener(e -> {
-            new ViewSeedOrdersPage(stu);
-        });
-
-
+        viewSeedOrdersButton.addActionListener(e -> new ViewSeedOrdersPage(stu));
 
         compAAmount.addKeyListener(Consts.customKeyListner(compAAmount));
         compBAmount.addKeyListener(Consts.customKeyListner(compBAmount));
@@ -207,30 +204,29 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
     }
 
     boolean printBalSheet() {
-        int runTtl = 0;
         DefaultTableModel nModel = new DefaultTableModel(new String[]{"Date", "Amount(cwt)"}, 0) {
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
-        int row = 0;
-        for (BushelLedgerEntry ledger : stu.farm.getBshlLedger()) {
+
+        int runTtl = 0;
+        //int row = 0;
+        for (HarvestEntry ledger : stu.farm.getYieldRecords()) {
             runTtl += ledger.getAmount();
-            if (runTtl < 0) {
-                return false;
-            }
-            if (row > 0) {
+/*            if (row > 0) {
                 if (ledger.getDate().equals(nModel.getValueAt(row - 1, 0))) {
                     nModel.setValueAt(NumberFormat.getNumberInstance(Locale.US).format(runTtl), row - 1, 1);
                     continue;
                 }
-            }
+            }*/
             try {
-                nModel.addRow(new Object[]{Consts.sd2.format(Consts.sd2.parse(ledger.getDate())), NumberFormat.getNumberInstance(Locale.US).format(runTtl)});
+                nModel.addRow(new Object[]{Consts.sd2.format(Consts.sd2.parse(ledger.getDate())),
+                        NumberFormat.getNumberInstance(Locale.US).format(runTtl)});
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            row++;
+            //row++;
         }
         bshlBalSheet.setFont(new Font("Segoe UI", 0, 18));
         bshlBalSheet.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 20));
@@ -249,7 +245,7 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
                 return false;
             }
         };
-        stu.farm.getBshlLedger().stream().filter(entry -> entry.getSeller() != null).forEach(entry -> nModel.addRow(new Object[]{
+        stu.farm.getSaleRecords().forEach(entry -> nModel.addRow(new Object[]{
                 entry.getSeller(),
                 entry.getDate(),
                 NumberFormat.getNumberInstance(Locale.US).format(-entry.getAmount()),
@@ -260,6 +256,39 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
         tbl_currentDeals.setFillsViewportHeight(true);
         tbl_currentDeals.setRowHeight(25);
         tbl_currentDeals.setModel(nModel);
+    }
+
+    boolean attemptTrans(BushelLedgerEntry sell) {
+        ArrayList<HarvestEntry> usableHarvs = new ArrayList<>();
+        stu.farm.getYieldRecords().stream().filter(harvestEntry -> {
+            try {
+                return (Consts.sd2.parse(harvestEntry.getDate()).before(Consts.sd2.parse(sell.getDate())) ||
+                        sell.getDate().equals(harvestEntry.getDate())
+                );
+            } catch (ParseException e) {
+                e.printStackTrace();
+                return true;
+            }
+        }).forEach(usableHarvs::add);
+
+        if (usableHarvs.size() == 0) return false;
+
+        ArrayList<HarvestEntry> tmpEntries = new ArrayList<>();
+        int sellAmnt = sell.getAmount();
+        for (HarvestEntry usableEntry : usableHarvs) {
+            if (sellAmnt > usableEntry.getAmount()) {
+                sellAmnt -= usableEntry.getAmount();
+                tmpEntries.add(new HarvestEntry(usableEntry.getDate(), -usableEntry.getAmount()));
+            } else {
+                tmpEntries.add(new BushelLedgerEntry(usableEntry.getDate(), -sellAmnt, 0, ""));
+                stu.farm.getYieldRecords().addAll(tmpEntries);
+                condenseYieldRecords();
+                sell.setAmount(-sell.getAmount());
+                stu.farm.addToSaleRecords(sell);
+                return true;
+            }
+        }
+        return false;
     }
 
     void buttonHandler(JDatePickerImpl jDatePicker, JLabel dateLabel, JTextField amntField, String compName,
@@ -297,24 +326,34 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
 
             return;
         }
-        if (!Consts.DB.getMarketingComp(compName).updateBshls(amount)) {
+        try {
+            if (Consts.sd2.parse(selectedDate).before(
+                    Consts.sd2.parse(Consts.getEarlyHarvDt()))) {
+                balloonTip.setAttachedComponent(amntField);
+                balloonTip.setTextContents("Please select a date after the first harvest date.");
+                TimingUtils.showTimedBalloon(balloonTip, 4500);
+                return;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        if (!Consts.DB.getMarketingComp(compName).subtractBshls(amount)) {
             balloonTip.setAttachedComponent(amntField);
             balloonTip.setTextContents("This seller does not need this much.");
             TimingUtils.showTimedBalloon(balloonTip, 3500);
             return;
         }
-        BushelLedgerEntry varEntry = new BushelLedgerEntry(selectedDate, -amount, bndlPrice, compName);
-        stu.farm.addToBshlLedger(varEntry);
-        if (!printBalSheet()) {
+        if (!attemptTrans(new BushelLedgerEntry(selectedDate, amount, bndlPrice, compName))) {
             balloonTip.setAttachedComponent(amntField);
-            balloonTip.setTextContents("You will not have enough available to do this deal on this day.");
+            balloonTip.setTextContents("You will not have enough available to do this deal.");
             TimingUtils.showTimedBalloon(balloonTip, 4500);
 
-            Consts.DB.getMarketingComp(compName).updateBshls(-amount);
-            stu.farm.removeFromBshlLedger(varEntry);
-            printBalSheet();
+            Consts.DB.getMarketingComp(compName).subtractBshls(-amount);
+            //Consts.DB.getMarketingComp(compName).subtractBshls(-amount);
             return;
         }
+        printBalSheet();
         printCurrentDeals();
         amntField.setText("");
         Consts.DB.saveStudent(stu);
@@ -323,6 +362,27 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
         successBalloon.setTextContents("Successful deal.");
         TimingUtils.showTimedBalloon(successBalloon, 3500);
 
+    }
+
+    private void condenseYieldRecords() {
+        ArrayList<HarvestEntry> harvList = new ArrayList<>();
+        int first = 0, second = 0, third = 0;
+
+        for (HarvestEntry ledger : stu.farm.getYieldRecords()) {
+            if (ledger.getDate().equals(Consts.getEarlyHarvDt())) {
+                first += ledger.getAmount();
+            } else if (ledger.getDate().equals(Consts.getMidHarvDt())) {
+                second += ledger.getAmount();
+            } else {
+                third += ledger.getAmount();
+            }
+        }
+
+        harvList.add(new HarvestEntry(Consts.getEarlyHarvDt(), first));
+        harvList.add(new HarvestEntry(Consts.getMidHarvDt(), second));
+        harvList.add(new HarvestEntry(Consts.getFullHarvDt(), third));
+
+        stu.farm.setYieldRecords(harvList);
     }
 
     class DateLabelFormatter extends JFormattedTextField.AbstractFormatter {

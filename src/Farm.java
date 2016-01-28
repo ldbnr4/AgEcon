@@ -16,9 +16,11 @@ public final class Farm {
     private Consts.Farm_Size size;
     private int acres, ttlBushels, seedsNeeded, ttlSeedsOwned;
     private HashMap<String, Double> staticCosts = new HashMap<>();
-    private ArrayList<BushelLedgerEntry> bshlLedger = new ArrayList<>();
     private HashMap<Consts.Seed_Type, Integer> seedsOwned;
     private ArrayList<SeedLedgerEntry> seedLedger = new ArrayList<>();
+
+    private ArrayList<HarvestEntry> yieldRecords = new ArrayList<>();
+    private ArrayList<BushelLedgerEntry> saleRecords = new ArrayList<>();
 
     public Farm(Consts.Farm_Size size) {
         setSize(size);
@@ -102,15 +104,16 @@ public final class Farm {
         }
     }
 
-    public ArrayList<BushelLedgerEntry> getBshlLedger() {
-        return this.bshlLedger;
+    public ArrayList<BushelLedgerEntry> getSaleRecords() {
+        return saleRecords;
     }
 
-    public ArrayList<BushelLedgerEntry> getDealsList() {
-        ArrayList<BushelLedgerEntry> retVal = new ArrayList<>();
-        bshlLedger.stream().filter(bushelLedgerEntry -> bushelLedgerEntry.getSeller() != null).forEach(retVal::add);
+    public ArrayList<HarvestEntry> getYieldRecords() {
+        return yieldRecords;
+    }
 
-        return retVal;
+    public void setYieldRecords(ArrayList<HarvestEntry> yieldRecords) {
+        this.yieldRecords = yieldRecords;
     }
 
     public Consts.Farm_Size getSize() {
@@ -193,17 +196,17 @@ public final class Farm {
 
         setStaticCosts(earlyAcres + midAcres + fullAcres);
 
-        BushelLedgerEntry earlyEntry = new BushelLedgerEntry(Consts.getEarlyHarvDt(), (int) ceil(earlyAcres * Consts.ACRE_YIELD), 0, null);
-        if (!bshlLedger.contains(earlyEntry)) {
-            this.bshlLedger.add(earlyEntry);
+        HarvestEntry earlyEntry = new HarvestEntry(Consts.getEarlyHarvDt(), (int) ceil(earlyAcres * Consts.ACRE_YIELD));
+        if (!yieldRecords.contains(earlyEntry)) {
+            addToYieldRecord(earlyEntry);
         }
-        BushelLedgerEntry midEntry = new BushelLedgerEntry(Consts.getMidHarvDt(), (int) ceil((midAcres * Consts.ACRE_YIELD)), 0, null);
-        if (!bshlLedger.contains(midEntry)) {
-            this.bshlLedger.add(midEntry);
+        HarvestEntry midEntry = new HarvestEntry(Consts.getMidHarvDt(), (int) ceil((midAcres * Consts.ACRE_YIELD)));
+        if (!yieldRecords.contains(midEntry)) {
+            addToYieldRecord(midEntry);
         }
-        BushelLedgerEntry fullEntry = new BushelLedgerEntry(Consts.getFullHarvDt(), (int) ceil((fullAcres * Consts.ACRE_YIELD)), 0, null);
-        if (!bshlLedger.contains(fullEntry)) {
-            this.bshlLedger.add(fullEntry);
+        HarvestEntry fullEntry = new HarvestEntry(Consts.getFullHarvDt(), (int) ceil((fullAcres * Consts.ACRE_YIELD)));
+        if (!yieldRecords.contains(fullEntry)) {
+            addToYieldRecord(fullEntry);
         }
 
         setTtlBushels((int) ceil(earlyAcres * Consts.ACRE_YIELD) + (int) ceil(midAcres * Consts.ACRE_YIELD) +
@@ -211,14 +214,18 @@ public final class Farm {
 
     }
 
-    public void addToBshlLedger(BushelLedgerEntry entry) {
-        bshlLedger.add(entry);
-        //noinspection unchecked
-        sort(bshlLedger);
+    public void addToSaleRecords(BushelLedgerEntry entry) {
+        saleRecords.add(entry);
+        sort(saleRecords);
     }
 
-    public void removeFromBshlLedger(BushelLedgerEntry entry) {
-        bshlLedger.remove(entry);
+    public void addToYieldRecord(HarvestEntry entry) {
+        yieldRecords.add(entry);
+        sort(yieldRecords);
+    }
+
+    public void removeFromYieldRecord(HarvestEntry entry) {
+        yieldRecords.remove(entry);
     }
 
     public void addToSeedLedger(SeedLedgerEntry entry){

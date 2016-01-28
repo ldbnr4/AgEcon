@@ -41,11 +41,11 @@ public class MarketingSector {
         return this.bshls;
     }
 
-    public boolean updateBshls(int adjust) {
+    public boolean subtractBshls(int adjust) {
         if (adjust > bshls) {
             return false;
         }
-        this.bshls -= adjust;
+        bshls -= adjust;
         Consts.DB.saveMarketing(this);
         return true;
     }
