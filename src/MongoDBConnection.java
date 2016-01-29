@@ -202,23 +202,25 @@ public class MongoDBConnection{
     }*/
 
     public int getSeedsNeeded() {
-        int seed_total = 0;
+        return (10 * 100) * 8 + (10 * 250) * 14 + (10 * 500) * 8;
+        /*int seed_total = 0;
         try (DBCursor cursor = usersColl.find(new BasicDBObject("year", getGameFlow().currentYear), new BasicDBObject("farm.seedsNeeded", true))) {
             while (cursor.hasNext()) {
                 seed_total += morphia.fromDBObject(Student.class, cursor.next()).farm.getSeedsNeeded();
             }
         }
-        return seed_total;
+        return seed_total;*/
     }
 
     public int getBshlsNeeded() {
-        int bshl_ttl = 0;
+        return (50 * 100) * 8 + (50 * 250) * 14 + (50 * 500) * 8;
+        /*int bshl_ttl = 0;
         try (DBCursor cursor = usersColl.find(new BasicDBObject("year", getGameFlow().currentYear))) {
             while (cursor.hasNext()) {
                 bshl_ttl += morphia.fromDBObject(Student.class, cursor.next()).farm.getTtlBushels();
             }
         }
-        return bshl_ttl;
+        return bshl_ttl;*/
     }
 
     public HashMap<Consts.Farm_Size, Integer> numInEachFarm() {
