@@ -2,6 +2,8 @@ package AgEgonPackage;
 
 import java.util.HashMap;
 
+import static java.lang.String.valueOf;
+
 /**
  * Created by Lorenzo on 9/24/2015.
  *
@@ -9,9 +11,8 @@ import java.util.HashMap;
 public class EncryptPassword {
     public static HashMap<String, String> encrypt(String password) {
         HashMap<String, String> ret = new HashMap<>();
-        CSPRNG salt = new CSPRNG();
-        String saltString = String.valueOf(salt.getAll());
-        String hash = String.valueOf((password + saltString).hashCode());
+        String saltString = valueOf(new CSPRNG().getAll());
+        String hash = valueOf((password + saltString).hashCode());
         ret.put("salt", saltString);
         ret.put("password", hash);
         return ret;
@@ -20,7 +21,7 @@ public class EncryptPassword {
     public static String encrpyt(String password, String salt) {
         String combo = password + salt;
 
-        return String.valueOf(combo.hashCode());
+        return valueOf(combo.hashCode());
     }
 
 }

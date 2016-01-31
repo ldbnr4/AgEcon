@@ -141,15 +141,15 @@ public class Consts {
     }
 
     static String getEarlyHarvDt() {
-        return "September 01, " + DB.getGameFlow().currentYear;
+        return "September 01, " + DB.NNgetGameFlow().currentYear;
     }
 
     static String getMidHarvDt() {
-        return "September 20, " + DB.getGameFlow().currentYear;
+        return "September 20, " + DB.NNgetGameFlow().currentYear;
     }
 
     static String getFullHarvDt() {
-        return "October 10, " + DB.getGameFlow().currentYear;
+        return "October 10, " + DB.NNgetGameFlow().currentYear;
     }
 
     public enum Seed_Type {

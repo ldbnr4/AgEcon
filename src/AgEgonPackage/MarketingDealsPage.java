@@ -37,9 +37,6 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
 
     private Student stu;
     private String stuName;
-    private Boolean marketsAvail;
-
-    //private ArrayList<HarvestEntry> dynamicYields;
 
     public MarketingDealsPage(Student student) {
         super("Markets Page");
@@ -47,12 +44,16 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
         setResizable(false);
         pack();
         setLocationRelativeTo(null);
+        if (!Consts.DB.NNgetGameFlow().isMarketingSect()) {
+            new WaitPage();
+            setVisible(false);
+            dispose();
+        }
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         this.stu = student;
         this.stuName = student.uName;
-        this.marketsAvail = false;
         welcomeLabel.setText("Hey " + this.stuName + "!");
         logoutButton.addActionListener(e -> {
             new WelcomePage();
@@ -60,25 +61,15 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
             dispose();
         });
 
-        //attemptTrans(new BushelLedgerEntry(Consts.getFullHarvDt(), 5000, 3.5, Consts.MARKETING_COMPANY_A_NAME));
-
         printBalSheet();
         printCurrentDeals();
-
-        final Runnable initMarket = () -> {
-            while (!marketsAvail && isVisible()) {
-                marketsAvail = !(Consts.DB.getMarketingComps()).isEmpty();
-            }
-            initCompThreads();
-        };
-        new Thread(initMarket).start();
+        initCompThreads();
 
         compABtn.addActionListener(this);
         compBBtn.addActionListener(this);
         compCBtn.addActionListener(this);
         compDBtn.addActionListener(this);
         compEBtn.addActionListener(this);
-
 
         MinimalBalloonStyle modern = new MinimalBalloonStyle(Color.yellow, 5);
         balloonTip = new BalloonTip(compAAmount, new JLabel(), modern, BalloonTip.Orientation.RIGHT_ABOVE,
@@ -91,11 +82,16 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
         this.successBalloon.setVisible(false);
 
         endSeasonButton.addActionListener(e -> {
-            stu.setStage(Consts.Student_Stage.End_of_Season);
-            Consts.DB.saveStudent(stu);
-            new EndofSeasonPage(stu);
-            setVisible(false);
-            dispose();
+            String msg = Consts.htmlWrapper("Are you sure you are done selling your crop? You will not be able to make any" +
+                    " additional deals after continuing.", 4);
+            int option = JOptionPane.showConfirmDialog(rootPanel, msg, "Deals confirmation", JOptionPane.YES_NO_OPTION);
+            if (option == JOptionPane.YES_OPTION) {
+                stu.setStage(Consts.Student_Stage.End_of_Season);
+                Consts.DB.saveStudent(stu);
+                new EndofSeasonPage(stu);
+                setVisible(false);
+                dispose();
+            }
         });
 
         viewSeedOrdersButton.addActionListener(e -> new ViewSeedOrdersPage(stu));

@@ -34,28 +34,28 @@ public class MongoDBConnection{
     }
 
     public void removeStudent(Student student){
-        usersColl.remove(new BasicDBObject("_id", student.id));
-        getGameFlow().setTotalPlayers();
-        saveGameFlow();
+        usersColl.remove(new BasicDBObject("id", student.id));
+        GameFlow gf = NNgetGameFlow();
+        gf.setTotalPlayers();
+        saveGameFlow(gf);
     }
 
     public void removeAdmin(String admin) {
-        adminsColl.remove(new BasicDBObject("_id", admin));
+        adminsColl.remove(new BasicDBObject("name", admin));
     }
 
     public void removeInput(String input) {
-        inputColl.remove(new BasicDBObject("_id", input));
+        inputColl.remove(new BasicDBObject("name", input));
     }
 
     public void removeMarketComp(String marketName) {
-        marketColl.remove(new BasicDBObject("_id", marketName));
+        marketColl.remove(new BasicDBObject("name", marketName));
     }
 
     public void removeAllStudents() {
         try (DBCursor cursor = usersColl.find()) {
             while (cursor.hasNext()) {
                 usersColl.remove(cursor.next());
-                //usersColl.remove(new BasicDBObject("_id",cursor.next().get("_id")));
             }
         }
     }
@@ -65,9 +65,8 @@ public class MongoDBConnection{
         addStudent(student);
     }
 
-    public void saveGameFlow() {
-        GameFlow gameFlow = getGameFlow();
-        gameFlowColl.remove(new BasicDBObject("_id", gameFlow.name));
+    public void saveGameFlow(GameFlow gameFlow) {
+        gameFlowColl.remove(new BasicDBObject("name", gameFlow.name));
         addGameFlow(gameFlow);
     }
 
@@ -84,7 +83,7 @@ public class MongoDBConnection{
     //@NotNull
     public Student getStudent(String username) {
         HashMap<String, Integer> id = new HashMap<>();
-        id.put(username, getGameFlow().currentYear);
+        id.put(username, NNgetGameFlow().currentYear);
         DBObject person = usersColl.findOne(new BasicDBObject("id", id));
         if (person == null) {
             return null;
@@ -118,6 +117,15 @@ public class MongoDBConnection{
             return null;
         }
         return gson.fromJson(person.toString(), GameFlow.class);
+    }
+
+    @NotNull
+    public GameFlow NNgetGameFlow() {
+        DBObject gf = gameFlowColl.findOne(new BasicDBObject("name", "GameFlow"));
+        while (gf == null) {
+            gf = gameFlowColl.findOne(new BasicDBObject("name", "GameFlow"));
+        }
+        return gson.fromJson(gf.toString(), GameFlow.class);
     }
 
     public HashMap<String, InputSector> getInputSectorSellers() {
@@ -163,7 +171,7 @@ public class MongoDBConnection{
     }
 
     public int getTotalPlayers() {
-        return (int) usersColl.count(new BasicDBObject("year", getGameFlow().currentYear));
+        return (int) usersColl.count(new BasicDBObject("year", NNgetGameFlow().currentYear));
     }
 
     public int getTotalPlayers(int year) {
@@ -188,15 +196,15 @@ public class MongoDBConnection{
         try {
             numRes.put(Consts.Farm_Size.SMALL_FARM,
                     (int) usersColl
-                            .count(new BasicDBObject("year", getGameFlow().currentYear).append("farm.size", Consts.Farm_Size.SMALL_FARM.toValue())));
+                            .count(new BasicDBObject("year", NNgetGameFlow().currentYear).append("farm.size", Consts.Farm_Size.SMALL_FARM.toValue())));
             numRes.put(Consts.Farm_Size.MED_FARM,
                     (int) usersColl
-                            .count(new BasicDBObject("year", getGameFlow().currentYear).append("farm.size", Consts.Farm_Size.MED_FARM.toValue())));
+                            .count(new BasicDBObject("year", NNgetGameFlow().currentYear).append("farm.size", Consts.Farm_Size.MED_FARM.toValue())));
             numRes.put(Consts.Farm_Size.LARGE_FARM, (int) usersColl
-                    .count(new BasicDBObject("year", getGameFlow().currentYear).append("farm.size", Consts.Farm_Size.LARGE_FARM.toValue())));
+                    .count(new BasicDBObject("year", NNgetGameFlow().currentYear).append("farm.size", Consts.Farm_Size.LARGE_FARM.toValue())));
             numRes.put(Consts.Farm_Size.NO_FARM,
                     (int) usersColl
-                            .count(new BasicDBObject("year", getGameFlow().currentYear).append("farm.size", Consts.Farm_Size.NO_FARM.toValue())));
+                            .count(new BasicDBObject("year", NNgetGameFlow().currentYear).append("farm.size", Consts.Farm_Size.NO_FARM.toValue())));
         } catch (NullPointerException e) {
             return numRes;
         }
@@ -205,8 +213,9 @@ public class MongoDBConnection{
 
     public void addStudent(Student student) {
         usersColl.insert((BasicDBObject) JSON.parse(gson.toJson(student)));
-        getGameFlow().setTotalPlayers();
-        saveGameFlow();
+        GameFlow gf = NNgetGameFlow();
+        gf.setTotalPlayers();
+        saveGameFlow(gf);
     }
 
     public void addAdmin(Admin admin) {
@@ -230,7 +239,7 @@ public class MongoDBConnection{
     }
 
     public void yearChange(int dir) {
-        int newYr = getGameFlow().currentYear;
+        int newYr = NNgetGameFlow().currentYear;
         int oldYr = newYr + dir;
         int newTtl = getTotalPlayers(newYr);
         int oldTtl = getTotalPlayers(oldYr);
@@ -262,7 +271,7 @@ public class MongoDBConnection{
 
     ArrayList<Student> getAllStudents() {
         ArrayList<Student> list = new ArrayList<>();
-        try (DBCursor cursor = usersColl.find(new BasicDBObject("year", getGameFlow().currentYear))) {
+        try (DBCursor cursor = usersColl.find(new BasicDBObject("year", NNgetGameFlow().currentYear))) {
             while (cursor.hasNext()) {
                 list.add(gson.fromJson(cursor.next().toString(), Student.class));
             }
@@ -278,6 +287,18 @@ public class MongoDBConnection{
             }
         }
         return list;
+    }
+
+    public void setGenInput() {
+        GameFlow gameFlow = NNgetGameFlow();
+        gameFlow.setInpuSect(true);
+        saveGameFlow(gameFlow);
+    }
+
+    public void setGenMark() {
+        GameFlow gameFlow = NNgetGameFlow();
+        gameFlow.setMarketingSect(true);
+        saveGameFlow(gameFlow);
     }
 
     private DB openConnection() {

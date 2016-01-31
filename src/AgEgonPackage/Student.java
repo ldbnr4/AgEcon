@@ -24,7 +24,7 @@ public class Student {
         this.password = passInfo.get("password");
         this.salt = passInfo.get("salt");
         this.farm = farm;
-        this.year = Consts.DB.getGameFlow().currentYear;
+        this.year = Consts.DB.NNgetGameFlow().currentYear;
         setId(this.year);
         setStage(Consts.Student_Stage.Select_Size);
     }
@@ -41,5 +41,9 @@ public class Student {
 
     public void setStage(Consts.Student_Stage stage) {
         this.stage = stage;
+    }
+
+    public void setFarm(Farm farm) {
+        this.farm = farm;
     }
 }

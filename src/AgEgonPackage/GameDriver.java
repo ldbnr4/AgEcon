@@ -11,8 +11,10 @@ public class GameDriver {
             Consts.DB.addGameFlow(new GameFlow());
         }
 
-        Consts.DB.addStudent(new Student("newGuy", "password", new Farm()));
-        //new WelcomePage();
+        //new WaitPage();
+        new WelcomePage();
+        new WelcomePage();
+        //Consts.DB.addAdmin(new Admin("ldbnr4", "password"));
 
         //Student student = Consts.DB.getStudent("ldbnr4");
         //Admin admin = Consts.DB.getAdmin("ldbnr4");

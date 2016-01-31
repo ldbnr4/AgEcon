@@ -30,7 +30,7 @@ public class EndofSeasonPage extends JFrame {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         incomeStatementLabel.setText(incomeStatementLabel.getText() + " for " + student.uName);
-        lbl_year.setText("for the year " + Consts.DB.getGameFlow().currentYear);
+        lbl_year.setText("for the year " + Consts.DB.NNgetGameFlow().currentYear);
 
         viewSeedOrdersButton.addActionListener(e -> new ViewSeedOrdersPage(student));
 

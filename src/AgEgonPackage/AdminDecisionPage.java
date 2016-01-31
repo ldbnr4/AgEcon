@@ -30,8 +30,8 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
         setResizable(false);
         nameLabel.setText("Welcome " + admin.name + "!");
         //Consts.DB.saveGameFlow();
-        numOfPlayersLabel.setText(String.valueOf(Consts.DB.getGameFlow().totalPlayers));
-        startingYearLabel.setText(String.valueOf(Consts.DB.getGameFlow().startingYear));
+        numOfPlayersLabel.setText(String.valueOf(Consts.DB.NNgetGameFlow().totalPlayers));
+        startingYearLabel.setText(String.valueOf(Consts.DB.NNgetGameFlow().startingYear));
         setLabels();
         setNumOfAdminsLabel();
         rootPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -47,6 +47,7 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
         });
 
         generateInputSectorButton.addActionListener(e -> {
+            Consts.DB.setGenInput();
             int compMax = 0, early = 0, mid = 0, full = 0, rn = 0, var = 0;
             Double maxPrice = 3.50, minPrice = 1.50;
             double ttlSeedsNeeded = Consts.DB.getSeedsNeeded();
@@ -93,6 +94,7 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
         });
 
         generateMarketingSectorButton.addActionListener(e -> {
+            Consts.DB.setGenMark();
             Double maxPrice = 12.50, minPrice = 15.25;
             int bshlsNeeded = Consts.DB.getBshlsNeeded();
             int var = 0, compBshls = 0;
@@ -154,11 +156,11 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
         JButton button = (JButton) e.getSource();
         String buttonText = button.getText();
         if (buttonText.equals(nextYearBtn.getText())) {
-            Consts.DB.getGameFlow().nextYear();
+            Consts.DB.NNgetGameFlow().nextYear();
             Consts.DB.yearChange(Consts.FORWARD);
             setGameYearLabel();
         } else if (buttonText.equals(prevYearBtn.getText())) {
-            Consts.DB.getGameFlow().prevYear();
+            Consts.DB.NNgetGameFlow().prevYear();
             Consts.DB.yearChange(Consts.BACK);
             setGameYearLabel();
         }
@@ -170,7 +172,7 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
     }
 
     private void setGameYearLabel() {
-        gameYearLabel.setText(String.valueOf(Consts.DB.getGameFlow().currentYear));
+        gameYearLabel.setText(String.valueOf(Consts.DB.NNgetGameFlow().currentYear));
     }
 
     private void createUIComponents() {

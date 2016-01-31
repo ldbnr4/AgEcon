@@ -14,21 +14,20 @@ import static java.lang.Thread.sleep;
  *
  */
 public class BuySeedsPage extends JFrame {
-    JLabel welcomeLabel;
-    JPanel rootPanel;
-    JButton logoutButton, buyNowButtonA, buyNowButtonB, buyNowButtonC, buyNowButtonD, buyNowButtonE;
-    JLabel earlyAmntLabelA, midAmntLabelA, fullAmntLabelA, earlyPriceLabelA, midPriceLabelA, fullPriceLabelA;
-    JLabel earlyAmntLabelB, midAmntLabelB, fullAmntLabelB, earlyPriceLabelB, midPriceLabelB, fullPriceLabelB;
-    JLabel earlyAmntLabelC, midAmntLabelC, fullAmntLabelC, earlyPriceLabelC, midPriceLabelC, fullPriceLabelC;
-    JLabel earlyAmntLabelD, midAmntLabelD, fullAmntLabelD, earlyPriceLabelD, midPriceLabelD, fullPriceLabelD;
-    JLabel earlyAmntLabelE, midAmntLabelE, fullAmntLabelE, earlyPriceLabelE, midPriceLabelE, fullPriceLabelE;
-    JLabel neededLabel;
-    JLabel onHandLabel;
-    JLabel stuEarlyLabel, stuMidLabel, stuFullLabel;
-    JButton plantButton;
-    Student stu;
-    String stuName;
-    boolean inSectsAvail;
+    private JLabel welcomeLabel;
+    private JPanel rootPanel;
+    private JButton logoutButton, buyNowButtonA, buyNowButtonB, buyNowButtonC, buyNowButtonD, buyNowButtonE;
+    private JLabel earlyAmntLabelA, midAmntLabelA, fullAmntLabelA, earlyPriceLabelA, midPriceLabelA, fullPriceLabelA;
+    private JLabel earlyAmntLabelB, midAmntLabelB, fullAmntLabelB, earlyPriceLabelB, midPriceLabelB, fullPriceLabelB;
+    private JLabel earlyAmntLabelC, midAmntLabelC, fullAmntLabelC, earlyPriceLabelC, midPriceLabelC, fullPriceLabelC;
+    private JLabel earlyAmntLabelD, midAmntLabelD, fullAmntLabelD, earlyPriceLabelD, midPriceLabelD, fullPriceLabelD;
+    private JLabel earlyAmntLabelE, midAmntLabelE, fullAmntLabelE, earlyPriceLabelE, midPriceLabelE, fullPriceLabelE;
+    private JLabel neededLabel;
+    private JLabel onHandLabel;
+    private JLabel stuEarlyLabel, stuMidLabel, stuFullLabel;
+    private JButton plantButton;
+    private String stuName;
+    private Student stu;
     private JLabel companyALabel;
     private JLabel companyBLabel;
     private JLabel companyCLabel;
@@ -43,15 +42,18 @@ public class BuySeedsPage extends JFrame {
         //setSize(Toolkit.getDefaultToolkit().getScreenSize());
         pack();
         setLocationRelativeTo(null);
+        if (!Consts.DB.NNgetGameFlow().isInpuSect()) {
+            new WaitPage();
+            setVisible(false);
+            dispose();
+        }
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         this.stu = student;
         stuName = student.uName;
-        inSectsAvail = false;
-        welcomeLabel.setText("Hey " + stu.uName + "!");
+        welcomeLabel.setText("Hey " + student.uName + "!");
         logoutButton.addActionListener(e -> {
-            inSectsAvail = false;
             try {
                 sleep(500);
             } catch (InterruptedException e1) {
@@ -61,9 +63,8 @@ public class BuySeedsPage extends JFrame {
             setVisible(false);
             dispose();
         });
-        neededLabel.setText(NumberFormat.getNumberInstance(Locale.US).format(stu.farm.getSeedsNeeded()));
+        neededLabel.setText(NumberFormat.getNumberInstance(Locale.US).format(student.farm.getSeedsNeeded()));
         plantButton.addActionListener(e -> {
-            inSectsAvail = false;
             try {
                 sleep(500);
             } catch (InterruptedException e1) {
@@ -73,10 +74,8 @@ public class BuySeedsPage extends JFrame {
                     " additional orders after continuing.", 4);
             int option = JOptionPane.showConfirmDialog(rootPanel, msg, "Order confirmation", JOptionPane.YES_NO_OPTION);
             if (option == JOptionPane.YES_OPTION) {
-                stu.farm.plantAction();
-                stu.setStage(Consts.Student_Stage.Sell_Yields);
-                Consts.DB.saveStudent(stu);
-                new MarketingDealsPage(stu);
+                callPlantAction(stu);
+                new MarketingDealsPage(Consts.DB.getStudent(stu.uName));
                 setVisible(false);
                 dispose();
             }
@@ -85,11 +84,9 @@ public class BuySeedsPage extends JFrame {
         new Thread(() -> {
             while (isVisible()) {
                 try {
-                    if (inSectsAvail) {
+                    stu = Consts.DB.getStudent(stuName);
+                    while (stu == null) {
                         stu = Consts.DB.getStudent(stuName);
-                        while (stu == null) {
-                            stu = Consts.DB.getStudent(stuName);
-                        }
                     }
                     onHandLabel.setText(NumberFormat.getNumberInstance(Locale.US).format(stu.farm.getTtlSeedsOwned()));
                     HashMap<Consts.Seed_Type, Integer> stuSeeds = stu.farm.getSeedsOwned();
@@ -102,43 +99,35 @@ public class BuySeedsPage extends JFrame {
             }
         }).start();
 
-        final Runnable initInSects = () -> {
-            while (!inSectsAvail && isVisible()) {
-                inSectsAvail = !(Consts.DB.getInputSectorSellers()).isEmpty();
-            }
-            startCompThreads();
-        };
-        new Thread(initInSects).start();
+        startCompThreads();
 
         final ActionListener buyNowAction = e -> {
-            if (inSectsAvail) {
-                JButton btn = (JButton) e.getSource();
-                InputSector company = null;
-                if (btn.equals(buyNowButtonA)) {
-                    while (company == null) {
-                        company = Consts.DB.getInputSeller(Consts.SUPPLY_COMPANY_A_NAME);
-                    }
-                } else if (btn.equals(buyNowButtonB)) {
-                    while (company == null) {
-                        company = Consts.DB.getInputSeller(Consts.SUPPLY_COMPANY_B_NAME);
-                    }
-                } else if (btn.equals(buyNowButtonC)) {
-                    while (company == null) {
-                        company = Consts.DB.getInputSeller(Consts.SUPPLY_COMPANY_C_NAME);
-                    }
-                } else if (btn.equals(buyNowButtonD)) {
-                    while (company == null) {
-                        company = Consts.DB.getInputSeller(Consts.SUPPLY_COMPANY_D_NAME);
-                    }
-                } else if (btn.equals(buyNowButtonE)) {
-                    while (company == null) {
-                        company = Consts.DB.getInputSeller(Consts.SUPPLY_COMPANY_E_NAME);
-                    }
-                } else {
-                    System.out.println(btn.getName() + " does not have a case.");
+            JButton btn = (JButton) e.getSource();
+            InputSector company = null;
+            if (btn.equals(buyNowButtonA)) {
+                while (company == null) {
+                    company = Consts.DB.getInputSeller(Consts.SUPPLY_COMPANY_A_NAME);
                 }
-                new BuyingSeedsPage(stu, company);
+            } else if (btn.equals(buyNowButtonB)) {
+                while (company == null) {
+                    company = Consts.DB.getInputSeller(Consts.SUPPLY_COMPANY_B_NAME);
+                }
+            } else if (btn.equals(buyNowButtonC)) {
+                while (company == null) {
+                    company = Consts.DB.getInputSeller(Consts.SUPPLY_COMPANY_C_NAME);
+                }
+            } else if (btn.equals(buyNowButtonD)) {
+                while (company == null) {
+                    company = Consts.DB.getInputSeller(Consts.SUPPLY_COMPANY_D_NAME);
+                }
+            } else if (btn.equals(buyNowButtonE)) {
+                while (company == null) {
+                    company = Consts.DB.getInputSeller(Consts.SUPPLY_COMPANY_E_NAME);
+                }
+            } else {
+                System.out.println(btn.getName() + " does not have a case.");
             }
+            new BuyingSeedsPage(stu, company);
         };
 
         buyNowButtonA.addActionListener(buyNowAction);
@@ -172,5 +161,11 @@ public class BuySeedsPage extends JFrame {
                 midPriceLabelD, fullAmntLabelD, fullPriceLabelD)).start();
         new Thread(new CompanyThread(this, Consts.SUPPLY_COMPANY_E_NAME, earlyAmntLabelE, earlyPriceLabelE, midAmntLabelE,
                 midPriceLabelE, fullAmntLabelE, fullPriceLabelE)).start();
+    }
+
+    public void callPlantAction(Student stu) {
+        stu.farm.plantAction();
+        stu.setStage(Consts.Student_Stage.Sell_Yields);
+        Consts.DB.saveStudent(stu);
     }
 }

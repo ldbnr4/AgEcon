@@ -11,7 +11,7 @@ import static java.util.Collections.sort;
  *
  */
 
-public final class Farm {
+public class Farm {
     private Consts.Farm_Size size;
     private int acres, ttlBushels, seedsNeeded, ttlSeedsOwned;
     private HashMap<String, Double> staticCosts = new HashMap<>();
