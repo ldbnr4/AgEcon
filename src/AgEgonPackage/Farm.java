@@ -21,7 +21,7 @@ public class Farm {
     private Student_Stage stage;
     private int acres, ttlBushels, seedsNeeded, ttlSeedsOwned;
     private HashMap<String, Double> staticCosts;
-    private HashMap<Consts.Seed_Type, Integer> seedsOwned;
+    private HashMap<Seed_Type, Integer> seedsOwned;
     private ArrayList<SeedLedgerEntry> seedLedger;
 
     private ArrayList<HarvestEntry> yieldRecords;
@@ -32,17 +32,14 @@ public class Farm {
         ttlBushels = 0;
         ttlSeedsOwned = 0;
         staticCosts = new HashMap<>();
-        initSeedsOwned();
+        seedsOwned = new HashMap<Seed_Type, Integer>() {{
+            put(EARLY, 0);
+            put(MID, 0);
+            put(FULL, 0);
+        }};
         seedLedger = new ArrayList<>();
         yieldRecords = new ArrayList<>();
         saleRecords = new ArrayList<>();
-    }
-
-    private void initSeedsOwned() {
-        seedsOwned = new HashMap<>();
-        seedsOwned.put(EARLY, 0);
-        seedsOwned.put(MID, 0);
-        seedsOwned.put(FULL, 0);
     }
 
     public int getSeedsNeeded() {

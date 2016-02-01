@@ -2,6 +2,8 @@ package AgEgonPackage;
 
 import javax.swing.*;
 
+import static AgEgonPackage.Consts.Seed_Type.*;
+
 /**
  * Created by Lorenzo on 12/19/2015.
  *
@@ -48,9 +50,9 @@ public class CompanyThread implements Runnable {
         while (page.isVisible()) {
             if (inputComp) {
                 try {
-                    Consts.checkSetSoldOut(erlA, erlP, DBinput.getEarlyAmnt(), DBinput.getEarlyPrice());
-                    Consts.checkSetSoldOut(midA, midP, DBinput.getMidAmnt(), DBinput.getMidPrice());
-                    Consts.checkSetSoldOut(fullA, fullP, DBinput.getFullAmnt(), DBinput.getFullPrice());
+                    Consts.checkSetSoldOut(erlA, erlP, DBinput.getAmnt(EARLY), DBinput.getPrice(EARLY));
+                    Consts.checkSetSoldOut(midA, midP, DBinput.getAmnt(MID), DBinput.getPrice(MID));
+                    Consts.checkSetSoldOut(fullA, fullP, DBinput.getAmnt(FULL), DBinput.getPrice(FULL));
                     DBinput = Consts.DB.getInputSeller(name);
                 } catch (Exception e) {
                     //System.out.println("Trouble updating labels on Home Page.");

@@ -32,6 +32,10 @@ public class Student {
         return studentSeasons.get(Consts.DB.NNgetGameFlow().currentYear);
     }
 
+    public int numOfSeasonsPlayed() {
+        return studentSeasons.size();
+    }
+
     public void addReplaceFarm(Farm farm) {
         if (studentSeasons.containsKey(DB.NNgetGameFlow().currentYear)) {
             studentSeasons.remove(DB.NNgetGameFlow().currentYear);

@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
+import static AgEgonPackage.Consts.Farm_Size.*;
+
 /**
  * Created by Lorenzo on 10/6/2015.
  *
@@ -88,14 +90,6 @@ public class MongoDBConnection{
         return gson.fromJson(person.toString(), Student.class);
     }
 
-    public Student getStudent(String username, int year) {
-        DBObject person = usersColl.findOne(new BasicDBObject("uName", username));
-        if (person == null) {
-            return null;
-        }
-        return gson.fromJson(person.toString(), Student.class);
-    }
-
     public Admin getAdmin(String username) {
         DBObject person = adminsColl.findOne(new BasicDBObject("name", username));
         if (person == null) {
@@ -121,30 +115,6 @@ public class MongoDBConnection{
         return gson.fromJson(gf.toString(), GameFlow.class);
     }
 
-    public HashMap<String, InputSector> getInputSectorSellers() {
-        HashMap<String, InputSector> list = new HashMap<>();
-        try (DBCursor cursor = inputColl.find()){
-            InputSector inputSector;
-            while (cursor.hasNext()) {
-                inputSector = gson.fromJson(cursor.next().toString(), InputSector.class);
-                list.put(inputSector.getName(), inputSector);
-            }
-        }
-        return list;
-    }
-
-    public HashMap<String, MarketingSector> getMarketingComps() {
-        HashMap<String, MarketingSector> list = new HashMap<>();
-        try (DBCursor cursor = marketColl.find()) {
-            MarketingSector marketingSector;
-            while (cursor.hasNext()) {
-                marketingSector = gson.fromJson(cursor.next().toString(), MarketingSector.class);
-                list.put(marketingSector.getName(), marketingSector);
-            }
-        }
-        return list;
-    }
-
     @NotNull
     public InputSector getInputSeller(String name) {
         DBObject one = inputColl.findOne(new BasicDBObject("name", name));
@@ -163,13 +133,13 @@ public class MongoDBConnection{
         return gson.fromJson(one.toString(), MarketingSector.class);
     }
 
-    public int getTotalPlayers(int year) {
+    public int getTotalPlayers() {
         HashMap<String, Integer> farmHash = new HashMap<>();
         int count = 0;
         try (DBCursor cursor = usersColl.find()) {
             while (cursor.hasNext()) {
                 farmHash = (HashMap<String, Integer>) cursor.next().get("studentSeasons");
-                if (farmHash.values().contains(year)) count++;
+                if (farmHash.values().contains(NNgetGameFlow().currentYear)) count++;
             }
         }
         return count;
@@ -189,21 +159,17 @@ public class MongoDBConnection{
 
     public HashMap<Consts.Farm_Size, Integer> numInEachFarm() {
         HashMap<Consts.Farm_Size, Integer> numRes = new HashMap<>();
-
         try {
-            numRes.put(Consts.Farm_Size.SMALL_FARM,
-                    (int) usersColl
-                            .count(new BasicDBObject("year", NNgetGameFlow().currentYear).append("farm.size", Consts.Farm_Size.SMALL_FARM.toValue())));
-            numRes.put(Consts.Farm_Size.MED_FARM,
-                    (int) usersColl
-                            .count(new BasicDBObject("year", NNgetGameFlow().currentYear).append("farm.size", Consts.Farm_Size.MED_FARM.toValue())));
-            numRes.put(Consts.Farm_Size.LARGE_FARM, (int) usersColl
-                    .count(new BasicDBObject("year", NNgetGameFlow().currentYear).append("farm.size", Consts.Farm_Size.LARGE_FARM.toValue())));
-            numRes.put(Consts.Farm_Size.NO_FARM,
-                    (int) usersColl
-                            .count(new BasicDBObject("year", NNgetGameFlow().currentYear).append("farm.size", Consts.Farm_Size.NO_FARM.toValue())));
+            numRes.put(SMALL_FARM, (int) usersColl
+                    .count(new BasicDBObject("studentSeasons." + NNgetGameFlow().currentYear + ".size", SMALL_FARM.toValue())));
+            numRes.put(MED_FARM, (int) usersColl
+                    .count(new BasicDBObject("studentSeasons." + NNgetGameFlow().currentYear + ".size", MED_FARM.toValue())));
+            numRes.put(LARGE_FARM, (int) usersColl
+                    .count(new BasicDBObject("studentSeasons." + NNgetGameFlow().currentYear + ".size", LARGE_FARM.toValue())));
+            numRes.put(NO_FARM, (int) usersColl
+                    .count(new BasicDBObject("studentSeasons." + NNgetGameFlow().currentYear + ".size", NO_FARM.toValue())));
         } catch (NullPointerException e) {
-            return numRes;
+            return null;
         }
         return numRes;
     }
@@ -237,28 +203,14 @@ public class MongoDBConnection{
 
     public void yearChange(int dir) {
         int newYr = NNgetGameFlow().currentYear;
-        int oldYr = newYr + dir;
-        int newTtl = getTotalPlayers(newYr);
-        int oldTtl = getTotalPlayers(oldYr);
+        Student student;
 
-        if (oldTtl > newTtl) {
-            try (DBCursor users = usersColl.find(new BasicDBObject("year", oldYr))) {
-                Student student;
-                while (users.hasNext()) {
-                    if (getStudent((String) users.next().get("uName"), newYr) == null) {
-                        student = getStudent((String) users.next().get("uName"), oldYr);
-                        //addStudent(student.resetStudent());
-                    }
-                }
-            }
-        } else if (oldTtl < newTtl) {
-            try (DBCursor users = usersColl.find(new BasicDBObject("year", newYr))) {
-                Student student;
-                while (users.hasNext()) {
-                    if (getStudent((String) users.next().get("uName"), oldYr) == null) {
-                        student = getStudent((String) users.next().get("uName"), newYr);
-                        //addStudent(student.resetStudent());
-                    }
+        try (DBCursor users = usersColl.find()) {
+            while (users.hasNext()) {
+                student = gson.fromJson(users.next().toString(), Student.class);
+                if (student.getFarm(newYr) == null) {
+                    student.addReplaceFarm(new Farm(NO_FARM));
+                    saveStudent(student);
                 }
             }
         }
@@ -266,7 +218,7 @@ public class MongoDBConnection{
 
     ArrayList<Student> getAllStudents() {
         ArrayList<Student> list = new ArrayList<>();
-        try (DBCursor cursor = usersColl.find(new BasicDBObject("year", NNgetGameFlow().currentYear))) {
+        try (DBCursor cursor = usersColl.find()) {
             while (cursor.hasNext()) {
                 list.add(gson.fromJson(cursor.next().toString(), Student.class));
             }

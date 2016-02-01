@@ -32,7 +32,7 @@ public class GameFlow {
     }
 
     public void setTotalPlayers() {
-        this.totalPlayers = Consts.DB.getTotalPlayers(currentYear);
+        this.totalPlayers = Consts.DB.getTotalPlayers();
     }
 
     public void nextYear() {

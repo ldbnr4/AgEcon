@@ -1,5 +1,7 @@
 package AgEgonPackage;
 
+import AgEgonPackage.Consts.Farm_Size;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -15,7 +17,7 @@ import static java.lang.Thread.sleep;
 public class FarmerDecisionPage extends JFrame implements ActionListener {
     Thread t1;
     private Student student;
-    private HashMap<Consts.Farm_Size, Integer> farmSizeAmounts;
+    private HashMap<Farm_Size, Integer> farmSizeAmounts;
     private JPanel rootPanel;
     private JLabel farmerLabel;
     private JButton smallFarmBtn;
@@ -58,7 +60,9 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
         t1.start();
 
         backBtn.addActionListener(e -> {
-            Consts.DB.removeStudent(student);
+            if (student.numOfSeasonsPlayed() < 2) {
+                Consts.DB.removeStudent(student);
+            }
             new WelcomePage();
             setVisible(false);
             dispose();
@@ -74,11 +78,11 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
         JButton button = (JButton) e.getSource();
         if (farmCheck(button)) {
             if (button.equals(smallFarmBtn)) {
-                student.addReplaceFarm(new Farm(Consts.Farm_Size.SMALL_FARM));
+                student.addReplaceFarm(new Farm(Farm_Size.SMALL_FARM));
             } else if (button.equals(medFarmBtn)) {
-                student.addReplaceFarm(new Farm(Consts.Farm_Size.MED_FARM));
+                student.addReplaceFarm(new Farm(Farm_Size.MED_FARM));
             } else {
-                student.addReplaceFarm(new Farm(Consts.Farm_Size.LARGE_FARM));
+                student.addReplaceFarm(new Farm(Farm_Size.LARGE_FARM));
             }
             Consts.DB.saveStudent(student);
             new BuySeedsPage(student);
@@ -94,13 +98,13 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
         }
         //System.out.println(farmSizeAmounts);
         try {
-            int dbNumOfSmall = farmSizeAmounts.get(Consts.Farm_Size.SMALL_FARM);
+            int dbNumOfSmall = farmSizeAmounts.get(Farm_Size.SMALL_FARM);
             setAvailableLabel(smallAmntLbl, dbNumOfSmall, Consts.S_FARM_CAP);
 
-            int dbNumOfMed = farmSizeAmounts.get(Consts.Farm_Size.MED_FARM);
+            int dbNumOfMed = farmSizeAmounts.get(Farm_Size.MED_FARM);
             setAvailableLabel(medAmntLbl, dbNumOfMed, Consts.M_FARM_CAP);
 
-            int dbNumOfLrg = farmSizeAmounts.get(Consts.Farm_Size.LARGE_FARM);
+            int dbNumOfLrg = farmSizeAmounts.get(Farm_Size.LARGE_FARM);
             setAvailableLabel(largeAmntLbl, dbNumOfLrg, Consts.L_FARM_CAP);
 
             if (dbNumOfSmall >= Consts.S_FARM_CAP) {
@@ -143,17 +147,17 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
 
     private boolean farmCheck(JButton farm) {
         int farmLimit;
-        Consts.Farm_Size farmSize;
+        Farm_Size farmSize;
         if (farm.equals(smallFarmBtn)) {
             farmLimit = Consts.S_FARM_CAP;
-            farmSize = Consts.Farm_Size.SMALL_FARM;
+            farmSize = Farm_Size.SMALL_FARM;
 
         } else if (farm.equals(medFarmBtn)) {
             farmLimit = Consts.M_FARM_CAP;
-            farmSize = Consts.Farm_Size.MED_FARM;
+            farmSize = Farm_Size.MED_FARM;
         } else {
             farmLimit = Consts.L_FARM_CAP;
-            farmSize = Consts.Farm_Size.LARGE_FARM;
+            farmSize = Farm_Size.LARGE_FARM;
         }
 
         try {

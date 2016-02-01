@@ -12,7 +12,7 @@ public class GameDriver {
         }
 
         //new WaitPage();
-        new WelcomePage();
+        //new WelcomePage();
         //Consts.DB.addAdmin(new Admin("ldbnr4", "password"));
         //Consts.DB.addStudent(new Student("ldbnr4","password", new Farm()));
         //System.out.println(Consts.DB.getTotalPlayers(2016));

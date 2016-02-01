@@ -9,6 +9,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import static AgEgonPackage.Consts.Seed_Type.*;
+
 /**
  * Created by Lorenzo on 12/3/2015.
  *
@@ -75,9 +77,9 @@ public class BuyingSeedsPage extends JFrame implements ActionListener {
 
     private void updateLabels() {
         InputSector input = Consts.DB.getInputSeller(inName);
-        Consts.checkSetSoldOut(earlyAmntLabel, earlyPriceLabel, input.getEarlyAmnt(), input.getEarlyPrice());
-        Consts.checkSetSoldOut(midAmntLabel, midPriceLabel, input.getMidAmnt(), input.getMidPrice());
-        Consts.checkSetSoldOut(fullAmntLabel, fullPriceLabel, input.getFullAmnt(), input.getFullPrice());
+        Consts.checkSetSoldOut(earlyAmntLabel, earlyPriceLabel, input.getAmnt(EARLY), input.getPrice(EARLY));
+        Consts.checkSetSoldOut(midAmntLabel, midPriceLabel, input.getAmnt(MID), input.getPrice(MID));
+        Consts.checkSetSoldOut(fullAmntLabel, fullPriceLabel, input.getAmnt(FULL), input.getPrice(FULL));
 
     }
 
@@ -88,13 +90,13 @@ public class BuyingSeedsPage extends JFrame implements ActionListener {
             setVisible(false);
             dispose();
         } else if (btn.equals(earlyBuyBtn)) {
-            btnHandler(earlyTF, earlyAmntLabel, Consts.Seed_Type.EARLY);
+            btnHandler(earlyTF, earlyAmntLabel, EARLY);
         }
         else if (btn.equals(midBuyBtn)) {
-            btnHandler(midTF, midAmntLabel, Consts.Seed_Type.MID);
+            btnHandler(midTF, midAmntLabel, MID);
         }
         else if (btn.equals(fullBuyBtn)) {
-            btnHandler(fullTF, fullAmntLabel, Consts.Seed_Type.FULL);
+            btnHandler(fullTF, fullAmntLabel, FULL);
         }
     }
 
@@ -110,7 +112,9 @@ public class BuyingSeedsPage extends JFrame implements ActionListener {
             while (stu == null) {
                 stu = Consts.DB.getStudent(stuName);
             }
-            flag = Consts.DB.getInputSeller(inName).updateFullAmnt(-desireAmnt);
+
+
+            flag = Consts.DB.getInputSeller(inName).updateAmnt(seed_type, -desireAmnt);
             if(!flag){
                 balloonTip.setAttachedComponent(txtField);
                 balloonTip.setTextContents("You cant purchase more than what is available.");
@@ -118,7 +122,7 @@ public class BuyingSeedsPage extends JFrame implements ActionListener {
             } else {
                 stu.getFarm().updateSeedsOwned(seed_type, desireAmnt);
                 stu.getFarm().addToSeedLedger(new SeedLedgerEntry(inName, seed_type, desireAmnt,
-                        Consts.DB.getInputSeller(inName).getFullPrice()));
+                        Consts.DB.getInputSeller(inName).getPrice(seed_type)));
 
                 Consts.DB.saveStudent(stu);
                 greenBalloonTip.setAttachedComponent(txtField);

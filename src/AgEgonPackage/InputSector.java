@@ -1,5 +1,11 @@
 package AgEgonPackage;
 
+import AgEgonPackage.Consts.Seed_Type;
+
+import java.util.HashMap;
+
+import static AgEgonPackage.Consts.Seed_Type.*;
+
 /**
  * Created by Lorenzo on 10/13/2015.
  *
@@ -14,87 +20,110 @@ public class InputSector {
 
     public InputSector(String name, int earlyAmnt, double earlyCost, int midAmnt, double midCost, int fullAmnt,
                        double fullCost) {
-        setName(name);
-        updateEarlyAmnt(earlyAmnt);
-        setEarlyPrice(earlyCost);
-        updateMidAmnt(midAmnt);
-        setMidPrice(midCost);
-        updateFullAmnt(fullAmnt);
-        setFullPrice(fullCost);
+        this.name = name;
+        setPrice(new HashMap<Seed_Type, Double>() {{
+            put(EARLY, earlyCost);
+            put(MID, midCost);
+            put(FULL, fullCost);
+        }});
+
+        setAmnts(new HashMap<Seed_Type, Integer>() {{
+            put(EARLY, earlyAmnt);
+            put(MID, midAmnt);
+            put(FULL, fullAmnt);
+        }});
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-        Consts.DB.saveInput(this);
+    private void setAmnt(Seed_Type type, int amnt) {
+        switch (type) {
+            case EARLY:
+                earlyAmnt = amnt;
+                break;
+            case MID:
+                midAmnt = amnt;
+                break;
+            case FULL:
+                fullAmnt = amnt;
+                break;
+            default:
+                break;
+        }
     }
 
-    public int getEarlyAmnt() {
-        return earlyAmnt;
-    }
-
-    public boolean updateEarlyAmnt(int earlyAmnt) {
-        if(-earlyAmnt > this.earlyAmnt){
+    public boolean updateAmnt(Seed_Type type, Integer amnt) {
+        if (-amnt > getAmnt(type)) {
             return false;
         }
-        this.earlyAmnt += earlyAmnt;
+        setAmnt(type, amnt += getAmnt(type));
         Consts.DB.saveInput(this);
         return true;
     }
 
-    public int getMidAmnt() {
-        return midAmnt;
-    }
-
-    public boolean updateMidAmnt(int midAmnt) {
-        if(-midAmnt > this.midAmnt){
-            return false;
+    public int getAmnt(Seed_Type type) {
+        switch (type) {
+            case EARLY:
+                return earlyAmnt;
+            case MID:
+                return midAmnt;
+            case FULL:
+                return fullAmnt;
+            default:
+                return 0;
         }
-        this.midAmnt += midAmnt;
-        Consts.DB.saveInput(this);
-        return true;
     }
 
-    public int getFullAmnt() {
-        return fullAmnt;
-    }
-
-    public boolean updateFullAmnt(int fullAmnt) {
-        if(-fullAmnt > this.fullAmnt){
-            return false;
+    public double getPrice(Seed_Type type) {
+        switch (type) {
+            case EARLY:
+                return earlyPrice;
+            case MID:
+                return midPrice;
+            case FULL:
+                return fullPrice;
+            default:
+                return 0;
         }
-        this.fullAmnt += fullAmnt;
-        Consts.DB.saveInput(this);
-        return true;
     }
 
-    public double getEarlyPrice() {
-        return earlyPrice;
-    }
-
-    public void setEarlyPrice(double earlyPrice) {
-        this.earlyPrice = earlyPrice;
-        Consts.DB.saveInput(this);
-    }
-
-    public double getMidPrice() {
-        return midPrice;
-    }
-
-    public void setMidPrice(double midPrice) {
-        this.midPrice = midPrice;
+    public void setPrice(HashMap<Seed_Type, Double> seedPrices) {
+        seedPrices.forEach((type, price) -> {
+            switch (type) {
+                case EARLY:
+                    earlyPrice = price;
+                    break;
+                case MID:
+                    midPrice = price;
+                    break;
+                case FULL:
+                    fullPrice = price;
+                    break;
+                default:
+                    break;
+            }
+        });
         Consts.DB.saveInput(this);
     }
 
-    public double getFullPrice() {
-        return fullPrice;
-    }
-
-    public void setFullPrice(double fullPrice) {
-        this.fullPrice = fullPrice;
+    private void setAmnts(HashMap<Seed_Type, Integer> seedAmnts) {
+        seedAmnts.forEach((type, amnt) -> {
+            switch (type) {
+                case EARLY:
+                    earlyAmnt = amnt;
+                    break;
+                case MID:
+                    midAmnt = amnt;
+                    break;
+                case FULL:
+                    fullAmnt = amnt;
+                    break;
+                default:
+                    break;
+            }
+        });
         Consts.DB.saveInput(this);
     }
 }
