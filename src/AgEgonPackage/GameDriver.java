@@ -27,7 +27,7 @@ public class GameDriver {
         //new EndofSeasonPage(student);
 
         new SoftTestPage();
-        //new AdminDecisionPage(admin);
+        new AdminDecisionPage(admin);
     }
 
 

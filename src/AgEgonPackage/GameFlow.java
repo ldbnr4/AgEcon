@@ -10,14 +10,14 @@ public class GameFlow {
     public String name = "GameFlow";
     public int currentYear;
     public int startingYear;
-    public int totalPlayers;
+    public int currentPlayers;
     public boolean inpuSect;
     public boolean marketingSect;
 
     public GameFlow() {
         setCurrentYear(Calendar.getInstance().get(Calendar.YEAR));
         setStartingYear(Calendar.getInstance().get(Calendar.YEAR));
-        setTotalPlayers();
+        currentPlayers = Consts.DB.getTotalPlayers(currentYear);
         setInpuSect(false);
         setMarketingSect(false);
     }
@@ -31,8 +31,8 @@ public class GameFlow {
         this.startingYear = startingYear;
     }
 
-    public void setTotalPlayers() {
-        this.totalPlayers = Consts.DB.getTotalPlayers();
+    public void setCurrentPlayers() {
+        currentPlayers = Consts.DB.getTotalPlayers(currentYear);
     }
 
     public void nextYear() {

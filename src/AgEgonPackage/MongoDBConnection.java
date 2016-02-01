@@ -38,7 +38,7 @@ public class MongoDBConnection{
     public void removeStudent(Student student){
         usersColl.remove(new BasicDBObject("uName", student.uName));
         GameFlow gf = NNgetGameFlow();
-        gf.setTotalPlayers();
+        gf.setCurrentPlayers();
         saveGameFlow(gf);
     }
 
@@ -133,13 +133,13 @@ public class MongoDBConnection{
         return gson.fromJson(one.toString(), MarketingSector.class);
     }
 
-    public int getTotalPlayers() {
+    public int getTotalPlayers(int year) {
         HashMap<String, Integer> farmHash = new HashMap<>();
         int count = 0;
         try (DBCursor cursor = usersColl.find()) {
             while (cursor.hasNext()) {
                 farmHash = (HashMap<String, Integer>) cursor.next().get("studentSeasons");
-                if (farmHash.values().contains(NNgetGameFlow().currentYear)) count++;
+                if (farmHash.get(String.valueOf(year)) != null) count++;
             }
         }
         return count;
@@ -177,7 +177,7 @@ public class MongoDBConnection{
     public void addStudent(Student student) {
         usersColl.insert((BasicDBObject) JSON.parse(gson.toJson(student)));
         GameFlow gf = NNgetGameFlow();
-        gf.setTotalPlayers();
+        gf.setCurrentPlayers();
         saveGameFlow(gf);
     }
 

@@ -30,7 +30,7 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
         setResizable(false);
         nameLabel.setText("Welcome " + admin.name + "!");
         //Consts.DB.saveGameFlow();
-        numOfPlayersLabel.setText(String.valueOf(Consts.DB.NNgetGameFlow().totalPlayers));
+        numOfPlayersLabel.setText(String.valueOf(Consts.DB.NNgetGameFlow().currentPlayers));
         startingYearLabel.setText(String.valueOf(Consts.DB.NNgetGameFlow().startingYear));
         setLabels();
         setNumOfAdminsLabel();

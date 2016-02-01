@@ -45,7 +45,7 @@
                 </constraints>
                 <properties>
                   <font name="Perpetua" size="24"/>
-                  <text value="Total Students Playing:"/>
+                  <text value="Current Students Playing in Game Year:"/>
                 </properties>
               </component>
               <component id="e4d14" class="javax.swing.JLabel" binding="numOfPlayersLabel">
