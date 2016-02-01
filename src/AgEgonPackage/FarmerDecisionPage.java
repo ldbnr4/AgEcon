@@ -74,11 +74,11 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
         JButton button = (JButton) e.getSource();
         if (farmCheck(button)) {
             if (button.equals(smallFarmBtn)) {
-                student.addFarm(new Farm(Consts.Farm_Size.SMALL_FARM));
+                student.addReplaceFarm(new Farm(Consts.Farm_Size.SMALL_FARM));
             } else if (button.equals(medFarmBtn)) {
-                student.addFarm(new Farm(Consts.Farm_Size.MED_FARM));
+                student.addReplaceFarm(new Farm(Consts.Farm_Size.MED_FARM));
             } else {
-                student.addFarm(new Farm(Consts.Farm_Size.LARGE_FARM));
+                student.addReplaceFarm(new Farm(Consts.Farm_Size.LARGE_FARM));
             }
             Consts.DB.saveStudent(student);
             new BuySeedsPage(student);

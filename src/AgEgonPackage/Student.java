@@ -32,7 +32,7 @@ public class Student {
         return studentSeasons.get(Consts.DB.NNgetGameFlow().currentYear);
     }
 
-    public void addFarm(Farm farm) {
+    public void addReplaceFarm(Farm farm) {
         if (studentSeasons.containsKey(DB.NNgetGameFlow().currentYear)) {
             studentSeasons.remove(DB.NNgetGameFlow().currentYear);
         }

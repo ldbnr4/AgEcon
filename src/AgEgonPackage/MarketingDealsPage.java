@@ -48,6 +48,7 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
             new WaitPage();
             setVisible(false);
             dispose();
+            return;
         }
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);

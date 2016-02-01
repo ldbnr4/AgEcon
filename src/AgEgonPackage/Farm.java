@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import static AgEgonPackage.Consts.*;
 import static AgEgonPackage.Consts.Farm_Size.NO_FARM;
+import static AgEgonPackage.Consts.Seed_Type.*;
 import static AgEgonPackage.Consts.Student_Stage.Buy_Seeds;
 import static AgEgonPackage.Consts.Student_Stage.Select_Size;
 import static java.lang.Math.ceil;
@@ -31,10 +32,17 @@ public class Farm {
         ttlBushels = 0;
         ttlSeedsOwned = 0;
         staticCosts = new HashMap<>();
-        seedsOwned = new HashMap<>();
+        initSeedsOwned();
         seedLedger = new ArrayList<>();
         yieldRecords = new ArrayList<>();
         saleRecords = new ArrayList<>();
+    }
+
+    private void initSeedsOwned() {
+        seedsOwned = new HashMap<>();
+        seedsOwned.put(EARLY, 0);
+        seedsOwned.put(MID, 0);
+        seedsOwned.put(FULL, 0);
     }
 
     public int getSeedsNeeded() {
@@ -102,10 +110,6 @@ public class Farm {
         return size;
     }
 
-    public void setTtlBushels(int ttlBushels) {
-        this.ttlBushels = ttlBushels;
-    }
-
     public ArrayList<BushelLedgerEntry> getSaleRecords() {
         return saleRecords;
     }
@@ -150,19 +154,8 @@ public class Farm {
         return seedsOwned;
     }
 
-    public void setSeedsOwned(HashMap<Consts.Seed_Type, Integer> seedsOwned) {
-        if (seedsOwned.isEmpty()) {
-            seedsOwned.put(Seed_Type.EARLY, 0);
-            seedsOwned.put(Seed_Type.MID, 0);
-            seedsOwned.put(Seed_Type.FULL, 0);
-        }
-        this.seedsOwned = seedsOwned;
-    }
-
-    public void updateSeedsOwned(int early, int mid, int full) {
-        seedsOwned.put(Seed_Type.EARLY, seedsOwned.get(Seed_Type.EARLY) + early);
-        seedsOwned.put(Seed_Type.MID, seedsOwned.get(Seed_Type.MID) + mid);
-        seedsOwned.put(Seed_Type.FULL, seedsOwned.get(Seed_Type.FULL) + full);
+    public void updateSeedsOwned(Seed_Type type, int amnt) {
+        seedsOwned.put(type, seedsOwned.get(type) + amnt);
 
         updateTtlSeedsOwned();
     }
@@ -179,18 +172,18 @@ public class Farm {
     }
 
     public void plantAction() {
-        double earlyPerc = round((double) seedsOwned.get(Seed_Type.EARLY) / getTtlSeedsOwned());
-        double midPerc = round((double) seedsOwned.get(Seed_Type.MID) / getTtlSeedsOwned());
-        double fullPerc = round((double) seedsOwned.get(Seed_Type.FULL) / getTtlSeedsOwned());
+        double earlyPerc = round((double) seedsOwned.get(EARLY) / getTtlSeedsOwned());
+        double midPerc = round((double) seedsOwned.get(MID) / getTtlSeedsOwned());
+        double fullPerc = round((double) seedsOwned.get(FULL) / getTtlSeedsOwned());
         if (ttlSeedsOwned > seedsNeeded) {
             ttlSeedsOwned = seedsNeeded;
-            seedsOwned.put(Seed_Type.EARLY, (int) round(earlyPerc * ttlSeedsOwned));
-            seedsOwned.put(Seed_Type.MID, (int) round(midPerc * ttlSeedsOwned));
-            seedsOwned.put(Seed_Type.FULL, (int) round(fullPerc * ttlSeedsOwned));
+            seedsOwned.put(EARLY, (int) round(earlyPerc * ttlSeedsOwned));
+            seedsOwned.put(MID, (int) round(midPerc * ttlSeedsOwned));
+            seedsOwned.put(FULL, (int) round(fullPerc * ttlSeedsOwned));
         }
-        double earlyAcres = round((double) seedsOwned.get(Seed_Type.EARLY) / 10);
-        double midAcres = round((double) seedsOwned.get(Seed_Type.MID) / 10);
-        double fullAcres = round((double) seedsOwned.get(Seed_Type.FULL) / 10);
+        double earlyAcres = round((double) seedsOwned.get(EARLY) / 10);
+        double midAcres = round((double) seedsOwned.get(MID) / 10);
+        double fullAcres = round((double) seedsOwned.get(FULL) / 10);
 
         setStaticCosts(earlyAcres + midAcres + fullAcres);
 
@@ -207,8 +200,8 @@ public class Farm {
             addToYieldRecord(fullEntry);
         }
 
-        setTtlBushels((int) ceil(earlyAcres * ACRE_YIELD) + (int) ceil(midAcres * ACRE_YIELD) +
-                (int) ceil(fullAcres * ACRE_YIELD));
+        ttlBushels = (int) ceil(earlyAcres * ACRE_YIELD) + (int) ceil(midAcres * ACRE_YIELD) +
+                (int) ceil(fullAcres * ACRE_YIELD);
 
     }
 

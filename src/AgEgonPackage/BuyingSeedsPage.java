@@ -110,37 +110,16 @@ public class BuyingSeedsPage extends JFrame implements ActionListener {
             while (stu == null) {
                 stu = Consts.DB.getStudent(stuName);
             }
-            switch (seed_type){
-                case FULL:
-                    flag = Consts.DB.getInputSeller(inName).updateFullAmnt(-desireAmnt);
-                    if(flag){
-                        stu.getFarm().updateSeedsOwned(0, 0, desireAmnt);
-                    }
-                    stu.getFarm().addToSeedLedger(new SeedLedgerEntry(inName, seed_type, desireAmnt,
-                            Consts.DB.getInputSeller(inName).getFullPrice()));
-                    break;
-                case MID:
-                    flag = Consts.DB.getInputSeller(inName).updateMidAmnt(-desireAmnt);
-                    if(flag){
-                        stu.getFarm().updateSeedsOwned(0, desireAmnt, 0);
-                    }
-                    stu.getFarm().addToSeedLedger(new SeedLedgerEntry(inName, seed_type, desireAmnt,
-                            Consts.DB.getInputSeller(inName).getMidPrice()));
-                    break;
-                case EARLY:
-                    flag = Consts.DB.getInputSeller(inName).updateEarlyAmnt(-desireAmnt);
-                    if(flag){
-                        stu.getFarm().updateSeedsOwned(desireAmnt, 0, 0);
-                    }
-                    stu.getFarm().addToSeedLedger(new SeedLedgerEntry(inName, seed_type, desireAmnt,
-                            Consts.DB.getInputSeller(inName).getEarlyPrice()));
-                    break;
-            }
+            flag = Consts.DB.getInputSeller(inName).updateFullAmnt(-desireAmnt);
             if(!flag){
                 balloonTip.setAttachedComponent(txtField);
                 balloonTip.setTextContents("You cant purchase more than what is available.");
                 TimingUtils.showTimedBalloon(balloonTip, 2500);
             } else {
+                stu.getFarm().updateSeedsOwned(seed_type, desireAmnt);
+                stu.getFarm().addToSeedLedger(new SeedLedgerEntry(inName, seed_type, desireAmnt,
+                        Consts.DB.getInputSeller(inName).getFullPrice()));
+
                 Consts.DB.saveStudent(stu);
                 greenBalloonTip.setAttachedComponent(txtField);
                 TimingUtils.showTimedBalloon(greenBalloonTip, 2500);

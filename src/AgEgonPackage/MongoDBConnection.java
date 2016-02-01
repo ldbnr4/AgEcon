@@ -80,29 +80,22 @@ public class MongoDBConnection{
         addMarketComp(marketingSector);
     }
 
-    //@NotNull
     public Student getStudent(String username) {
-        HashMap<String, Integer> id = new HashMap<>();
-        id.put(username, NNgetGameFlow().currentYear);
-        DBObject person = usersColl.findOne(new BasicDBObject("id", id));
+        DBObject person = usersColl.findOne(new BasicDBObject("uName", username));
         if (person == null) {
             return null;
         }
         return gson.fromJson(person.toString(), Student.class);
     }
 
-    //@NotNull
     public Student getStudent(String username, int year) {
-        HashMap<String, Integer> id = new HashMap<>();
-        id.put(username, year);
-        DBObject person = usersColl.findOne(new BasicDBObject("id", id));
+        DBObject person = usersColl.findOne(new BasicDBObject("uName", username));
         if (person == null) {
             return null;
         }
         return gson.fromJson(person.toString(), Student.class);
     }
 
-    //@NotNull
     public Admin getAdmin(String username) {
         DBObject person = adminsColl.findOne(new BasicDBObject("name", username));
         if (person == null) {
@@ -171,11 +164,13 @@ public class MongoDBConnection{
     }
 
     public int getTotalPlayers(int year) {
-        HashMap<String, Integer> stuHash = new HashMap<>();
+        HashMap<String, Integer> farmHash = new HashMap<>();
         int count = 0;
         try (DBCursor cursor = usersColl.find()) {
-            stuHash = (HashMap<String, Integer>) cursor.next().get("id");
-            if (stuHash.values().contains(year)) count++;
+            while (cursor.hasNext()) {
+                farmHash = (HashMap<String, Integer>) cursor.next().get("studentSeasons");
+                if (farmHash.values().contains(year)) count++;
+            }
         }
         return count;
     }

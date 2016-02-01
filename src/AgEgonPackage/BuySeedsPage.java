@@ -45,6 +45,7 @@ public class BuySeedsPage extends JFrame {
             new WaitPage();
             setVisible(false);
             dispose();
+            return;
         }
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
