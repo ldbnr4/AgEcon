@@ -2,48 +2,40 @@ package AgEgonPackage;
 
 import java.util.HashMap;
 
+import static AgEgonPackage.Consts.DB;
+
 /**
  * Created by Lorenzo on 9/22/2015.
  *
  */
 
 public class Student {
-    public HashMap<String, Integer> id;
+    public HashMap<Integer, Farm> studentSeasons;
     public String uName;
-    public Farm farm;
     protected String password;
     protected String salt;
-    private int year;
-    private Consts.Student_Stage stage;
-
-    public Student() {}
 
     public Student(String name, String pass, Farm farm) {
-        this.uName = name;
+        uName = name;
         HashMap<String, String> passInfo = EncryptPassword.encrypt(pass);
-        this.password = passInfo.get("password");
-        this.salt = passInfo.get("salt");
-        this.farm = farm;
-        this.year = Consts.DB.NNgetGameFlow().currentYear;
-        setId(this.year);
-        setStage(Consts.Student_Stage.Select_Size);
+        password = passInfo.get("password");
+        salt = passInfo.get("salt");
+        studentSeasons = new HashMap<>();
+        studentSeasons.put(Consts.DB.NNgetGameFlow().currentYear, farm);
     }
 
-    public void setId(int year) {
-        this.id = new HashMap<>();
-        this.year = year;
-        id.put(this.uName, year);
+    public Farm getFarm(int year) {
+        return studentSeasons.get(year);
     }
 
-    public Consts.Student_Stage getStage() {
-        return stage;
+    public Farm getFarm() {
+        return studentSeasons.get(Consts.DB.NNgetGameFlow().currentYear);
     }
 
-    public void setStage(Consts.Student_Stage stage) {
-        this.stage = stage;
-    }
-
-    public void setFarm(Farm farm) {
-        this.farm = farm;
+    public void addFarm(Farm farm) {
+        if (studentSeasons.containsKey(DB.NNgetGameFlow().currentYear)) {
+            studentSeasons.remove(DB.NNgetGameFlow().currentYear);
+        }
+        studentSeasons.put(DB.NNgetGameFlow().currentYear, farm);
     }
 }

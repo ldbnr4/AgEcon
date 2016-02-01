@@ -36,7 +36,7 @@ public class ViewSeedOrdersPage extends JFrame {
         };
 
         double runningTtl = 0;
-        for (SeedLedgerEntry entry : student.farm.getSeedLedger()) {
+        for (SeedLedgerEntry entry : student.getFarm().getSeedLedger()) {
             runningTtl += -entry.getAmount() * entry.getPrice();
         }
         nModel.addRow(new Object[]{
@@ -47,7 +47,7 @@ public class ViewSeedOrdersPage extends JFrame {
                 Consts.htmlWrapper("<b><i>" + NumberFormat.getCurrencyInstance(Locale.US).format(runningTtl) + "</b></i>", 5)
         });
 
-        for (SeedLedgerEntry entry : student.farm.getSeedLedger()) {
+        for (SeedLedgerEntry entry : student.getFarm().getSeedLedger()) {
             nModel.addRow(new Object[]{
                     entry.getSeller(),
                     entry.getSeedType(),

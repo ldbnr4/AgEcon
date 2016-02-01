@@ -3,6 +3,10 @@ package AgEgonPackage;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static AgEgonPackage.Consts.*;
+import static AgEgonPackage.Consts.Farm_Size.NO_FARM;
+import static AgEgonPackage.Consts.Student_Stage.Buy_Seeds;
+import static AgEgonPackage.Consts.Student_Stage.Select_Size;
 import static java.lang.Math.ceil;
 import static java.util.Collections.sort;
 
@@ -12,46 +16,29 @@ import static java.util.Collections.sort;
  */
 
 public class Farm {
-    private Consts.Farm_Size size;
+    private Farm_Size size;
+    private Student_Stage stage;
     private int acres, ttlBushels, seedsNeeded, ttlSeedsOwned;
-    private HashMap<String, Double> staticCosts = new HashMap<>();
+    private HashMap<String, Double> staticCosts;
     private HashMap<Consts.Seed_Type, Integer> seedsOwned;
-    private ArrayList<SeedLedgerEntry> seedLedger = new ArrayList<>();
+    private ArrayList<SeedLedgerEntry> seedLedger;
 
-    private ArrayList<HarvestEntry> yieldRecords = new ArrayList<>();
-    private ArrayList<BushelLedgerEntry> saleRecords = new ArrayList<>();
+    private ArrayList<HarvestEntry> yieldRecords;
+    private ArrayList<BushelLedgerEntry> saleRecords;
 
-    public Farm(Consts.Farm_Size size) {
-        setSize(size);
-        setAcres(size);
-        //setStaticCosts();
-        setTtlBushels(0);
-        setSeedsNeeded(10 * acres);
-        setTtlSeedsOwned();
-        setSeedsOwned(new HashMap<>());
-    }
-
-    public Farm() {
-        size = Consts.Farm_Size.NO_FARM;
-        acres = 0;
-        setSeedsOwned(new HashMap<>());
-        setTtlSeedsOwned();
+    public Farm(Farm_Size size) {
+        setSizeAcreSeedsNeedStage(size);
+        ttlBushels = 0;
+        ttlSeedsOwned = 0;
+        staticCosts = new HashMap<>();
+        seedsOwned = new HashMap<>();
+        seedLedger = new ArrayList<>();
+        yieldRecords = new ArrayList<>();
+        saleRecords = new ArrayList<>();
     }
 
     public int getSeedsNeeded() {
         return seedsNeeded;
-    }
-
-    public void setSeedsNeeded(int seedsNeeded) {
-        this.seedsNeeded = seedsNeeded;
-    }
-
-    public double getTtlBushels() {
-        return ttlBushels;
-    }
-
-    public void setTtlBushels(int ttlBushels) {
-        this.ttlBushels = ttlBushels;
     }
 
     public HashMap<String, Double> getStaticCosts() {
@@ -61,46 +48,62 @@ public class Farm {
     public void setStaticCosts(double acres) {
         switch (size) {
             case SMALL_FARM:
-                staticCosts.put("Nitrogen", Consts.round((0.68 * Consts.INFLATION) * acres * 130));
-                staticCosts.put("Phosphate", Consts.round((0.9 * Consts.INFLATION) * acres * 50));
-                staticCosts.put("Potash", Consts.round((0.72 * Consts.INFLATION) * acres * 30));
-                staticCosts.put("Lime", Consts.round((14 * Consts.INFLATION) * acres * 0.25));
-                staticCosts.put("Pesticides", Consts.round((20 * Consts.INFLATION) * acres));
-                staticCosts.put("Fuel Utils", Consts.round((20 * Consts.INFLATION) * acres));
-                staticCosts.put("Repairs", Consts.round((15.23 * Consts.INFLATION) * acres));
-                staticCosts.put("Misc", Consts.round((9 * Consts.INFLATION) * acres));
-                staticCosts.put("Interest", Consts.round((0.09 * Consts.INFLATION) * acres));
-                staticCosts.put("Labor", Consts.round((11 * Consts.INFLATION) * acres * 4));
-                staticCosts.put("Equipment", Consts.round((40 * Consts.INFLATION) * acres));
+                staticCosts.put("Nitrogen", round((0.68 * INFLATION) * acres * 130));
+                staticCosts.put("Phosphate", round((0.9 * INFLATION) * acres * 50));
+                staticCosts.put("Potash", round((0.72 * INFLATION) * acres * 30));
+                staticCosts.put("Lime", round((14 * INFLATION) * acres * 0.25));
+                staticCosts.put("Pesticides", round((20 * INFLATION) * acres));
+                staticCosts.put("Fuel Utils", round((20 * INFLATION) * acres));
+                staticCosts.put("Repairs", round((15.23 * INFLATION) * acres));
+                staticCosts.put("Misc", round((9 * INFLATION) * acres));
+                staticCosts.put("Interest", round((0.09 * INFLATION) * acres));
+                staticCosts.put("Labor", round((11 * INFLATION) * acres * 4));
+                staticCosts.put("Equipment", round((40 * INFLATION) * acres));
                 break;
 
             case MED_FARM:
-                staticCosts.put("Nitrogen", Consts.round((0.68 * Consts.INFLATION * 0.96) * acres * 130));
-                staticCosts.put("Phosphate", Consts.round((0.9 * Consts.INFLATION * 0.96) * acres * 50));
-                staticCosts.put("Potash", Consts.round((0.72 * Consts.INFLATION * 0.96) * acres * 30));
-                staticCosts.put("Lime", Consts.round((14 * Consts.INFLATION * 0.96) * acres * 0.25));
-                staticCosts.put("Pesticides", Consts.round((20 * Consts.INFLATION * 0.96) * acres));
-                staticCosts.put("Fuel Utils", Consts.round((20 * Consts.INFLATION * 0.96) * acres));
-                staticCosts.put("Repairs", Consts.round((15.23 * Consts.INFLATION * 0.96) * acres));
-                staticCosts.put("Misc", Consts.round((9 * Consts.INFLATION * 0.96) * acres));
-                staticCosts.put("Interest", Consts.round((0.09 * Consts.INFLATION * 0.96) * acres));
-                staticCosts.put("Labor", Consts.round((11 * Consts.INFLATION * 0.96) * acres * 4));
-                staticCosts.put("Equipment", Consts.round((40 * Consts.INFLATION * 0.96) * acres));
+                staticCosts.put("Nitrogen", round((0.68 * INFLATION * 0.96) * acres * 130));
+                staticCosts.put("Phosphate", round((0.9 * INFLATION * 0.96) * acres * 50));
+                staticCosts.put("Potash", round((0.72 * INFLATION * 0.96) * acres * 30));
+                staticCosts.put("Lime", round((14 * INFLATION * 0.96) * acres * 0.25));
+                staticCosts.put("Pesticides", round((20 * INFLATION * 0.96) * acres));
+                staticCosts.put("Fuel Utils", round((20 * INFLATION * 0.96) * acres));
+                staticCosts.put("Repairs", round((15.23 * INFLATION * 0.96) * acres));
+                staticCosts.put("Misc", round((9 * INFLATION * 0.96) * acres));
+                staticCosts.put("Interest", round((0.09 * INFLATION * 0.96) * acres));
+                staticCosts.put("Labor", round((11 * INFLATION * 0.96) * acres * 4));
+                staticCosts.put("Equipment", round((40 * INFLATION * 0.96) * acres));
                 break;
             case LARGE_FARM:
-                staticCosts.put("Nitrogen", Consts.round((0.68 * Consts.INFLATION * 0.94) * acres * 130));
-                staticCosts.put("Phosphate", Consts.round((0.9 * Consts.INFLATION * 0.94) * acres * 50));
-                staticCosts.put("Potash", Consts.round((0.72 * Consts.INFLATION * 0.94) * acres * 30));
-                staticCosts.put("Lime", Consts.round((14 * Consts.INFLATION * 0.94) * acres * 0.25));
-                staticCosts.put("Pesticides", Consts.round((20 * Consts.INFLATION * 0.94) * acres));
-                staticCosts.put("Fuel Utils", Consts.round((20 * Consts.INFLATION * 0.94) * acres));
-                staticCosts.put("Repairs", Consts.round((15.23 * Consts.INFLATION * 0.94) * acres));
-                staticCosts.put("Misc", Consts.round((9 * Consts.INFLATION * 0.94) * acres));
-                staticCosts.put("Interest", Consts.round((0.09 * Consts.INFLATION * 0.94) * acres));
-                staticCosts.put("Labor", Consts.round((11 * Consts.INFLATION * 0.94) * acres * 4));
-                staticCosts.put("Equipment", Consts.round((40 * Consts.INFLATION * 0.94) * acres));
+                staticCosts.put("Nitrogen", round((0.68 * INFLATION * 0.94) * acres * 130));
+                staticCosts.put("Phosphate", round((0.9 * INFLATION * 0.94) * acres * 50));
+                staticCosts.put("Potash", round((0.72 * INFLATION * 0.94) * acres * 30));
+                staticCosts.put("Lime", round((14 * INFLATION * 0.94) * acres * 0.25));
+                staticCosts.put("Pesticides", round((20 * INFLATION * 0.94) * acres));
+                staticCosts.put("Fuel Utils", round((20 * INFLATION * 0.94) * acres));
+                staticCosts.put("Repairs", round((15.23 * INFLATION * 0.94) * acres));
+                staticCosts.put("Misc", round((9 * INFLATION * 0.94) * acres));
+                staticCosts.put("Interest", round((0.09 * INFLATION * 0.94) * acres));
+                staticCosts.put("Labor", round((11 * INFLATION * 0.94) * acres * 4));
+                staticCosts.put("Equipment", round((40 * INFLATION * 0.94) * acres));
                 break;
         }
+    }
+
+    public Student_Stage getStage() {
+        return stage;
+    }
+
+    public void setStage(Student_Stage stage) {
+        this.stage = stage;
+    }
+
+    public Farm_Size getSize(){
+        return size;
+    }
+
+    public void setTtlBushels(int ttlBushels) {
+        this.ttlBushels = ttlBushels;
     }
 
     public ArrayList<BushelLedgerEntry> getSaleRecords() {
@@ -115,32 +118,32 @@ public class Farm {
         this.yieldRecords = yieldRecords;
     }
 
-    public Consts.Farm_Size getSize() {
-        return size;
-    }
-
-    public void setSize(Consts.Farm_Size size) {
+    public void setSizeAcreSeedsNeedStage(Farm_Size size) {
         this.size = size;
         setAcres(size);
+        if (size.equals(NO_FARM)) stage = Select_Size;
+        else stage = Buy_Seeds;
     }
 
     public int getAcres() {
         return acres;
     }
 
-    public void setAcres(Consts.Farm_Size size) {
+    public void setAcres(Farm_Size size) {
         switch (size) {
             case SMALL_FARM:
-                acres = Consts.S_ACRE;
+                acres = S_ACRE;
                 break;
             case MED_FARM:
-                acres = Consts.M_ACRE;
+                acres = M_ACRE;
                 break;
             case LARGE_FARM:
-                acres = Consts.L_ACRE;
+                acres = L_ACRE;
                 break;
+            case NO_FARM:
+                acres = 0;
         }
-        setSeedsNeeded(10 * acres);
+        seedsNeeded = 10 * acres;
     }
 
     public HashMap<Consts.Seed_Type, Integer> getSeedsOwned() {
@@ -149,27 +152,23 @@ public class Farm {
 
     public void setSeedsOwned(HashMap<Consts.Seed_Type, Integer> seedsOwned) {
         if (seedsOwned.isEmpty()) {
-            seedsOwned.put(Consts.Seed_Type.EARLY, 0);
-            seedsOwned.put(Consts.Seed_Type.MID, 0);
-            seedsOwned.put(Consts.Seed_Type.FULL, 0);
+            seedsOwned.put(Seed_Type.EARLY, 0);
+            seedsOwned.put(Seed_Type.MID, 0);
+            seedsOwned.put(Seed_Type.FULL, 0);
         }
         this.seedsOwned = seedsOwned;
     }
 
     public void updateSeedsOwned(int early, int mid, int full) {
-        seedsOwned.put(Consts.Seed_Type.EARLY, seedsOwned.get(Consts.Seed_Type.EARLY) + early);
-        seedsOwned.put(Consts.Seed_Type.MID, seedsOwned.get(Consts.Seed_Type.MID) + mid);
-        seedsOwned.put(Consts.Seed_Type.FULL, seedsOwned.get(Consts.Seed_Type.FULL) + full);
+        seedsOwned.put(Seed_Type.EARLY, seedsOwned.get(Seed_Type.EARLY) + early);
+        seedsOwned.put(Seed_Type.MID, seedsOwned.get(Seed_Type.MID) + mid);
+        seedsOwned.put(Seed_Type.FULL, seedsOwned.get(Seed_Type.FULL) + full);
 
         updateTtlSeedsOwned();
     }
 
     public int getTtlSeedsOwned() {
         return ttlSeedsOwned;
-    }
-
-    public void setTtlSeedsOwned() {
-        this.ttlSeedsOwned = 0;
     }
 
     public void updateTtlSeedsOwned() {
@@ -180,36 +179,36 @@ public class Farm {
     }
 
     public void plantAction() {
-        double earlyPerc = Consts.round((double) seedsOwned.get(Consts.Seed_Type.EARLY) / getTtlSeedsOwned());
-        double midPerc = Consts.round((double) seedsOwned.get(Consts.Seed_Type.MID) / getTtlSeedsOwned());
-        double fullPerc = Consts.round((double) seedsOwned.get(Consts.Seed_Type.FULL) / getTtlSeedsOwned());
+        double earlyPerc = round((double) seedsOwned.get(Seed_Type.EARLY) / getTtlSeedsOwned());
+        double midPerc = round((double) seedsOwned.get(Seed_Type.MID) / getTtlSeedsOwned());
+        double fullPerc = round((double) seedsOwned.get(Seed_Type.FULL) / getTtlSeedsOwned());
         if (ttlSeedsOwned > seedsNeeded) {
             ttlSeedsOwned = seedsNeeded;
-            seedsOwned.put(Consts.Seed_Type.EARLY, (int) Consts.round(earlyPerc * ttlSeedsOwned));
-            seedsOwned.put(Consts.Seed_Type.MID, (int) Consts.round(midPerc * ttlSeedsOwned));
-            seedsOwned.put(Consts.Seed_Type.FULL, (int) Consts.round(fullPerc * ttlSeedsOwned));
+            seedsOwned.put(Seed_Type.EARLY, (int) round(earlyPerc * ttlSeedsOwned));
+            seedsOwned.put(Seed_Type.MID, (int) round(midPerc * ttlSeedsOwned));
+            seedsOwned.put(Seed_Type.FULL, (int) round(fullPerc * ttlSeedsOwned));
         }
-        double earlyAcres = Consts.round((double) seedsOwned.get(Consts.Seed_Type.EARLY) / 10);
-        double midAcres = Consts.round((double) seedsOwned.get(Consts.Seed_Type.MID) / 10);
-        double fullAcres = Consts.round((double) seedsOwned.get(Consts.Seed_Type.FULL) / 10);
+        double earlyAcres = round((double) seedsOwned.get(Seed_Type.EARLY) / 10);
+        double midAcres = round((double) seedsOwned.get(Seed_Type.MID) / 10);
+        double fullAcres = round((double) seedsOwned.get(Seed_Type.FULL) / 10);
 
         setStaticCosts(earlyAcres + midAcres + fullAcres);
 
-        HarvestEntry earlyEntry = new HarvestEntry(Consts.getEarlyHarvDt(), (int) ceil(earlyAcres * Consts.ACRE_YIELD));
+        HarvestEntry earlyEntry = new HarvestEntry(getEarlyHarvDt(), (int) ceil(earlyAcres * ACRE_YIELD));
         if (!yieldRecords.contains(earlyEntry)) {
             addToYieldRecord(earlyEntry);
         }
-        HarvestEntry midEntry = new HarvestEntry(Consts.getMidHarvDt(), (int) ceil((midAcres * Consts.ACRE_YIELD)));
+        HarvestEntry midEntry = new HarvestEntry(getMidHarvDt(), (int) ceil((midAcres * ACRE_YIELD)));
         if (!yieldRecords.contains(midEntry)) {
             addToYieldRecord(midEntry);
         }
-        HarvestEntry fullEntry = new HarvestEntry(Consts.getFullHarvDt(), (int) ceil((fullAcres * Consts.ACRE_YIELD)));
+        HarvestEntry fullEntry = new HarvestEntry(getFullHarvDt(), (int) ceil((fullAcres * ACRE_YIELD)));
         if (!yieldRecords.contains(fullEntry)) {
             addToYieldRecord(fullEntry);
         }
 
-        setTtlBushels((int) ceil(earlyAcres * Consts.ACRE_YIELD) + (int) ceil(midAcres * Consts.ACRE_YIELD) +
-                (int) ceil(fullAcres * Consts.ACRE_YIELD));
+        setTtlBushels((int) ceil(earlyAcres * ACRE_YIELD) + (int) ceil(midAcres * ACRE_YIELD) +
+                (int) ceil(fullAcres * ACRE_YIELD));
 
     }
 
@@ -229,6 +228,7 @@ public class Farm {
 
     public void addToSeedLedger(SeedLedgerEntry entry){
         seedLedger.add(entry);
+        //updateSeedsOwned();
     }
 
     public ArrayList<SeedLedgerEntry> getSeedLedger() {

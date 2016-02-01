@@ -114,25 +114,25 @@ public class BuyingSeedsPage extends JFrame implements ActionListener {
                 case FULL:
                     flag = Consts.DB.getInputSeller(inName).updateFullAmnt(-desireAmnt);
                     if(flag){
-                        stu.farm.updateSeedsOwned(0, 0, desireAmnt);
+                        stu.getFarm().updateSeedsOwned(0, 0, desireAmnt);
                     }
-                    stu.farm.addToSeedLedger(new SeedLedgerEntry(inName, seed_type, desireAmnt,
+                    stu.getFarm().addToSeedLedger(new SeedLedgerEntry(inName, seed_type, desireAmnt,
                             Consts.DB.getInputSeller(inName).getFullPrice()));
                     break;
                 case MID:
                     flag = Consts.DB.getInputSeller(inName).updateMidAmnt(-desireAmnt);
                     if(flag){
-                        stu.farm.updateSeedsOwned(0, desireAmnt, 0);
+                        stu.getFarm().updateSeedsOwned(0, desireAmnt, 0);
                     }
-                    stu.farm.addToSeedLedger(new SeedLedgerEntry(inName, seed_type, desireAmnt,
+                    stu.getFarm().addToSeedLedger(new SeedLedgerEntry(inName, seed_type, desireAmnt,
                             Consts.DB.getInputSeller(inName).getMidPrice()));
                     break;
                 case EARLY:
                     flag = Consts.DB.getInputSeller(inName).updateEarlyAmnt(-desireAmnt);
                     if(flag){
-                        stu.farm.updateSeedsOwned(desireAmnt, 0, 0);
+                        stu.getFarm().updateSeedsOwned(desireAmnt, 0, 0);
                     }
-                    stu.farm.addToSeedLedger(new SeedLedgerEntry(inName, seed_type, desireAmnt,
+                    stu.getFarm().addToSeedLedger(new SeedLedgerEntry(inName, seed_type, desireAmnt,
                             Consts.DB.getInputSeller(inName).getEarlyPrice()));
                     break;
             }

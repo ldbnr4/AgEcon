@@ -86,7 +86,7 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
                     " additional deals after continuing.", 4);
             int option = JOptionPane.showConfirmDialog(rootPanel, msg, "Deals confirmation", JOptionPane.YES_NO_OPTION);
             if (option == JOptionPane.YES_OPTION) {
-                stu.setStage(Consts.Student_Stage.End_of_Season);
+                stu.getFarm().setStage(Consts.Student_Stage.End_of_Season);
                 Consts.DB.saveStudent(stu);
                 new EndofSeasonPage(stu);
                 setVisible(false);
@@ -210,7 +210,7 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
 
         int runTtl = 0;
         //int row = 0;
-        for (HarvestEntry ledger : stu.farm.getYieldRecords()) {
+        for (HarvestEntry ledger : stu.getFarm().getYieldRecords()) {
             runTtl += ledger.getAmount();
 /*            if (row > 0) {
                 if (ledger.getDate().equals(nModel.getValueAt(row - 1, 0))) {
@@ -242,7 +242,7 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
                 return false;
             }
         };
-        stu.farm.getSaleRecords().forEach(entry -> nModel.addRow(new Object[]{
+        stu.getFarm().getSaleRecords().forEach(entry -> nModel.addRow(new Object[]{
                 entry.getSeller(),
                 entry.getDate(),
                 NumberFormat.getNumberInstance(Locale.US).format(-entry.getAmount()),
@@ -257,7 +257,7 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
 
     boolean attemptTrans(BushelLedgerEntry sell) {
         ArrayList<HarvestEntry> usableHarvs = new ArrayList<>();
-        stu.farm.getYieldRecords().stream().filter(harvestEntry -> {
+        stu.getFarm().getYieldRecords().stream().filter(harvestEntry -> {
             try {
                 return (Consts.sd2.parse(harvestEntry.getDate()).before(Consts.sd2.parse(sell.getDate())) ||
                         sell.getDate().equals(harvestEntry.getDate())
@@ -278,10 +278,10 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
                 tmpEntries.add(new HarvestEntry(usableEntry.getDate(), -usableEntry.getAmount()));
             } else {
                 tmpEntries.add(new BushelLedgerEntry(usableEntry.getDate(), -sellAmnt, 0, ""));
-                stu.farm.getYieldRecords().addAll(tmpEntries);
+                stu.getFarm().getYieldRecords().addAll(tmpEntries);
                 condenseYieldRecords();
                 sell.setAmount(-sell.getAmount());
-                stu.farm.addToSaleRecords(sell);
+                stu.getFarm().addToSaleRecords(sell);
                 return true;
             }
         }
@@ -365,7 +365,7 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
         ArrayList<HarvestEntry> harvList = new ArrayList<>();
         int first = 0, second = 0, third = 0;
 
-        for (HarvestEntry ledger : stu.farm.getYieldRecords()) {
+        for (HarvestEntry ledger : stu.getFarm().getYieldRecords()) {
             if (ledger.getDate().equals(Consts.getEarlyHarvDt())) {
                 first += ledger.getAmount();
             } else if (ledger.getDate().equals(Consts.getMidHarvDt())) {
@@ -379,7 +379,7 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
         harvList.add(new HarvestEntry(Consts.getMidHarvDt(), second));
         harvList.add(new HarvestEntry(Consts.getFullHarvDt(), third));
 
-        stu.farm.setYieldRecords(harvList);
+        stu.getFarm().setYieldRecords(harvList);
     }
 
     class DateLabelFormatter extends JFormattedTextField.AbstractFormatter {

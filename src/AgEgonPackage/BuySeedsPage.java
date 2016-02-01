@@ -39,7 +39,6 @@ public class BuySeedsPage extends JFrame {
         setContentPane(rootPanel);
         setResizable(false);
         setMaximumSize(Toolkit.getDefaultToolkit().getScreenSize());
-        //setSize(Toolkit.getDefaultToolkit().getScreenSize());
         pack();
         setLocationRelativeTo(null);
         if (!Consts.DB.NNgetGameFlow().isInpuSect()) {
@@ -63,7 +62,7 @@ public class BuySeedsPage extends JFrame {
             setVisible(false);
             dispose();
         });
-        neededLabel.setText(NumberFormat.getNumberInstance(Locale.US).format(student.farm.getSeedsNeeded()));
+        neededLabel.setText(NumberFormat.getNumberInstance(Locale.US).format(student.getFarm().getSeedsNeeded()));
         plantButton.addActionListener(e -> {
             try {
                 sleep(500);
@@ -88,8 +87,8 @@ public class BuySeedsPage extends JFrame {
                     while (stu == null) {
                         stu = Consts.DB.getStudent(stuName);
                     }
-                    onHandLabel.setText(NumberFormat.getNumberInstance(Locale.US).format(stu.farm.getTtlSeedsOwned()));
-                    HashMap<Consts.Seed_Type, Integer> stuSeeds = stu.farm.getSeedsOwned();
+                    onHandLabel.setText(NumberFormat.getNumberInstance(Locale.US).format(stu.getFarm().getTtlSeedsOwned()));
+                    HashMap<Consts.Seed_Type, Integer> stuSeeds = stu.getFarm().getSeedsOwned();
                     stuEarlyLabel.setText(NumberFormat.getNumberInstance(Locale.US).format(stuSeeds.get(Consts.Seed_Type.EARLY)));
                     stuMidLabel.setText(NumberFormat.getNumberInstance(Locale.US).format(stuSeeds.get(Consts.Seed_Type.MID)));
                     stuFullLabel.setText(NumberFormat.getNumberInstance(Locale.US).format(stuSeeds.get(Consts.Seed_Type.FULL)));
@@ -164,8 +163,8 @@ public class BuySeedsPage extends JFrame {
     }
 
     public void callPlantAction(Student stu) {
-        stu.farm.plantAction();
-        stu.setStage(Consts.Student_Stage.Sell_Yields);
+        stu.getFarm().plantAction();
+        stu.getFarm().setStage(Consts.Student_Stage.Sell_Yields);
         Consts.DB.saveStudent(stu);
     }
 }

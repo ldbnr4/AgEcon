@@ -36,7 +36,7 @@ public class ViewMarketDealsPage extends JFrame {
         };
 
         final double[] runningTtl = {0};
-        student.farm.getSaleRecords().forEach(
+        student.getFarm().getSaleRecords().forEach(
                 entry -> runningTtl[0] += -entry.getAmount() * entry.getPpbndl());
 
         nModel.addRow(new Object[]{
@@ -47,7 +47,7 @@ public class ViewMarketDealsPage extends JFrame {
                 Consts.htmlWrapper("<b><i>" + NumberFormat.getCurrencyInstance(Locale.US).format(runningTtl[0]) + "</b></i>", 5)
         });
 
-        student.farm.getSaleRecords().forEach(entry -> nModel.addRow(new Object[]{
+        student.getFarm().getSaleRecords().forEach(entry -> nModel.addRow(new Object[]{
                 entry.getSeller(),
                 entry.getDate(),
                 NumberFormat.getNumberInstance(Locale.US).format(-entry.getAmount()),

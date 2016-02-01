@@ -11,6 +11,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
+import static AgEgonPackage.Consts.*;
+import static AgEgonPackage.Consts.Farm_Size.NO_FARM;
+
 /**
  * Created by Lorenzo on 9/22/2015.
  *
@@ -171,14 +174,14 @@ public class WelcomePage extends JFrame implements ActionListener {
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
-        usernameTextField = new Consts.RoundJTextField();
+        usernameTextField = new RoundJTextField();
         usernameTextField.setBorder(BorderFactory.createCompoundBorder(
                 usernameTextField.getBorder(),
                 BorderFactory.createEmptyBorder(5, 5, 5, 5)));
         usernameTextField.setText("Username");
         usernameTextField.setForeground(Color.GRAY);
 
-        passwordPasswordField = new Consts.RoundPasswordField();
+        passwordPasswordField = new RoundPasswordField();
         passwordPasswordField.setBorder(BorderFactory.createCompoundBorder(
                 passwordPasswordField.getBorder(),
                 BorderFactory.createEmptyBorder(5, 5, 5, 5)));
@@ -186,7 +189,7 @@ public class WelcomePage extends JFrame implements ActionListener {
         passwordPasswordField.setText("Password");
         passwordPasswordField.setForeground(Color.GRAY);
 
-        confirmPasswordPasswordField = new Consts.RoundPasswordField();
+        confirmPasswordPasswordField = new RoundPasswordField();
         confirmPasswordPasswordField.setBorder(BorderFactory.createCompoundBorder(
                 confirmPasswordPasswordField.getBorder(),
                 BorderFactory.createEmptyBorder(5, 5, 5, 5)));
@@ -194,14 +197,14 @@ public class WelcomePage extends JFrame implements ActionListener {
         confirmPasswordPasswordField.setText("Confirm Password");
         confirmPasswordPasswordField.setForeground(Color.GRAY);
 
-        userNameField = new Consts.RoundJTextField();
+        userNameField = new RoundJTextField();
         userNameField.setBorder(BorderFactory.createCompoundBorder(
                 userNameField.getBorder(),
                 BorderFactory.createEmptyBorder(5, 5, 5, 5)));
         userNameField.setText("Username");
         userNameField.setForeground(Color.GRAY);
 
-        passwordField = new Consts.RoundPasswordField();
+        passwordField = new RoundPasswordField();
         passwordField.setBorder(BorderFactory.createCompoundBorder(
                 passwordField.getBorder(),
                 BorderFactory.createEmptyBorder(5, 5, 5, 5)));
@@ -234,9 +237,9 @@ public class WelcomePage extends JFrame implements ActionListener {
                 usernameTextField.setBackground(Color.green);
                 confirmPasswordPasswordField.setBackground(Color.GREEN);
                 passwordPasswordField.setBackground(Color.GREEN);
-                Student student = new Student(usernameTextField.getText(), String.valueOf(passwordPasswordField.getPassword()), new Farm());
+                Student student = new Student(usernameTextField.getText(), String.valueOf(passwordPasswordField.getPassword()), new Farm(NO_FARM));
                 new FarmerDecisionPage(student);
-                Consts.DB.addStudent(student);
+                DB.addStudent(student);
                 setVisible(false);
                 dispose();
             }
@@ -255,7 +258,7 @@ public class WelcomePage extends JFrame implements ActionListener {
                 passwordField.setBackground(Color.GREEN);
                 userNameField.setBackground(Color.GREEN);
                 if (studentRadioButton.isSelected()) {
-                    Student grabbedStudent = Consts.DB.getStudent(inUse);
+                    Student grabbedStudent = DB.getStudent(inUse);
                     if (grabbedStudent == null) {
                         JOptionPane.showMessageDialog(rootPanel, "User account not found. Make sure you are registered and selected the correct user type.", "Username error", JOptionPane.ERROR_MESSAGE);
                         userNameField.setBackground(Color.RED);
@@ -264,7 +267,7 @@ public class WelcomePage extends JFrame implements ActionListener {
                         String inEncrypt = EncryptPassword.encrpyt(inPass, salt);
                         if (inEncrypt.equals(grabbedStudent.password)) {
                             passwordField.setBackground(Color.GREEN);
-                            switch (grabbedStudent.getStage()) {
+                            switch (grabbedStudent.getFarm().getStage()) {
                                 case Select_Size:
                                     new FarmerDecisionPage(grabbedStudent);
                                     break;
@@ -286,7 +289,7 @@ public class WelcomePage extends JFrame implements ActionListener {
                         }
                     }
                 } else {
-                    Admin grabbedAdmin = Consts.DB.getAdmin(inUse);
+                    Admin grabbedAdmin = DB.getAdmin(inUse);
                     if (grabbedAdmin == null) {
                         JOptionPane.showMessageDialog(rootPanel, "User account not found. Make sure you are registered and selected the correct user type.", "Username error", JOptionPane.ERROR_MESSAGE);
                         userNameField.setBackground(Color.RED);

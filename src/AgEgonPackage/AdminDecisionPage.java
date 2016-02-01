@@ -99,7 +99,7 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
             int bshlsNeeded = Consts.DB.getBshlsNeeded();
             int var = 0, compBshls = 0;
             String compDate = "";
-            int minAmnt = new Farm(Consts.Farm_Size.SMALL_FARM).getAcres() * Consts.ACRE_YIELD;
+            int minAmnt = Consts.S_ACRE * Consts.ACRE_YIELD;
 
             for (char i = 'A'; i <= 'E'; i++) {
                 var = new Random().nextInt(3);
@@ -190,7 +190,7 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
 
         studentTable = new JTable(tableModel);
         for (Student student : students) {
-            Object[] objs = {student.uName, student.farm.getSize(), student.farm.getAcres()};
+            Object[] objs = {student.uName, student.getFarm().getSize(), student.getFarm().getAcres()};
             tableModel.addRow(objs);
         }
         studentTable.setPreferredScrollableViewportSize(new Dimension(300, 200));

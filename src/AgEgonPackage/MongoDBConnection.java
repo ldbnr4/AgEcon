@@ -34,7 +34,7 @@ public class MongoDBConnection{
     }
 
     public void removeStudent(Student student){
-        usersColl.remove(new BasicDBObject("id", student.id));
+        usersColl.remove(new BasicDBObject("uName", student.uName));
         GameFlow gf = NNgetGameFlow();
         gf.setTotalPlayers();
         saveGameFlow(gf);
@@ -170,12 +170,14 @@ public class MongoDBConnection{
         return gson.fromJson(one.toString(), MarketingSector.class);
     }
 
-    public int getTotalPlayers() {
-        return (int) usersColl.count(new BasicDBObject("year", NNgetGameFlow().currentYear));
-    }
-
     public int getTotalPlayers(int year) {
-        return (int) usersColl.count(new BasicDBObject("year", year));
+        HashMap<String, Integer> stuHash = new HashMap<>();
+        int count = 0;
+        try (DBCursor cursor = usersColl.find()) {
+            stuHash = (HashMap<String, Integer>) cursor.next().get("id");
+            if (stuHash.values().contains(year)) count++;
+        }
+        return count;
     }
 
     public int getTotalAdmins() {
@@ -250,8 +252,7 @@ public class MongoDBConnection{
                 while (users.hasNext()) {
                     if (getStudent((String) users.next().get("uName"), newYr) == null) {
                         student = getStudent((String) users.next().get("uName"), oldYr);
-                        student.setId(newYr);
-                        addStudent(student);
+                        //addStudent(student.resetStudent());
                     }
                 }
             }
@@ -261,8 +262,7 @@ public class MongoDBConnection{
                 while (users.hasNext()) {
                     if (getStudent((String) users.next().get("uName"), oldYr) == null) {
                         student = getStudent((String) users.next().get("uName"), newYr);
-                        student.setId(oldYr);
-                        addStudent(student);
+                        //addStudent(student.resetStudent());
                     }
                 }
             }

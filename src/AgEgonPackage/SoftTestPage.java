@@ -7,7 +7,6 @@ import java.util.Random;
 
 import static AgEgonPackage.Consts.Farm_Size.MED_FARM;
 import static AgEgonPackage.Consts.Farm_Size.SMALL_FARM;
-import static AgEgonPackage.Consts.Student_Stage.Buy_Seeds;
 import static java.lang.Thread.sleep;
 
 /**
@@ -74,11 +73,9 @@ public class SoftTestPage extends JFrame implements ActionListener {
             for (int i = 0; i < Consts.TOTAL_STUS - 1; i++) {
                 Student student = new Student("farmer" + i, "password", new Farm(Consts.randomFarmSize()));
 
-                if (student.farm.getSize().equals(SMALL_FARM)) sCnt++;
-                else if (student.farm.getSize().equals(MED_FARM)) mCnt++;
+                if (student.getFarm().getSize().equals(SMALL_FARM)) sCnt++;
+                else if (student.getFarm().getSize().equals(MED_FARM)) mCnt++;
                 else lCnt++;
-
-                student.setStage(Buy_Seeds);
                 Consts.DB.saveStudent(student);
                 System.out.println("Created Farmer " + i);
             }

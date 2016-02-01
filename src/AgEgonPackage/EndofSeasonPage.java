@@ -44,12 +44,12 @@ public class EndofSeasonPage extends JFrame {
 
         //nModel.addRow(new Object[]{Consts.htmlWrapper("<b>Revenue<b>", 5)});
         final double[] rev = {0};
-        student.farm.getSaleRecords().forEach(
+        student.getFarm().getSaleRecords().forEach(
                 entry -> rev[0] += (-entry.getAmount()) * entry.getPpbndl()
         );
         nModel.addRow(new Object[]{Consts.htmlWrapper("<i><b>NET SALES REVENUE</b></i>", 5),
                 Consts.htmlWrapper("<i><b>" + NumberFormat.getCurrencyInstance(Locale.US).format(rev[0]) + "</b></i>", 5)});
-        student.farm.getSaleRecords().forEach(
+        student.getFarm().getSaleRecords().forEach(
                 entry -> nModel.addRow(new Object[]{entry.getSeller(),
                         NumberFormat.getCurrencyInstance(Locale.US).format(-entry.getAmount() * entry.getPpbndl())})
         );
@@ -57,9 +57,9 @@ public class EndofSeasonPage extends JFrame {
 
         //nModel.addRow(new Object[]{Consts.htmlWrapper("<b>Fixed Costs</b>", 5)});
         final double[] fixedCost = {0};
-        student.farm.getStaticCosts().forEach((name, amount) -> fixedCost[0] += -amount);
+        student.getFarm().getStaticCosts().forEach((name, amount) -> fixedCost[0] += -amount);
         final double[] seedCost = {0};
-        student.farm.getSeedLedger().forEach(entry1 -> seedCost[0] += -entry1.getAmount() * entry1.getPrice());
+        student.getFarm().getSeedLedger().forEach(entry1 -> seedCost[0] += -entry1.getAmount() * entry1.getPrice());
 
         double overallTotalCost = seedCost[0] + fixedCost[0];
         nModel.addRow(new Object[]{Consts.htmlWrapper("<i><b>OVERALL TOTAL COST</b></i>", 5),
@@ -68,13 +68,13 @@ public class EndofSeasonPage extends JFrame {
 
         nModel.addRow(new Object[]{Consts.htmlWrapper("<b>Total Production Cost</b>", 5),
                 Consts.htmlWrapper("<b>" + NumberFormat.getCurrencyInstance(Locale.US).format(fixedCost[0]) + "</b>", 5)});
-        student.farm.getStaticCosts().forEach((name, amount) -> nModel.addRow(new Object[]{name,
+        student.getFarm().getStaticCosts().forEach((name, amount) -> nModel.addRow(new Object[]{name,
                 NumberFormat.getCurrencyInstance(Locale.US).format(-amount)}));
 
         //nModel.addRow(new Object[]{Consts.htmlWrapper("<b>Seed Costs</b>", 5)});
         nModel.addRow(new Object[]{Consts.htmlWrapper("<b>Total Seed Cost</b>", 5),
                 Consts.htmlWrapper("<b>" + NumberFormat.getCurrencyInstance(Locale.US).format(seedCost[0]) + "</b>", 5)});
-        student.farm.getSeedLedger().forEach(entry1 -> nModel.addRow(new Object[]{entry1.getSeller(),
+        student.getFarm().getSeedLedger().forEach(entry1 -> nModel.addRow(new Object[]{entry1.getSeller(),
                 NumberFormat.getCurrencyInstance(Locale.US).format(-entry1.getAmount() * entry1.getPrice())}));
         nModel.addRow(new Object[]{});
 
