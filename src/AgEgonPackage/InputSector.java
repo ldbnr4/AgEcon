@@ -1,3 +1,11 @@
+/*
+ * © 2015, by The Curators of University of Missouri, All Rights Reserved
+ */
+
+/*
+ * © 2015, by The Curators of University of Missouri, All Rights Reserved
+ */
+
 package AgEgonPackage;
 
 import AgEgonPackage.Consts.Seed_Type;
@@ -127,3 +135,7 @@ public class InputSector {
         Consts.DB.saveInput(this);
     }
 }
+
+/*
+ * © 2015, by The Curators of University of Missouri, All Rights Reserved
+ */

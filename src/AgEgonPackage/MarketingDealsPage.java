@@ -1,3 +1,11 @@
+/*
+ * © 2015, by The Curators of University of Missouri, All Rights Reserved
+ */
+
+/*
+ * © 2015, by The Curators of University of Missouri, All Rights Reserved
+ */
+
 package AgEgonPackage;
 
 import net.java.balloontip.BalloonTip;
@@ -44,7 +52,7 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
         setResizable(false);
         pack();
         setLocationRelativeTo(null);
-        if (!Consts.DB.NNgetGameFlow().isMarketingSect()) {
+        if (!Consts.DB.NNgetGameFlow().getCurrGameMarket()) {
             new WaitPage();
             setVisible(false);
             dispose();
@@ -404,3 +412,7 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
 
     }
 }
+
+/*
+ * © 2015, by The Curators of University of Missouri, All Rights Reserved
+ */

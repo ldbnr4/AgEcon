@@ -1,3 +1,11 @@
+/*
+ * © 2015, by The Curators of University of Missouri, All Rights Reserved
+ */
+
+/*
+ * © 2015, by The Curators of University of Missouri, All Rights Reserved
+ */
+
 package AgEgonPackage;
 
 import java.util.HashMap;
@@ -21,7 +29,7 @@ public class Student {
         password = passInfo.get("password");
         salt = passInfo.get("salt");
         studentSeasons = new HashMap<>();
-        studentSeasons.put(Consts.DB.NNgetGameFlow().currentYear, farm);
+        studentSeasons.put(Consts.DB.NNgetGameFlow().getCurrentYear(), farm);
     }
 
     public Farm getFarm(int year) {
@@ -29,7 +37,7 @@ public class Student {
     }
 
     public Farm getFarm() {
-        return studentSeasons.get(Consts.DB.NNgetGameFlow().currentYear);
+        return studentSeasons.get(Consts.DB.NNgetGameFlow().getCurrentYear());
     }
 
     public int numOfSeasonsPlayed() {
@@ -37,9 +45,13 @@ public class Student {
     }
 
     public void addReplaceFarm(Farm farm) {
-        if (studentSeasons.containsKey(DB.NNgetGameFlow().currentYear)) {
-            studentSeasons.remove(DB.NNgetGameFlow().currentYear);
+        if (studentSeasons.containsKey(DB.NNgetGameFlow().getCurrentYear())) {
+            studentSeasons.remove(DB.NNgetGameFlow().getCurrentYear());
         }
-        studentSeasons.put(DB.NNgetGameFlow().currentYear, farm);
+        studentSeasons.put(DB.NNgetGameFlow().getCurrentYear(), farm);
     }
 }
+
+/*
+ * © 2015, by The Curators of University of Missouri, All Rights Reserved
+ */

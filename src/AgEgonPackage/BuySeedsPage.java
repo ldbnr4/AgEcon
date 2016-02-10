@@ -1,3 +1,11 @@
+/*
+ * © 2015, by The Curators of University of Missouri, All Rights Reserved
+ */
+
+/*
+ * © 2015, by The Curators of University of Missouri, All Rights Reserved
+ */
+
 package AgEgonPackage;
 
 import javax.swing.*;
@@ -41,7 +49,7 @@ public class BuySeedsPage extends JFrame {
         setMaximumSize(Toolkit.getDefaultToolkit().getScreenSize());
         pack();
         setLocationRelativeTo(null);
-        if (!Consts.DB.NNgetGameFlow().isInpuSect()) {
+        if (!Consts.DB.NNgetGameFlow().getCurrGameInput()) {
             new WaitPage();
             setVisible(false);
             dispose();
@@ -169,3 +177,7 @@ public class BuySeedsPage extends JFrame {
         Consts.DB.saveStudent(stu);
     }
 }
+
+/*
+ * © 2015, by The Curators of University of Missouri, All Rights Reserved
+ */

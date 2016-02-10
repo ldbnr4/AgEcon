@@ -1,3 +1,11 @@
+/*
+ * © 2015, by The Curators of University of Missouri, All Rights Reserved
+ */
+
+/*
+ * © 2015, by The Curators of University of Missouri, All Rights Reserved
+ */
+
 package AgEgonPackage;
 
 import net.java.balloontip.BalloonTip;
@@ -308,3 +316,7 @@ public class WelcomePage extends JFrame implements ActionListener {
         }
     }
 }
+
+/*
+ * © 2015, by The Curators of University of Missouri, All Rights Reserved
+ */

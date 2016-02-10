@@ -1,3 +1,11 @@
+/*
+ * © 2015, by The Curators of University of Missouri, All Rights Reserved
+ */
+
+/*
+ * © 2015, by The Curators of University of Missouri, All Rights Reserved
+ */
+
 package AgEgonPackage;
 
 import com.mongodb.BasicDBObject;
@@ -40,3 +48,7 @@ public class CSPRNG extends BasicDBObject {
         return (Arrays.toString(this.randomBytes) + this.randomInt + this.randomBoolean);
     }
 }
+
+/*
+ * © 2015, by The Curators of University of Missouri, All Rights Reserved
+ */

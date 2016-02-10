@@ -1,3 +1,11 @@
+/*
+ * © 2015, by The Curators of University of Missouri, All Rights Reserved
+ */
+
+/*
+ * © 2015, by The Curators of University of Missouri, All Rights Reserved
+ */
+
 package AgEgonPackage;
 
 import net.java.balloontip.BalloonTip;
@@ -160,3 +168,7 @@ public class CreateAdminPage extends JFrame implements ActionListener {
         confimpassword_pf.setForeground(Color.GRAY);
     }
 }
+
+/*
+ * © 2015, by The Curators of University of Missouri, All Rights Reserved
+ */

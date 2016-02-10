@@ -1,5 +1,5 @@
 <component name="ArtifactManager">
-  <artifact type="jar" name="AgEcon:jar">
+  <artifact type="jar" build-on-make="true" name="AgEcon:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/AgEcon_jar</output-path>
     <root id="archive" name="AgEcon.jar">
       <element id="module-output" name="AgEcon" />

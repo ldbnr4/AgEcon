@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="New Scope" pattern="src:AgEgonPackage.*||src:AgEgonPackage..*" />
+</component>

@@ -1,3 +1,11 @@
+/*
+ * © 2015, by The Curators of University of Missouri, All Rights Reserved
+ */
+
+/*
+ * © 2015, by The Curators of University of Missouri, All Rights Reserved
+ */
+
 package AgEgonPackage;
 
 /**
@@ -8,11 +16,11 @@ public class GameDriver {
 
     public static void main(String[] args) {
         if (Consts.DB.getGameFlow() == null) {
-            Consts.DB.addGameFlow(new GameFlow());
+            Consts.DB.addGameFlow(new GameFlow("GameFlow"));
         }
 
         //new WaitPage();
-        //new WelcomePage();
+        new WelcomePage();
         //Consts.DB.addAdmin(new Admin("ldbnr4", "password"));
         //Consts.DB.addStudent(new Student("ldbnr4","password", new Farm()));
         //System.out.println(Consts.DB.getTotalPlayers(2016));
@@ -26,9 +34,13 @@ public class GameDriver {
         //new ViewSeedOrdersPage(student);
         //new EndofSeasonPage(student);
 
-        new SoftTestPage();
-        new AdminDecisionPage(admin);
+        //new SoftTestPage();
+        //new AdminDecisionPage(admin);
     }
 
 
 }
+
+/*
+ * © 2015, by The Curators of University of Missouri, All Rights Reserved
+ */

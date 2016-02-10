@@ -1,3 +1,11 @@
+/*
+ * © 2015, by The Curators of University of Missouri, All Rights Reserved
+ */
+
+/*
+ * © 2015, by The Curators of University of Missouri, All Rights Reserved
+ */
+
 package AgEgonPackage;
 
 import javax.swing.*;
@@ -141,15 +149,15 @@ public class Consts {
     }
 
     static String getEarlyHarvDt() {
-        return "September 01, " + DB.NNgetGameFlow().currentYear;
+        return "September 01, " + DB.NNgetGameFlow().getCurrentYear();
     }
 
     static String getMidHarvDt() {
-        return "September 20, " + DB.NNgetGameFlow().currentYear;
+        return "September 20, " + DB.NNgetGameFlow().getCurrentYear();
     }
 
     static String getFullHarvDt() {
-        return "October 10, " + DB.NNgetGameFlow().currentYear;
+        return "October 10, " + DB.NNgetGameFlow().getCurrentYear();
     }
 
     public enum Seed_Type {
@@ -243,3 +251,7 @@ public class Consts {
     }
 
 }
+
+/*
+ * © 2015, by The Curators of University of Missouri, All Rights Reserved
+ */

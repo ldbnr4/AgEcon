@@ -1,65 +1,81 @@
+/*
+ * © 2015, by The Curators of University of Missouri, All Rights Reserved
+ */
+
+/*
+ * © 2015, by The Curators of University of Missouri, All Rights Reserved
+ */
+
 package AgEgonPackage;
 
 import java.util.Calendar;
+import java.util.HashMap;
 
 /**
  * Created by Lorenzo on 10/27/2015.
  *
  */
 public class GameFlow {
-    public String name = "GameFlow";
-    public int currentYear;
-    public int startingYear;
-    public int currentPlayers;
-    public boolean inpuSect;
-    public boolean marketingSect;
+    private String name;
+    private int startingYear;
+    private int currentYear;
+    private HashMap<Integer, LittleGameFlow> gameFlows;
 
-    public GameFlow() {
-        setCurrentYear(Calendar.getInstance().get(Calendar.YEAR));
-        setStartingYear(Calendar.getInstance().get(Calendar.YEAR));
-        currentPlayers = Consts.DB.getTotalPlayers(currentYear);
-        setInpuSect(false);
-        setMarketingSect(false);
+    public GameFlow(String name) {
+        this.name = name;
+        startingYear = Calendar.getInstance().get(Calendar.YEAR);
+        gameFlows = new HashMap<Integer, LittleGameFlow>() {{
+            put(startingYear, new LittleGameFlow());
+        }};
+        currentYear = Calendar.getInstance().get(Calendar.YEAR);
     }
 
-
-    public void setCurrentYear(int currentYear) {
-        this.currentYear = currentYear;
-    }
-
-    public void setStartingYear(int startingYear) {
-        this.startingYear = startingYear;
-    }
-
-    public void setCurrentPlayers() {
-        currentPlayers = Consts.DB.getTotalPlayers(currentYear);
+    public String getName() {
+        return name;
     }
 
     public void nextYear() {
-        setCurrentYear(this.currentYear + 1);
-        Consts.DB.saveGameFlow(this);
-    }
-
-    public void prevYear() {
-        if (this.currentYear > this.startingYear) {
-            setCurrentYear(this.currentYear - 1);
+        currentYear += 1;
+        if (gameFlows.get(currentYear) == null) {
+            gameFlows.put(currentYear, new LittleGameFlow());
         }
         Consts.DB.saveGameFlow(this);
     }
 
-    public boolean isMarketingSect() {
-        return marketingSect;
+    public boolean prevYear() {
+        if (currentYear > startingYear) {
+            currentYear -= 1;
+            Consts.DB.saveGameFlow(this);
+            return true;
+        }
+        return false;
     }
 
-    public void setMarketingSect(boolean marketingSect) {
-        this.marketingSect = marketingSect;
+    public int getCurrentYear() {
+        return currentYear;
     }
 
-    public boolean isInpuSect() {
-        return inpuSect;
+    public int getStartingYear() {
+        return startingYear;
     }
 
-    public void setInpuSect(boolean inpuSect) {
-        this.inpuSect = inpuSect;
+    public boolean getCurrGameInput() {
+        return gameFlows.get(currentYear).isInpuSect();
+    }
+
+    public boolean getCurrGameMarket() {
+        return gameFlows.get(currentYear).isMarketingSect();
+    }
+
+    public void setGameFlowsInput(int year, boolean bool) {
+        gameFlows.get(year).setInpuSect(bool);
+    }
+
+    public void setGameFlowsMarket(int year, boolean bool) {
+        gameFlows.get(year).setMarketingSect(bool);
     }
 }
+
+/*
+ * © 2015, by The Curators of University of Missouri, All Rights Reserved
+ */

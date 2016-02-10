@@ -1,3 +1,11 @@
+/*
+ * © 2015, by The Curators of University of Missouri, All Rights Reserved
+ */
+
+/*
+ * © 2015, by The Curators of University of Missouri, All Rights Reserved
+ */
+
 package AgEgonPackage;
 
 import com.mongodb.MongoException;
@@ -30,8 +38,8 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
         setResizable(false);
         nameLabel.setText("Welcome " + admin.name + "!");
         //Consts.DB.saveGameFlow();
-        numOfPlayersLabel.setText(String.valueOf(Consts.DB.NNgetGameFlow().currentPlayers));
-        startingYearLabel.setText(String.valueOf(Consts.DB.NNgetGameFlow().startingYear));
+        numOfPlayersLabel.setText(String.valueOf(Consts.DB.getTotalPlayers(Consts.DB.NNgetGameFlow().getCurrentYear())));
+        startingYearLabel.setText(String.valueOf(Consts.DB.NNgetGameFlow().getStartingYear()));
         setLabels();
         setNumOfAdminsLabel();
         rootPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -160,9 +168,10 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
             Consts.DB.yearChange(Consts.FORWARD);
             setGameYearLabel();
         } else if (buttonText.equals(prevYearBtn.getText())) {
-            Consts.DB.NNgetGameFlow().prevYear();
-            Consts.DB.yearChange(Consts.BACK);
-            setGameYearLabel();
+            if (Consts.DB.NNgetGameFlow().prevYear()) {
+                Consts.DB.yearChange(Consts.BACK);
+                setGameYearLabel();
+            }
         }
 
     }
@@ -172,7 +181,7 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
     }
 
     private void setGameYearLabel() {
-        gameYearLabel.setText(String.valueOf(Consts.DB.NNgetGameFlow().currentYear));
+        gameYearLabel.setText(String.valueOf(Consts.DB.NNgetGameFlow().getCurrentYear()));
     }
 
     private void createUIComponents() {
@@ -225,3 +234,6 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
         }
     }
 }
+/*
+ * © 2015, by The Curators of University of Missouri, All Rights Reserved
+ */

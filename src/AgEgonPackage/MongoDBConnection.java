@@ -1,3 +1,11 @@
+/*
+ * © 2015, by The Curators of University of Missouri, All Rights Reserved
+ */
+
+/*
+ * © 2015, by The Curators of University of Missouri, All Rights Reserved
+ */
+
 package AgEgonPackage;
 
 import com.google.gson.Gson;
@@ -37,9 +45,6 @@ public class MongoDBConnection{
 
     public void removeStudent(Student student){
         usersColl.remove(new BasicDBObject("uName", student.uName));
-        GameFlow gf = NNgetGameFlow();
-        gf.setCurrentPlayers();
-        saveGameFlow(gf);
     }
 
     public void removeAdmin(String admin) {
@@ -68,7 +73,7 @@ public class MongoDBConnection{
     }
 
     public void saveGameFlow(GameFlow gameFlow) {
-        gameFlowColl.remove(new BasicDBObject("name", gameFlow.name));
+        gameFlowColl.remove(new BasicDBObject("name", gameFlow.getName()));
         addGameFlow(gameFlow);
     }
 
@@ -161,13 +166,13 @@ public class MongoDBConnection{
         HashMap<Consts.Farm_Size, Integer> numRes = new HashMap<>();
         try {
             numRes.put(SMALL_FARM, (int) usersColl
-                    .count(new BasicDBObject("studentSeasons." + NNgetGameFlow().currentYear + ".size", SMALL_FARM.toValue())));
+                    .count(new BasicDBObject("studentSeasons." + NNgetGameFlow().getCurrentYear() + ".size", SMALL_FARM.toValue())));
             numRes.put(MED_FARM, (int) usersColl
-                    .count(new BasicDBObject("studentSeasons." + NNgetGameFlow().currentYear + ".size", MED_FARM.toValue())));
+                    .count(new BasicDBObject("studentSeasons." + NNgetGameFlow().getCurrentYear() + ".size", MED_FARM.toValue())));
             numRes.put(LARGE_FARM, (int) usersColl
-                    .count(new BasicDBObject("studentSeasons." + NNgetGameFlow().currentYear + ".size", LARGE_FARM.toValue())));
+                    .count(new BasicDBObject("studentSeasons." + NNgetGameFlow().getCurrentYear() + ".size", LARGE_FARM.toValue())));
             numRes.put(NO_FARM, (int) usersColl
-                    .count(new BasicDBObject("studentSeasons." + NNgetGameFlow().currentYear + ".size", NO_FARM.toValue())));
+                    .count(new BasicDBObject("studentSeasons." + NNgetGameFlow().getCurrentYear() + ".size", NO_FARM.toValue())));
         } catch (NullPointerException e) {
             return null;
         }
@@ -177,8 +182,6 @@ public class MongoDBConnection{
     public void addStudent(Student student) {
         usersColl.insert((BasicDBObject) JSON.parse(gson.toJson(student)));
         GameFlow gf = NNgetGameFlow();
-        gf.setCurrentPlayers();
-        saveGameFlow(gf);
     }
 
     public void addAdmin(Admin admin) {
@@ -202,7 +205,7 @@ public class MongoDBConnection{
     }
 
     public void yearChange(int dir) {
-        int newYr = NNgetGameFlow().currentYear;
+        int newYr = NNgetGameFlow().getCurrentYear();
         Student student;
 
         try (DBCursor users = usersColl.find()) {
@@ -238,13 +241,13 @@ public class MongoDBConnection{
 
     public void setGenInput() {
         GameFlow gameFlow = NNgetGameFlow();
-        gameFlow.setInpuSect(true);
+        gameFlow.setGameFlowsInput(gameFlow.getCurrentYear(), true);
         saveGameFlow(gameFlow);
     }
 
     public void setGenMark() {
         GameFlow gameFlow = NNgetGameFlow();
-        gameFlow.setMarketingSect(true);
+        gameFlow.setGameFlowsMarket(gameFlow.getCurrentYear(), true);
         saveGameFlow(gameFlow);
     }
 
@@ -261,3 +264,7 @@ public class MongoDBConnection{
         return this.mongoClient.getDB("agdb");
     }
 }
+
+/*
+ * © 2015, by The Curators of University of Missouri, All Rights Reserved
+ */

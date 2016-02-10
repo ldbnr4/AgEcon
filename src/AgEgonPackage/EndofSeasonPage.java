@@ -1,3 +1,11 @@
+/*
+ * © 2015, by The Curators of University of Missouri, All Rights Reserved
+ */
+
+/*
+ * © 2015, by The Curators of University of Missouri, All Rights Reserved
+ */
+
 package AgEgonPackage;
 
 import javax.swing.*;
@@ -30,7 +38,7 @@ public class EndofSeasonPage extends JFrame {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         incomeStatementLabel.setText(incomeStatementLabel.getText() + " for " + student.uName);
-        lbl_year.setText("for the year " + Consts.DB.NNgetGameFlow().currentYear);
+        lbl_year.setText("for the year " + Consts.DB.NNgetGameFlow().getCurrentYear());
 
         viewSeedOrdersButton.addActionListener(e -> new ViewSeedOrdersPage(student));
 
@@ -106,3 +114,7 @@ public class EndofSeasonPage extends JFrame {
 
     }
 }
+
+/*
+ * © 2015, by The Curators of University of Missouri, All Rights Reserved
+ */
