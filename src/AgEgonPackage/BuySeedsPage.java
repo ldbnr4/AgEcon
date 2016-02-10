@@ -2,10 +2,6 @@
  * © 2015, by The Curators of University of Missouri, All Rights Reserved
  */
 
-/*
- * © 2015, by The Curators of University of Missouri, All Rights Reserved
- */
-
 package AgEgonPackage;
 
 import javax.swing.*;
@@ -178,6 +174,3 @@ public class BuySeedsPage extends JFrame {
     }
 }
 
-/*
- * © 2015, by The Curators of University of Missouri, All Rights Reserved
- */

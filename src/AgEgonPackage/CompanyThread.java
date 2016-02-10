@@ -2,10 +2,6 @@
  * © 2015, by The Curators of University of Missouri, All Rights Reserved
  */
 
-/*
- * © 2015, by The Curators of University of Missouri, All Rights Reserved
- */
-
 package AgEgonPackage;
 
 import javax.swing.*;
@@ -80,6 +76,3 @@ public class CompanyThread implements Runnable {
     }
 }
 
-/*
- * © 2015, by The Curators of University of Missouri, All Rights Reserved
- */

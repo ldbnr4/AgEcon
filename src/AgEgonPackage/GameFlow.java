@@ -2,10 +2,6 @@
  * © 2015, by The Curators of University of Missouri, All Rights Reserved
  */
 
-/*
- * © 2015, by The Curators of University of Missouri, All Rights Reserved
- */
-
 package AgEgonPackage;
 
 import java.util.Calendar;
@@ -76,6 +72,3 @@ public class GameFlow {
     }
 }
 
-/*
- * © 2015, by The Curators of University of Missouri, All Rights Reserved
- */

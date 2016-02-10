@@ -1,6 +1,7 @@
 <component name="CopyrightManager">
   <copyright>
     <option name="myName" value="Mizzou Copyrights" />
+    <option name="keyword" value="©" />
     <option name="notice" value="© 2015, by The Curators of University of Missouri, All Rights Reserved" />
   </copyright>
 </component>

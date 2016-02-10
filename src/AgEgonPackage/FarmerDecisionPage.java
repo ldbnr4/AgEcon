@@ -2,10 +2,6 @@
  * © 2015, by The Curators of University of Missouri, All Rights Reserved
  */
 
-/*
- * © 2015, by The Curators of University of Missouri, All Rights Reserved
- */
-
 package AgEgonPackage;
 
 import AgEgonPackage.Consts.Farm_Size;
@@ -201,6 +197,3 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
     }
 }
 
-/*
- * © 2015, by The Curators of University of Missouri, All Rights Reserved
- */
