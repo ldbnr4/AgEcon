@@ -409,3 +409,6 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
     }
 }
 
+/*
+ * Copyright (c) 2015, by The Curators of University of Missouri, All Rights Reserved
+ */

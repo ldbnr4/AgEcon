@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 /**
  * Created by Lorenzo on 10/27/2015.
- * 
+ *
  */
 
 public class Admin {
@@ -27,3 +27,7 @@ public class Admin {
     }
 }
 
+
+/*
+ * Copyright (c) 2015, by The Curators of University of Missouri, All Rights Reserved
+ */

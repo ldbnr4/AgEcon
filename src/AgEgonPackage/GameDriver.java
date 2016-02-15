@@ -22,7 +22,7 @@ public class GameDriver {
         //System.out.println(Consts.DB.getTotalPlayers(2016));
 
         //Student student = Consts.DB.getStudent("ldbnr4");
-        Admin admin = Consts.DB.getAdmin("ldbnr4");
+        //Admin admin = Consts.DB.getAdmin("ldbnr4");
 
 
         //new BuySeedsPage(student);
@@ -38,5 +38,5 @@ public class GameDriver {
 }
 
 /*
- * © 2015, by The Curators of University of Missouri, All Rights Reserved
+ * Copyright (c) 2015, by The Curators of University of Missouri, All Rights Reserved
  */

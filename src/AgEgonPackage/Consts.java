@@ -3,7 +3,6 @@
  */
 
 package AgEgonPackage;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.FocusEvent;
@@ -21,6 +20,7 @@ import java.util.Random;
  *
  */
 public class Consts {
+
     static final String SUPPLY_COMPANY_A_NAME = "Supply Company A", SUPPLY_COMPANY_B_NAME = "Supply Company B",
             SUPPLY_COMPANY_C_NAME = "Supply Company C", SUPPLY_COMPANY_D_NAME = "Supply Company D", SUPPLY_COMPANY_E_NAME = "Supply Company E";
     static final String MARKETING_COMPANY_A_NAME = "Marketing Company A", MARKETING_COMPANY_B_NAME = "Marketing Company B",
@@ -245,6 +245,8 @@ public class Consts {
             return shape.contains(x, y);
         }
     }
-
 }
 
+/*
+ * Copyright (c) 2015, by The Curators of University of Missouri, All Rights Reserved
+ */

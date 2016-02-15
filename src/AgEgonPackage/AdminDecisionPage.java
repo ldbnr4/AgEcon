@@ -92,7 +92,7 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
                 try {
                     Consts.DB.saveInput(theInput);
                 } catch (MongoException v) {
-                   v.printStackTrace();
+                    v.printStackTrace();
                 }
             }
         });
@@ -230,3 +230,7 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
         }
     }
 }
+
+/*
+ * Copyright (c) 2015, by The Curators of University of Missouri, All Rights Reserved
+ */

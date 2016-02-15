@@ -61,3 +61,6 @@ public class HarvestEntry implements Comparable {
     }
 }
 
+/*
+ * Copyright (c) 2015, by The Curators of University of Missouri, All Rights Reserved
+ */
