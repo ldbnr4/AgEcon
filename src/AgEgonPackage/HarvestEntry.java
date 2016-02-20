@@ -4,7 +4,7 @@
 
 package AgEgonPackage;
 
-import org.jetbrains.annotations.NotNull;
+import com.sun.istack.internal.NotNull;
 
 import java.text.ParseException;
 import java.util.Date;
