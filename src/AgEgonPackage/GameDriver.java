@@ -17,7 +17,7 @@ public class GameDriver {
 
         //new WaitPage();
         new WelcomePage();
-        //Consts.DB.addAdmin(new Admin("ldbnr4", "password"));
+        //Consts.DB.addAdmin(new Admin("admin", "password"));
         //Consts.DB.addStudent(new Student("ldbnr4","password", new Farm()));
         //System.out.println(Consts.DB.getTotalPlayers(2016));
 
@@ -25,7 +25,10 @@ public class GameDriver {
         //Admin admin = Consts.DB.getAdmin("ldbnr4");
 
 
+        //for(int i=0;i<40;i++){
         //new BuySeedsPage(student);
+        //}
+        //System.out.println("Done");
         //new MarketingDealsPage(student);
         //new ViewSeedOrdersPage(student);
         //new EndofSeasonPage(student);

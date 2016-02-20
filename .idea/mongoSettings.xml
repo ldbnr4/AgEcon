@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="MongoConfiguration">
+    <option name="serverConfigurations">
+      <list>
+        <ServerConfiguration>
+          <option name="label" value="AgEcon" />
+          <option name="password" value="password" />
+          <option name="serverUrls">
+            <list>
+              <option value="ds051543.mongolab.com:51543" />
+            </list>
+          </option>
+          <option name="userDatabase" value="agdb" />
+          <option name="username" value="admin" />
+        </ServerConfiguration>
+      </list>
+    </option>
+    <option name="shellPath" value="C:\Program Files\MongoDB\Server\3.2\bin\mongo.exe" />
+  </component>
+</project>

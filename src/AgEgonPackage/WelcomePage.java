@@ -45,10 +45,15 @@ public class WelcomePage extends JFrame implements ActionListener {
         super("Welcome Page");
         setContentPane(rootPanel);
         setResizable(false);
+        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        setMaximumSize(new Dimension(200, (int) screen.getHeight() - 50));
+        //System.out.println(Toolkit.getDefaultToolkit().getScreenSize());
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        System.out.println("Frame Size: " + getSize());
+        System.out.println("Resolution: " + Toolkit.getDefaultToolkit().getScreenResolution());
 
         modern = new MinimalBalloonStyle(Color.yellow, 5);
 
