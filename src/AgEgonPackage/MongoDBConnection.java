@@ -248,16 +248,18 @@ public class MongoDBConnection{
     }
 
     private DB openConnection() {
+        String dbuname = "admin", database = "agdb", password = "password";
+        //String dbuname = "mizzouUser", database = "MizzouAMUMC", password = "password";
         if(mongoClient == null) {
-            String dbuname = "mizzouUser", database = "MizzouAMUMC", password = "password";
             MongoCredential credential = MongoCredential.createCredential(dbuname, database, password.toCharArray());
             try {
-                this.mongoClient = new MongoClient(new ServerAddress("ldbnr4.ddns.net", 27017), Collections.singletonList(credential));
+                this.mongoClient = new MongoClient(new ServerAddress("ds051543.mongolab.com", 51543), Collections.singletonList(credential));
+                //this.mongoClient = new MongoClient(new ServerAddress("ldbnr4.ddns.net", 10000), Collections.singletonList(credential));
             } catch (UnknownHostException e) {
                 e.printStackTrace();
             }
         }
-        return this.mongoClient.getDB("MizzouAMUMC");
+        return this.mongoClient.getDB(database);
     }
 }
 

@@ -41,10 +41,9 @@ public class BuySeedsPage extends JFrame {
     public BuySeedsPage(Student student) {
         super("Buy Seeds Page");
         setContentPane(rootPanel);
-        setResizable(false);
         setMaximumSize(Toolkit.getDefaultToolkit().getScreenSize());
-        setLocationRelativeTo(null);
         pack();
+        setLocationRelativeTo(null);
         if (!Consts.DB.NNgetGameFlow().getCurrGameInput()) {
             new WaitPage();
             setVisible(false);
@@ -52,6 +51,7 @@ public class BuySeedsPage extends JFrame {
             return;
         }
         setVisible(true);
+        setResizable(false);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         this.stu = student;

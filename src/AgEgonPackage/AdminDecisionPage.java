@@ -85,10 +85,9 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
                     compMax -= rn;
                     var++;
                 }
-                InputSector theInput = new InputSector("Supply Company " + i, early, Consts.round(minPrice +
-                        new Random().nextDouble() * (maxPrice - minPrice)), mid, Consts.round(minPrice +
-                        new Random().nextDouble() * (maxPrice - minPrice)), full,
-                        Consts.round(minPrice + new Random().nextDouble() * (maxPrice - minPrice)));
+                double basePrice = Consts.round(minPrice + new Random().nextDouble() * (maxPrice - minPrice));
+                InputSector theInput = new InputSector("Supply Company " + i, early, basePrice, mid, basePrice*.90, full,
+                        basePrice*.75);
                 try {
                     Consts.DB.saveInput(theInput);
                 } catch (MongoException v) {

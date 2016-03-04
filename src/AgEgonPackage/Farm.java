@@ -192,11 +192,11 @@ public class Farm {
         if (!yieldRecords.contains(earlyEntry)) {
             addToYieldRecord(earlyEntry);
         }
-        HarvestEntry midEntry = new HarvestEntry(getMidHarvDt(), (int) ceil((midAcres * ACRE_YIELD)));
+        HarvestEntry midEntry = new HarvestEntry(getMidHarvDt(), (int) ceil((midAcres * ACRE_YIELD * .9)));
         if (!yieldRecords.contains(midEntry)) {
             addToYieldRecord(midEntry);
         }
-        HarvestEntry fullEntry = new HarvestEntry(getFullHarvDt(), (int) ceil((fullAcres * ACRE_YIELD)));
+        HarvestEntry fullEntry = new HarvestEntry(getFullHarvDt(), (int) ceil((fullAcres * ACRE_YIELD * .75)));
         if (!yieldRecords.contains(fullEntry)) {
             addToYieldRecord(fullEntry);
         }
