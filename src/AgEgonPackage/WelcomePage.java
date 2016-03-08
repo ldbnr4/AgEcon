@@ -52,8 +52,8 @@ public class WelcomePage extends JFrame implements ActionListener {
         setLocationRelativeTo(null);
         setVisible(true);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        System.out.println("Frame Size: " + getSize());
-        System.out.println("Resolution: " + Toolkit.getDefaultToolkit().getScreenResolution());
+        //System.out.println("Frame Size: " + getSize());
+        //System.out.println("Resolution: " + Toolkit.getDefaultToolkit().getScreenResolution());
 
         modern = new MinimalBalloonStyle(Color.yellow, 5);
 

@@ -28,13 +28,13 @@ public class EndofSeasonPage extends JFrame {
         super("End Page");
         setContentPane(rootPanel);
 
+        incomeStatementLabel.setText(incomeStatementLabel.getText() + " for " + student.uName);
+        lbl_year.setText("for the year " + Consts.DB.NNgetGameFlow().getCurrentYear());
+
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-
-        incomeStatementLabel.setText(incomeStatementLabel.getText() + " for " + student.uName);
-        lbl_year.setText("for the year " + Consts.DB.NNgetGameFlow().getCurrentYear());
 
         viewSeedOrdersButton.addActionListener(e -> new ViewSeedOrdersPage(student));
 
