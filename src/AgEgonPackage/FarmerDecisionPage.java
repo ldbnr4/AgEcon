@@ -6,12 +6,15 @@ package AgEgonPackage;
 
 import AgEgonPackage.Consts.Farm_Size;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.HashMap;
 
+import static AgEgonPackage.Consts.Farm_Size.*;
 import static java.lang.Thread.sleep;
 
 /**
@@ -19,7 +22,6 @@ import static java.lang.Thread.sleep;
  *
  */
 public class FarmerDecisionPage extends JFrame implements ActionListener {
-    Thread t1;
     private Student student;
     private HashMap<Farm_Size, Integer> farmSizeAmounts;
     private JPanel rootPanel;
@@ -34,6 +36,11 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
     private JLabel lbl_acre_large;
     private JLabel lbl_acre_sml;
     private JLabel lbl_acre_med;
+    private JButton submitButton;
+    private JRadioButton yesRadioButton;
+    private JRadioButton noRadioButton;
+
+    Farm_Size farmSizeChoice;
 
 
     public FarmerDecisionPage(final Student student) {
@@ -46,12 +53,26 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setVisible(true);
         farmerLabel.setText("Hey " + student.uName + "!");
-
         this.student = student;
 
+        Image image = null;
+        try {
+            image = ImageIO.read(getClass().getResource("/img/check_Icon.png"));
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        ImageIcon checkIcon = new ImageIcon(image);
+
         smallFarmBtn.addActionListener(this);
+        smallFarmBtn.setSelectedIcon(checkIcon);
+
         medFarmBtn.addActionListener(this);
+        medFarmBtn.setSelectedIcon(checkIcon);
+
         largeFarmBtn.addActionListener(this);
+        largeFarmBtn.setSelectedIcon(checkIcon);
+
+        submitButton.addActionListener(this);
 
         Runnable r = () -> {
             while (isVisible()) {
@@ -59,9 +80,7 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
             }
             //System.out.println("Killed a thread.");
         };
-
-        t1 = new Thread(r);
-        t1.start();
+        new Thread(r).start();
 
         backBtn.addActionListener(e -> {
             if (student.numOfSeasonsPlayed() < 2) {
@@ -80,18 +99,33 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton button = (JButton) e.getSource();
-        if (farmCheck(button)) {
-            if (button.equals(smallFarmBtn)) {
-                student.addReplaceFarm(new Farm(Farm_Size.SMALL_FARM));
-            } else if (button.equals(medFarmBtn)) {
-                student.addReplaceFarm(new Farm(Farm_Size.MED_FARM));
-            } else {
-                student.addReplaceFarm(new Farm(Farm_Size.LARGE_FARM));
-            }
+
+        if(button.equals(submitButton)){
+            student.addReplaceFarm(new Farm(farmSizeChoice){{
+                setIrrigated(yesRadioButton.isSelected());
+            }});
             Consts.DB.saveStudent(student);
             new BuySeedsPage(student);
             setVisible(false);
             dispose();
+        }
+        else {
+            if (farmCheck(button)) {
+                button.setSelected(true);
+                if (button.equals(smallFarmBtn)) {
+                    medFarmBtn.setSelected(false);
+                    largeFarmBtn.setSelected(false);
+                    farmSizeChoice = SMALL_FARM;
+                } else if (button.equals(medFarmBtn)) {
+                    smallFarmBtn.setSelected(false);
+                    largeFarmBtn.setSelected(false);
+                    farmSizeChoice = MED_FARM;
+                } else if (button.equals(largeFarmBtn)) {
+                    medFarmBtn.setSelected(false);
+                    smallFarmBtn.setSelected(false);
+                    farmSizeChoice = LARGE_FARM;
+                }
+            }
         }
     }
 
@@ -102,13 +136,13 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
         }
         //System.out.println(farmSizeAmounts);
         try {
-            int dbNumOfSmall = farmSizeAmounts.get(Farm_Size.SMALL_FARM);
+            int dbNumOfSmall = farmSizeAmounts.get(SMALL_FARM);
             setAvailableLabel(smallAmntLbl, dbNumOfSmall, Consts.S_FARM_CAP);
 
-            int dbNumOfMed = farmSizeAmounts.get(Farm_Size.MED_FARM);
+            int dbNumOfMed = farmSizeAmounts.get(MED_FARM);
             setAvailableLabel(medAmntLbl, dbNumOfMed, Consts.M_FARM_CAP);
 
-            int dbNumOfLrg = farmSizeAmounts.get(Farm_Size.LARGE_FARM);
+            int dbNumOfLrg = farmSizeAmounts.get(LARGE_FARM);
             setAvailableLabel(largeAmntLbl, dbNumOfLrg, Consts.L_FARM_CAP);
 
             if (dbNumOfSmall >= Consts.S_FARM_CAP) {
@@ -154,14 +188,14 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
         Farm_Size farmSize;
         if (farm.equals(smallFarmBtn)) {
             farmLimit = Consts.S_FARM_CAP;
-            farmSize = Farm_Size.SMALL_FARM;
+            farmSize = SMALL_FARM;
 
         } else if (farm.equals(medFarmBtn)) {
             farmLimit = Consts.M_FARM_CAP;
-            farmSize = Farm_Size.MED_FARM;
+            farmSize = MED_FARM;
         } else {
             farmLimit = Consts.L_FARM_CAP;
-            farmSize = Farm_Size.LARGE_FARM;
+            farmSize = LARGE_FARM;
         }
 
         try {
@@ -174,26 +208,6 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
             return false;
         }
         return true;
-    }
-
-    public void setLargeFarmBtn(JButton largeFarmBtn) {
-        this.largeFarmBtn = largeFarmBtn;
-    }
-
-    public void setMedFarmBtn(JButton medFarmBtn) {
-        this.medFarmBtn = medFarmBtn;
-    }
-
-    public void setSmallFarmBtn(JButton smallFarmBtn) {
-        this.smallFarmBtn = smallFarmBtn;
-    }
-
-    public void setFarmerLabel(JLabel farmerLabel) {
-        this.farmerLabel = farmerLabel;
-    }
-
-    public void setRootPanel(JPanel rootPanel) {
-        this.rootPanel = rootPanel;
     }
 }
 

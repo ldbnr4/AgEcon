@@ -30,6 +30,7 @@ public class Farm {
 
     private ArrayList<HarvestEntry> yieldRecords;
     private ArrayList<BushelLedgerEntry> saleRecords;
+    private boolean irrigated;
 
     public Farm(Farm_Size size) {
         setSizeAcreSeedsNeedStage(size);
@@ -46,6 +47,10 @@ public class Farm {
         saleRecords = new ArrayList<>();
     }
 
+    public void setIrrigated(boolean flag){
+        irrigated = flag;
+    }
+
     public int getSeedsNeeded() {
         return seedsNeeded;
     }
@@ -55,48 +60,47 @@ public class Farm {
     }
 
     public void setStaticCosts(double acres) {
+        double econOfScale;
         switch (size) {
             case SMALL_FARM:
-                staticCosts.put("Nitrogen", round((0.68 * INFLATION) * acres * 130));
-                staticCosts.put("Phosphate", round((0.9 * INFLATION) * acres * 50));
-                staticCosts.put("Potash", round((0.72 * INFLATION) * acres * 30));
-                staticCosts.put("Lime", round((14 * INFLATION) * acres * 0.25));
-                staticCosts.put("Pesticides", round((20 * INFLATION) * acres));
-                staticCosts.put("Fuel Utils", round((20 * INFLATION) * acres));
-                staticCosts.put("Repairs", round((15.23 * INFLATION) * acres));
-                staticCosts.put("Misc", round((9 * INFLATION) * acres));
-                staticCosts.put("Interest", round((0.09 * INFLATION) * acres));
-                staticCosts.put("Labor", round((11 * INFLATION) * acres * 4));
-                staticCosts.put("Equipment", round((40 * INFLATION) * acres));
+                econOfScale = 1;
                 break;
 
             case MED_FARM:
-                staticCosts.put("Nitrogen", round((0.68 * INFLATION * 0.96) * acres * 130));
-                staticCosts.put("Phosphate", round((0.9 * INFLATION * 0.96) * acres * 50));
-                staticCosts.put("Potash", round((0.72 * INFLATION * 0.96) * acres * 30));
-                staticCosts.put("Lime", round((14 * INFLATION * 0.96) * acres * 0.25));
-                staticCosts.put("Pesticides", round((20 * INFLATION * 0.96) * acres));
-                staticCosts.put("Fuel Utils", round((20 * INFLATION * 0.96) * acres));
-                staticCosts.put("Repairs", round((15.23 * INFLATION * 0.96) * acres));
-                staticCosts.put("Misc", round((9 * INFLATION * 0.96) * acres));
-                staticCosts.put("Interest", round((0.09 * INFLATION * 0.96) * acres));
-                staticCosts.put("Labor", round((11 * INFLATION * 0.96) * acres * 4));
-                staticCosts.put("Equipment", round((40 * INFLATION * 0.96) * acres));
+               econOfScale = 0.96;
                 break;
+
             case LARGE_FARM:
-                staticCosts.put("Nitrogen", round((0.68 * INFLATION * 0.94) * acres * 130));
-                staticCosts.put("Phosphate", round((0.9 * INFLATION * 0.94) * acres * 50));
-                staticCosts.put("Potash", round((0.72 * INFLATION * 0.94) * acres * 30));
-                staticCosts.put("Lime", round((14 * INFLATION * 0.94) * acres * 0.25));
-                staticCosts.put("Pesticides", round((20 * INFLATION * 0.94) * acres));
-                staticCosts.put("Fuel Utils", round((20 * INFLATION * 0.94) * acres));
-                staticCosts.put("Repairs", round((15.23 * INFLATION * 0.94) * acres));
-                staticCosts.put("Misc", round((9 * INFLATION * 0.94) * acres));
-                staticCosts.put("Interest", round((0.09 * INFLATION * 0.94) * acres));
-                staticCosts.put("Labor", round((11 * INFLATION * 0.94) * acres * 4));
-                staticCosts.put("Equipment", round((40 * INFLATION * 0.94) * acres));
+                econOfScale = 0.94;
+                break;
+
+            default:
+                econOfScale = 1;
                 break;
         }
+
+        staticCosts.put("Nitrogen", round((0.45 * INFLATION * econOfScale) * acres * 185));
+        staticCosts.put("Phosphate", round((0.4 * INFLATION * econOfScale) * acres * 80));
+        staticCosts.put("Potash", round((0.35 * INFLATION * econOfScale) * acres * 60));
+        staticCosts.put("LimeStone", round((29 * INFLATION * econOfScale) * acres * 0.5));
+        staticCosts.put("Insecticide", round((15 * INFLATION * econOfScale) * acres));
+        staticCosts.put("Fungicide", round((15 * INFLATION * econOfScale) * acres));
+        staticCosts.put("Machinery Fuel", round((17 * INFLATION * econOfScale) * acres));
+        staticCosts.put("Machinery Repairs", round((17 * INFLATION * econOfScale) * acres));
+        staticCosts.put("Miscellaneous Overhead", round((12 * INFLATION * econOfScale) * acres));
+        staticCosts.put("Interest", round((0.09 * INFLATION * econOfScale) * acres));
+        staticCosts.put("Labor", round((35 * INFLATION * econOfScale) * acres));
+        staticCosts.put("Equipment", round((40 * INFLATION * econOfScale) * acres));
+        staticCosts.put("Hauling & Transportation", round((5000 * INFLATION * econOfScale) * acres * 0.0015));
+        staticCosts.put("Custom Application", round((6.50 * INFLATION * econOfScale) * acres));
+        staticCosts.put("Crop Insurance", round((10 * INFLATION * econOfScale) * acres));
+
+        if (irrigated){
+            staticCosts.put("Irrigation Fuel", round((12 * INFLATION * econOfScale) * acres * 2));
+            staticCosts.put("Irrigation Repairs", round((15 * INFLATION * econOfScale) * acres));
+            staticCosts.put("Irrigation Labor", round((4 * INFLATION * econOfScale) * acres));
+        }
+
     }
 
     public Student_Stage getStage() {

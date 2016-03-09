@@ -53,7 +53,8 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
         generateInputSectorButton.addActionListener(e -> {
             Consts.DB.setGenInput();
             int compMax = 0, early = 0, mid = 0, full = 0, rn = 0, var = 0;
-            Double maxPrice = 3.50, minPrice = 1.50;
+            //double maxPrice = 3.50, minPrice = 1.50;
+            double maxPrice = 5.00, minPrice = 3.00;
             double ttlSeedsNeeded = Consts.DB.getSeedsNeeded();
             int minAmnt = (int) ceil(ttlSeedsNeeded * .03);
             int maxAmnt = (int) ceil(ttlSeedsNeeded * .06);
