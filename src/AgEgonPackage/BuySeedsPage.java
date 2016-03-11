@@ -69,19 +69,14 @@ public class BuySeedsPage extends JFrame {
         });
         neededLabel.setText(NumberFormat.getNumberInstance(Locale.US).format(student.getFarm().getSeedsNeeded()));
         plantButton.addActionListener(e -> {
-            try {
-                sleep(500);
-            } catch (InterruptedException e1) {
-                e1.printStackTrace();
-            }
             String msg = Consts.htmlWrapper("Are you sure you are done ordering seeds? You will not be able to make any" +
                     " additional orders after continuing.", 4);
             int option = JOptionPane.showConfirmDialog(rootPanel, msg, "Order confirmation", JOptionPane.YES_NO_OPTION);
             if (option == JOptionPane.YES_OPTION) {
-                callPlantAction(stu);
                 new MarketingDealsPage(Consts.DB.getStudent(stu.uName));
                 setVisible(false);
                 dispose();
+                callPlantAction(stu);
             }
         });
 

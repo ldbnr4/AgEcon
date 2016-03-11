@@ -101,9 +101,8 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
         JButton button = (JButton) e.getSource();
 
         if(button.equals(submitButton)){
-            student.addReplaceFarm(new Farm(farmSizeChoice){{
-                setIrrigated(yesRadioButton.isSelected());
-            }});
+            student.addReplaceFarm(new Farm(farmSizeChoice));
+            student.getFarm().setIrrigated(yesRadioButton.isSelected());
             Consts.DB.saveStudent(student);
             new BuySeedsPage(student);
             setVisible(false);

@@ -176,8 +176,7 @@ public class MongoDBConnection{
     }
 
     public void addStudent(Student student) {
-        usersColl.insert((BasicDBObject) JSON.parse(gson.toJson(student)));
-        GameFlow gf = NNgetGameFlow();
+        usersColl.insert((BasicDBObject) JSON.parse(new Gson().toJson(student)));
     }
 
     public void addAdmin(Admin admin) {

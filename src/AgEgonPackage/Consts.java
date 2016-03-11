@@ -36,8 +36,44 @@ public class Consts {
     static final int FORWARD = -1;
     static final int BACK = 1;
     static final MongoDBConnection DB = MongoDBConnection.getInstance();
-    static final int ACRE_YIELD = 50;
+    static final int ACRE_YIELD = 45;
+    public static final int I_ACRE_YIELD = 55;
     static SimpleDateFormat sd2 = new SimpleDateFormat("MMMM dd, yyyy");
+
+    public enum Seed_Type {
+        EARLY, MID, FULL
+    }
+
+    public enum Student_Stage {
+        Select_Size, Buy_Seeds, Sell_Yields, End_of_Season
+    }
+
+    public enum Farm_Size {
+        SMALL_FARM("SMALL_FARM"), MED_FARM("MED_FARM"), LARGE_FARM("LARGE_FARM"), NO_FARM("NO_FARM");
+
+        private final String value;
+
+        Farm_Size(String value) {
+            this.value = value;
+        }
+
+        public static Farm_Size fromValue(String value) {
+            if (value != null) {
+                for (Farm_Size farm : values()) {
+                    if (farm.value.equals(value)) {
+                        return farm;
+                    }
+                }
+            }
+
+            throw new IllegalArgumentException("Invalid farm: " + value);
+        }
+
+        public String toValue() {
+            return value;
+        }
+
+    }
 
     private Consts() {
         throw new AssertionError();
@@ -154,41 +190,6 @@ public class Consts {
 
     static String getFullHarvDt() {
         return "October 10, " + DB.NNgetGameFlow().getCurrentYear();
-    }
-
-    public enum Seed_Type {
-        EARLY, MID, FULL
-    }
-
-    public enum Student_Stage {
-        Select_Size, Buy_Seeds, Sell_Yields, End_of_Season
-    }
-
-    public enum Farm_Size {
-        SMALL_FARM("SMALL_FARM"), MED_FARM("MED_FARM"), LARGE_FARM("LARGE_FARM"), NO_FARM("NO_FARM");
-
-        private final String value;
-
-        Farm_Size(String value) {
-            this.value = value;
-        }
-
-        public static Farm_Size fromValue(String value) {
-            if (value != null) {
-                for (Farm_Size farm : values()) {
-                    if (farm.value.equals(value)) {
-                        return farm;
-                    }
-                }
-            }
-
-            throw new IllegalArgumentException("Invalid farm: " + value);
-        }
-
-        public String toValue() {
-            return value;
-        }
-
     }
 
     public static class RoundJTextField extends JTextField {

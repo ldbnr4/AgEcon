@@ -4,14 +4,18 @@
 
 package AgEgonPackage;
 
+import AgEgonPackage.Consts.Farm_Size;
+import AgEgonPackage.Consts.Seed_Type;
+import AgEgonPackage.Consts.Student_Stage;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static AgEgonPackage.Consts.*;
-import static AgEgonPackage.Consts.Farm_Size.NO_FARM;
+import static AgEgonPackage.Consts.Student_Stage.*;
 import static AgEgonPackage.Consts.Seed_Type.*;
-import static AgEgonPackage.Consts.Student_Stage.Buy_Seeds;
-import static AgEgonPackage.Consts.Student_Stage.Select_Size;
+import static AgEgonPackage.Consts.round;
+import static AgEgonPackage.Consts.*;
+import static AgEgonPackage.Consts.Farm_Size.*;
 import static java.lang.Math.ceil;
 import static java.util.Collections.sort;
 
@@ -23,7 +27,7 @@ import static java.util.Collections.sort;
 public class Farm {
     private Farm_Size size;
     private Student_Stage stage;
-    private int acres, ttlBushels, seedsNeeded, ttlSeedsOwned;
+    private int acres, ttlCwt, seedsNeeded, ttlSeedsOwned;
     private HashMap<String, Double> staticCosts;
     private HashMap<Seed_Type, Integer> seedsOwned;
     private ArrayList<SeedLedgerEntry> seedLedger;
@@ -34,7 +38,7 @@ public class Farm {
 
     public Farm(Farm_Size size) {
         setSizeAcreSeedsNeedStage(size);
-        ttlBushels = 0;
+        ttlCwt = 0;
         ttlSeedsOwned = 0;
         staticCosts = new HashMap<>();
         seedsOwned = new HashMap<Seed_Type, Integer>() {{
@@ -155,7 +159,7 @@ public class Farm {
         seedsNeeded = 10 * acres;
     }
 
-    public HashMap<Consts.Seed_Type, Integer> getSeedsOwned() {
+    public HashMap<Seed_Type, Integer> getSeedsOwned() {
         return seedsOwned;
     }
 
@@ -192,21 +196,35 @@ public class Farm {
 
         setStaticCosts(earlyAcres + midAcres + fullAcres);
 
-        HarvestEntry earlyEntry = new HarvestEntry(getEarlyHarvDt(), (int) ceil(earlyAcres * ACRE_YIELD));
+        double earlyYield = earlyAcres * ACRE_YIELD;
+        if(irrigated){
+            earlyYield = earlyAcres * I_ACRE_YIELD;
+        }
+        HarvestEntry earlyEntry = new HarvestEntry(getEarlyHarvDt(), (int) ceil(earlyYield));
         if (!yieldRecords.contains(earlyEntry)) {
             addToYieldRecord(earlyEntry);
         }
-        HarvestEntry midEntry = new HarvestEntry(getMidHarvDt(), (int) ceil((midAcres * ACRE_YIELD * .9)));
+
+        double midYield = midAcres * ACRE_YIELD * 0.9;
+        if(irrigated){
+            midYield = midAcres * I_ACRE_YIELD * 0.9;
+        }
+
+        HarvestEntry midEntry = new HarvestEntry(getMidHarvDt(), (int) ceil(midYield));
         if (!yieldRecords.contains(midEntry)) {
             addToYieldRecord(midEntry);
         }
-        HarvestEntry fullEntry = new HarvestEntry(getFullHarvDt(), (int) ceil((fullAcres * ACRE_YIELD * .75)));
+
+        double fullYield = fullAcres * ACRE_YIELD * 0.75;
+        if(irrigated){
+            fullYield = fullAcres * I_ACRE_YIELD * 0.75;
+        }
+        HarvestEntry fullEntry = new HarvestEntry(getFullHarvDt(), (int) ceil(fullYield));
         if (!yieldRecords.contains(fullEntry)) {
             addToYieldRecord(fullEntry);
         }
 
-        ttlBushels = (int) ceil(earlyAcres * ACRE_YIELD) + (int) ceil(midAcres * ACRE_YIELD) +
-                (int) ceil(fullAcres * ACRE_YIELD);
+        ttlCwt = (int) ceil(earlyYield + midYield + fullYield);
 
     }
 

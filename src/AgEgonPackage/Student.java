@@ -24,8 +24,9 @@ public class Student {
         HashMap<String, String> passInfo = EncryptPassword.encrypt(pass);
         password = passInfo.get("password");
         salt = passInfo.get("salt");
-        studentSeasons = new HashMap<>();
-        studentSeasons.put(Consts.DB.NNgetGameFlow().getCurrentYear(), farm);
+        studentSeasons = new HashMap<Integer, Farm>(){{
+            put(Consts.DB.NNgetGameFlow().getCurrentYear(), farm);
+        }};
     }
 
     public Farm getFarm(int year) {
