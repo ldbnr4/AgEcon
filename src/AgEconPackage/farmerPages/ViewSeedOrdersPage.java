@@ -2,7 +2,12 @@
  * © 2015, by The Curators of University of Missouri, All Rights Reserved
  */
 
-package AgEconPackage;
+package AgEconPackage.farmerPages;
+
+import AgEconPackage.Consts;
+import AgEconPackage.Farm;
+import AgEconPackage.SeedLedgerEntry;
+import AgEconPackage.Student;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -40,9 +45,9 @@ public class ViewSeedOrdersPage extends JFrame {
         };
 
         double runningTtl = 0;
-        /*for (SeedLedgerEntry entry : student.getSector().getSeedLedger()) {
+        for (SeedLedgerEntry entry : ((Farm) student.getSector()).getSeedLedger()) {
             runningTtl += -entry.getAmount() * entry.getPrice();
-        }*/
+        }
         nModel.addRow(new Object[]{
                 Consts.htmlWrapper("<b><i>TOTAL COST</i></b>", 5),
                 null,
@@ -51,7 +56,7 @@ public class ViewSeedOrdersPage extends JFrame {
                 Consts.htmlWrapper("<b><i>" + NumberFormat.getCurrencyInstance(Locale.US).format(runningTtl) + "</b></i>", 5)
         });
 
-        /*for (SeedLedgerEntry entry : student.getSector().getSeedLedger()) {
+        for (SeedLedgerEntry entry : ((Farm) student.getSector()).getSeedLedger()) {
             nModel.addRow(new Object[]{
                     entry.getSeller(),
                     entry.getSeedType(),
@@ -59,7 +64,7 @@ public class ViewSeedOrdersPage extends JFrame {
                     NumberFormat.getCurrencyInstance(Locale.US).format(entry.getPrice()),
                     NumberFormat.getCurrencyInstance(Locale.US).format(-entry.getPrice() * entry.getAmount())
             });
-        }*/
+        }
 
         seedPurchs.setFont(new Font("Segoe UI", 0, 18));
         seedPurchs.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 20));

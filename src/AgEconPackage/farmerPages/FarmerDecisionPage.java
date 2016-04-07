@@ -2,9 +2,13 @@
  * © 2015, by The Curators of University of Missouri, All Rights Reserved
  */
 
-package AgEconPackage;
+package AgEconPackage.farmerPages;
 
-import AgEconPackage.Consts.Farm_Size;
+import AgEconPackage.Consts;
+import AgEconPackage.Consts.*;
+import AgEconPackage.Farm;
+import AgEconPackage.Student;
+import AgEconPackage.WelcomePage;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -15,12 +19,14 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import static AgEconPackage.Consts.Farm_Size.*;
+import static AgEconPackage.Consts.*;
 import static java.lang.Thread.sleep;
 
 /**
  * Created by Lorenzo on 10/22/2015.
  *
  */
+
 public class FarmerDecisionPage extends JFrame implements ActionListener {
     private Student student;
     private HashMap<Farm_Size, Integer> farmSizeAmounts;
@@ -40,7 +46,7 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
     private JRadioButton yesRadioButton;
     private JRadioButton noRadioButton;
 
-    Farm_Size farmSizeChoice;
+    private Farm_Size farmSizeChoice;
 
 
     public FarmerDecisionPage(final Student student) {
@@ -52,7 +58,7 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setVisible(true);
-        farmerLabel.setText("Hey " + student.uName + "!");
+        farmerLabel.setText("Hey " + student.getuName() + "!");
         this.student = student;
 
         Image image = null;
@@ -78,7 +84,6 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
             while (isVisible()) {
                 updateBtns();
             }
-            //System.out.println("Killed a thread.");
         };
         new Thread(r).start();
 
@@ -101,8 +106,8 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
         JButton button = (JButton) e.getSource();
 
         if(button.equals(submitButton)){
-            student.addReplaceFarm(new Farm(farmSizeChoice));
-            student.getSector().setIrrigated(yesRadioButton.isSelected());
+            student.addReplaceSector(new Farm(farmSizeChoice));
+            ((Farm) student.getSector()).setIrrigated(yesRadioButton.isSelected());
             Consts.DB.saveStudent(student);
             new BuySeedsPage(student);
             setVisible(false);
@@ -133,28 +138,27 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
         while (farmSizeAmounts == null) {
             farmSizeAmounts = Consts.DB.numInEachFarm();
         }
-        //System.out.println(farmSizeAmounts);
         try {
             int dbNumOfSmall = farmSizeAmounts.get(SMALL_FARM);
-            setAvailableLabel(smallAmntLbl, dbNumOfSmall, Consts.S_FARM_CAP);
+            setAvailableLabel(smallAmntLbl, dbNumOfSmall, S_FARM_CAP);
 
             int dbNumOfMed = farmSizeAmounts.get(MED_FARM);
-            setAvailableLabel(medAmntLbl, dbNumOfMed, Consts.M_FARM_CAP);
+            setAvailableLabel(medAmntLbl, dbNumOfMed, M_FARM_CAP);
 
             int dbNumOfLrg = farmSizeAmounts.get(LARGE_FARM);
-            setAvailableLabel(largeAmntLbl, dbNumOfLrg, Consts.L_FARM_CAP);
+            setAvailableLabel(largeAmntLbl, dbNumOfLrg, L_FARM_CAP);
 
-            if (dbNumOfSmall >= Consts.S_FARM_CAP) {
+            if (dbNumOfSmall >= S_FARM_CAP) {
                 smallFarmBtn.setEnabled(false);
             } else
                 smallFarmBtn.setEnabled(true);
 
-            if (dbNumOfMed >= Consts.M_FARM_CAP) {
+            if (dbNumOfMed >= M_FARM_CAP) {
                 medFarmBtn.setEnabled(false);
             } else
                 medFarmBtn.setEnabled(true);
 
-            if (dbNumOfLrg >= Consts.L_FARM_CAP) {
+            if (dbNumOfLrg >= L_FARM_CAP) {
                 largeFarmBtn.setEnabled(false);
             } else
                 largeFarmBtn.setEnabled(true);
@@ -173,7 +177,6 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
         label.setText(String.valueOf(available));
 
         float ratio = (float) num / (float) limit;
-        //System.out.println(ratio);
         if (ratio <= .33) {
             label.setForeground(new Color(0, 102, 0));
         } else if (ratio <= .66) {
@@ -186,14 +189,14 @@ public class FarmerDecisionPage extends JFrame implements ActionListener {
         int farmLimit;
         Farm_Size farmSize;
         if (farm.equals(smallFarmBtn)) {
-            farmLimit = Consts.S_FARM_CAP;
+            farmLimit = S_FARM_CAP;
             farmSize = SMALL_FARM;
 
         } else if (farm.equals(medFarmBtn)) {
-            farmLimit = Consts.M_FARM_CAP;
+            farmLimit = M_FARM_CAP;
             farmSize = MED_FARM;
         } else {
-            farmLimit = Consts.L_FARM_CAP;
+            farmLimit = L_FARM_CAP;
             farmSize = LARGE_FARM;
         }
 

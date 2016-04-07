@@ -14,6 +14,8 @@ import java.util.Locale;
  * Created by Lorenzo on 1/21/2016.
  *
  */
+
+//TODO: restore functionality
 public class ViewMarketDealsPage extends JFrame {
     private JTable marketDeals;
     private JPanel rootPanel;
@@ -40,8 +42,8 @@ public class ViewMarketDealsPage extends JFrame {
         };
 
         final double[] runningTtl = {0};
-        student.getSector().getSaleRecords().forEach(
-                entry -> runningTtl[0] += -entry.getAmount() * entry.getPpbndl());
+        /*student.getSector().getSaleRecords().forEach(
+                entry -> runningTtl[0] += -entry.getAmount() * entry.getPpbndl())*/
 
         nModel.addRow(new Object[]{
                 Consts.htmlWrapper("<b><i>TOTAL REVENUE</i></b>", 5),
@@ -51,13 +53,13 @@ public class ViewMarketDealsPage extends JFrame {
                 Consts.htmlWrapper("<b><i>" + NumberFormat.getCurrencyInstance(Locale.US).format(runningTtl[0]) + "</b></i>", 5)
         });
 
-        student.getSector().getSaleRecords().forEach(entry -> nModel.addRow(new Object[]{
+       /* student.getSector().getSaleRecords().forEach(entry -> nModel.addRow(new Object[]{
                 entry.getSeller(),
                 entry.getDate(),
                 NumberFormat.getNumberInstance(Locale.US).format(-entry.getAmount()),
                 NumberFormat.getCurrencyInstance(Locale.US).format(entry.getPpbndl()),
                 NumberFormat.getCurrencyInstance(Locale.US).format(entry.getPpbndl() * -entry.getAmount())
-        }));
+        }));*/
 
         marketDeals.setFont(new Font("Segoe UI", 0, 18));
         marketDeals.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 20));

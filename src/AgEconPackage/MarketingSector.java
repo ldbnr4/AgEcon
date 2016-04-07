@@ -4,45 +4,65 @@
 
 package AgEconPackage;
 
+import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Created by Lorenzo on 12/15/2015.
  *
  */
 
-public class MarketingSector {
+class MarketingSector extends Sector {
     private String name;
     private String neededDate;
     private Double pricePerBush;
 
     private int bshls;
 
-    public MarketingSector() {
-    }
-
-    public MarketingSector(String name, String neededDate, Double pricePerBush, int bshls) {
+    MarketingSector(String name, String neededDate, Double pricePerBush, int bshls) {
         this.name = name;
         this.neededDate = neededDate;
         this.pricePerBush = pricePerBush;
         this.bshls = bshls;
     }
 
+    @Override
+    public boolean isComplete() {
+        List<Field> fields = Arrays.asList(getClass().getDeclaredFields());
+        for (Field field : fields) {
+            try {
+                Object fieldVal = field.get(this);
+
+                if (fieldVal == null) continue;
+                else if (fieldVal.equals(0)) continue;
+                else if (fieldVal.equals(false)) continue;
+
+                return true;
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
     public String getName() {
         return this.name;
     }
 
-    public String getNeededDate() {
+    String getNeededDate() {
         return neededDate;
     }
 
-    public Double getPricePerBush() {
+    Double getPricePerBush() {
         return pricePerBush;
     }
 
-    public int getBshls() {
+    int getBshls() {
         return this.bshls;
     }
 
-    public boolean subtractBshls(int adjust) {
+    boolean subtractBshls(int adjust) {
         if (adjust > bshls) {
             return false;
         }

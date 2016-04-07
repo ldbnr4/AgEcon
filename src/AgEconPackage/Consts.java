@@ -4,7 +4,7 @@
 
 package AgEconPackage;
 
-import com.google.gson.internal.LinkedTreeMap;
+import com.google.gson.Gson;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,10 +13,8 @@ import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.RoundRectangle2D;
-import java.lang.reflect.Field;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Locale;
 import java.util.Random;
 
@@ -26,59 +24,20 @@ import java.util.Random;
  */
 public abstract class Consts {
 
-    static final String SUPPLY_COMPANY_A_NAME = "Supply Company A", SUPPLY_COMPANY_B_NAME = "Supply Company B",
+    public static final String SUPPLY_COMPANY_A_NAME = "Supply Company A", SUPPLY_COMPANY_B_NAME = "Supply Company B",
             SUPPLY_COMPANY_C_NAME = "Supply Company C", SUPPLY_COMPANY_D_NAME = "Supply Company D", SUPPLY_COMPANY_E_NAME = "Supply Company E";
+    public static final int S_FARM_CAP = 8, M_FARM_CAP = 14, L_FARM_CAP = 8;
+    //static final int TOTAL_STUS = S_FARM_CAP + M_FARM_CAP + L_FARM_CAP;
+    public static final int S_ACRE = 100, M_ACRE = 250, L_ACRE = 500;
+    public static final MongoDBConnection DB = MongoDBConnection.getInstance();
     static final String MARKETING_COMPANY_A_NAME = "Marketing Company A", MARKETING_COMPANY_B_NAME = "Marketing Company B",
             MARKETING_COMPANY_C_NAME = "Marketing Company C", MARKETING_COMPANY_D_NAME = "Marketing Company D", MARKETING_COMPANY_E_NAME = "Marketing Company E";
-    static final int S_FARM_CAP = 8;
-    static final int M_FARM_CAP = 14;
-    static final int L_FARM_CAP = 8;
-    static final int TOTAL_STUS = S_FARM_CAP + M_FARM_CAP + L_FARM_CAP;
-    static final int S_ACRE = 100;
-    static final int M_ACRE = 250;
-    static final int L_ACRE = 500;
     static final double INFLATION = 1.05;
     static final int FORWARD = -1;
     static final int BACK = 1;
-    static final MongoDBConnection DB = MongoDBConnection.getInstance();
-    static final int ACRE_YIELD = 45;
-    public static final int I_ACRE_YIELD = 55;
+    static final int ACRE_YIELD = 45, I_ACRE_YIELD = 55;
+    static final Gson GSON = new Gson();
     static SimpleDateFormat sd2 = new SimpleDateFormat("MMMM dd, yyyy");
-
-    public enum Seed_Type {
-        EARLY, MID, FULL
-    }
-
-    public enum Student_Stage {
-        Select_Size, Buy_Seeds, Sell_Yields, End_of_Season
-    }
-
-    public enum Farm_Size {
-        SMALL_FARM("SMALL_FARM"), MED_FARM("MED_FARM"), LARGE_FARM("LARGE_FARM"), NO_FARM("NO_FARM");
-
-        private final String value;
-
-        Farm_Size(String value) {
-            this.value = value;
-        }
-
-        public static Farm_Size fromValue(String value) {
-            if (value != null) {
-                for (Farm_Size farm : values()) {
-                    if (farm.value.equals(value)) {
-                        return farm;
-                    }
-                }
-            }
-
-            throw new IllegalArgumentException("Invalid farm: " + value);
-        }
-
-        public String toValue() {
-            return value;
-        }
-
-    }
 
     private Consts() {
         throw new AssertionError();
@@ -109,7 +68,7 @@ public abstract class Consts {
         return "<html><font size=\"" + size + "\">" + msg + "</font></html>";
     }
 
-    public static Farm_Size randomFarmSize() {
+    static Farm_Size randomFarmSize() {
         Farm_Size[] VALUES = Farm_Size.values();
         int SIZE = VALUES.length;
         Random RANDOM = new Random();
@@ -121,7 +80,7 @@ public abstract class Consts {
         }
     }
 
-    static KeyListener customKeyListner(JTextField textField) {
+    public static KeyListener customKeyListner(JTextField textField) {
         return new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -146,14 +105,14 @@ public abstract class Consts {
         };
     }
 
-    public static double round(double value) {
+    static double round(double value) {
         long factor = (long) Math.pow(10, 2);
         value = value * factor;
         long tmp = Math.round(value);
         return (double) tmp / factor;
     }
 
-    static void checkSetSoldOut(JLabel amntlabel, JLabel priceLabel, int amount, double price) {
+    public static void checkSetSoldOut(JLabel amntlabel, JLabel priceLabel, int amount, double price) {
         if (amount > 0) {
             amntlabel.setForeground(Color.BLACK);
             amntlabel.setText(String.valueOf(NumberFormat.getNumberInstance(Locale.US).format(amount)));
@@ -197,6 +156,41 @@ public abstract class Consts {
         return "October 10, " + DB.NNgetGameFlow().getCurrentYear();
     }
 
+    public enum Seed_Type {
+        EARLY, MID, FULL
+    }
+
+    public enum Student_Stage {
+        Select_Size, Buy_Seeds, Sell_Yields, End_of_Season
+    }
+
+    public enum Farm_Size {
+        SMALL_FARM("SMALL_FARM"), MED_FARM("MED_FARM"), LARGE_FARM("LARGE_FARM"), NO_FARM("NO_FARM");
+
+        private final String value;
+
+        Farm_Size(String value) {
+            this.value = value;
+        }
+
+        public static Farm_Size fromValue(String value) {
+            if (value != null) {
+                for (Farm_Size farm : values()) {
+                    if (farm.value.equals(value)) {
+                        return farm;
+                    }
+                }
+            }
+
+            throw new IllegalArgumentException("Invalid farm: " + value);
+        }
+
+        public String toValue() {
+            return value;
+        }
+
+    }
+
     public static class RoundJTextField extends JTextField {
         private Shape shape;
 
@@ -225,10 +219,10 @@ public abstract class Consts {
 
     }
 
-    public static class RoundPasswordField extends JPasswordField {
+    static class RoundPasswordField extends JPasswordField {
         private Shape shape;
 
-        public RoundPasswordField() {
+        RoundPasswordField() {
             super(15);
             setOpaque(false); // As suggested by @AVD in comment.
         }
@@ -250,31 +244,6 @@ public abstract class Consts {
             }
             return shape.contains(x, y);
         }
-    }
-
-    public static Object findClass(LinkedTreeMap treeMap){
-
-        if(treeMap.keySet().containsAll(Arrays.asList(Farm.class.getFields()))){
-
-            Farm farm = new Farm();
-            treeMap.keySet().stream().forEach(o -> {
-                try {
-                    Field field = Farm.class.getDeclaredField((String) o);
-                    try {
-                        field.setAccessible(true);
-                        field.set(farm, treeMap.get(o));
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    }
-                } catch (NoSuchFieldException e) {
-                    e.printStackTrace();
-                }
-            });
-            return farm;
-        }
-        //Farm.class.getFields();
-
-        return new Farm(Farm_Size.NO_FARM);
     }
 }
 

@@ -16,10 +16,21 @@ public class GameDriver {
         }
 
         //new WaitPage();
-        //new WelcomePage();
+        new WelcomePage();
+        Student realFarmer = Consts.DB.getStudent("realFarmer");
+        Farm realFarmerSector = (Farm) realFarmer.getSector();
+        realFarmerSector.plantAction();
+        realFarmer.addReplaceSector(realFarmerSector);
+        Consts.DB.saveStudent(realFarmer);
+        /*Student student = Consts.DB.getStudent("tester2");
+        Student student1 = new Student("name", "pass");
+        student1.addReplaceSector(new MarketingSector("name", getEarlyHarvDt(), 5.5, 1000));
+        DB.saveStudent(student1);
+        student1 = Consts.DB.getStudent("name");
+        Sector sector = student.getSector();
+        Sector sector1 = student1.getSector();
 
-        Student student = Consts.DB.getStudent("tester2");
-        student.getSector();
+        System.out.println(sector+"\n"+sector1);*/
 
         //Consts.DB.addAdmin(new Admin("admin", "password"));
         //Consts.DB.addStudent(new Student("ldbnr4","password", new Farm()));

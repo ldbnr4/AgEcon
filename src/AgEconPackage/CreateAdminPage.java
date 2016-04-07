@@ -139,7 +139,6 @@ public class CreateAdminPage extends JFrame implements ActionListener {
     }
 
     private void createUIComponents() {
-        // TODO: place custom component creation code here
         username_tf = new Consts.RoundJTextField();
         username_tf.setBorder(BorderFactory.createCompoundBorder(
                 username_tf.getBorder(),

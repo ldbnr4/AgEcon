@@ -4,6 +4,8 @@
 
 package AgEconPackage;
 
+import AgEconPackage.farmerPages.FarmerDecisionPage;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,7 +23,7 @@ public class SelectSectorPage extends JFrame implements ActionListener {
 
     private Student student;
 
-    public SelectSectorPage(Student student){
+    SelectSectorPage(Student student) {
         super("Farm Size Decision");
 
         setContentPane(rootPanel);

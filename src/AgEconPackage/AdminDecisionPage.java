@@ -21,6 +21,8 @@ import static java.lang.Math.ceil;
  * Created by Lorenzo on 10/27/2015.
  *
  */
+
+//TODO: restore functionality
 public class AdminDecisionPage extends JFrame implements ActionListener {
     JPanel rootPanel;
     JLabel nameLabel, numOfPlayersLabel, gameYearLabel, startingYearLabel, numOfAdminsLabel;
@@ -181,7 +183,6 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
     }
 
     private void createUIComponents() {
-        // TODO: place custom component creation code here
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
         ArrayList<Student> students = Consts.DB.getAllStudents();
@@ -194,10 +195,10 @@ public class AdminDecisionPage extends JFrame implements ActionListener {
         };
 
         studentTable = new JTable(tableModel);
-        for (Student student : students) {
+        /*for (Student student : students) {
             Object[] objs = {student.uName, student.getSector().getSize(), student.getSector().getAcres()};
             tableModel.addRow(objs);
-        }
+        }*/
         studentTable.setPreferredScrollableViewportSize(new Dimension(300, 200));
 
         ArrayList<Admin> admins = Consts.DB.getAllAdmins();

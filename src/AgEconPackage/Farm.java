@@ -25,7 +25,6 @@ import static java.util.Collections.sort;
 
 public class Farm extends Sector{
     private Farm_Size size;
-    private Student_Stage stage;
     private int acres, ttlCwt, seedsNeeded, ttlSeedsOwned;
     private HashMap<String, Double> staticCosts;
     private HashMap<Seed_Type, Integer> seedsOwned;
@@ -34,23 +33,6 @@ public class Farm extends Sector{
     private ArrayList<HarvestEntry> yieldRecords;
     private ArrayList<BushelLedgerEntry> saleRecords;
     private boolean irrigated;
-
-    public Farm(){}
-
-    @Override
-    public boolean isComplete() {
-        List<Field> fields = Arrays.asList(getClass().getFields());
-        fields.stream().forEach(field -> {
-            try {
-                Object o = field.get(this);
-                System.out.println(o);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-        });
-
-        return false;
-    }
 
     public Farm(Farm_Size size) {
         setSizeAcreSeedsNeedStage(size);
@@ -67,6 +49,25 @@ public class Farm extends Sector{
         saleRecords = new ArrayList<>();
     }
 
+    @Override
+    public boolean isComplete() {
+        List<Field> fields = Arrays.asList(getClass().getDeclaredFields());
+        for (Field field : fields) {
+            try {
+                Object fieldVal = field.get(this);
+
+                if (fieldVal == null) continue;
+                else if (fieldVal.equals(0)) continue;
+                else if (fieldVal.equals(false)) continue;
+
+                return true;
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
     public void setIrrigated(boolean flag){
         irrigated = flag;
     }
@@ -79,7 +80,7 @@ public class Farm extends Sector{
         return staticCosts;
     }
 
-    public void setStaticCosts(double acres) {
+    private void setStaticCosts(double acres) {
         double econOfScale;
         switch (size) {
             case SMALL_FARM:
@@ -135,19 +136,19 @@ public class Farm extends Sector{
         return size;
     }
 
-    public ArrayList<BushelLedgerEntry> getSaleRecords() {
+    ArrayList<BushelLedgerEntry> getSaleRecords() {
         return saleRecords;
     }
 
-    public ArrayList<HarvestEntry> getYieldRecords() {
+    ArrayList<HarvestEntry> getYieldRecords() {
         return yieldRecords;
     }
 
-    public void setYieldRecords(ArrayList<HarvestEntry> yieldRecords) {
+    void setYieldRecords(ArrayList<HarvestEntry> yieldRecords) {
         this.yieldRecords = yieldRecords;
     }
 
-    public void setSizeAcreSeedsNeedStage(Farm_Size size) {
+    private void setSizeAcreSeedsNeedStage(Farm_Size size) {
         this.size = size;
         setAcres(size);
         if (size.equals(NO_FARM)) stage = Select_Size;
@@ -158,7 +159,7 @@ public class Farm extends Sector{
         return acres;
     }
 
-    public void setAcres(Farm_Size size) {
+    private void setAcres(Farm_Size size) {
         switch (size) {
             case SMALL_FARM:
                 acres = S_ACRE;
@@ -197,6 +198,7 @@ public class Farm extends Sector{
     }
 
     public void plantAction() {
+        yieldRecords.clear();
         if (ttlSeedsOwned > seedsNeeded) {
             double earlyPerc = round((double) seedsOwned.get(EARLY) / ttlSeedsOwned);
             double midPerc = round((double) seedsOwned.get(MID) / ttlSeedsOwned);
@@ -216,40 +218,32 @@ public class Farm extends Sector{
         if(irrigated){
             earlyYield = earlyAcres * I_ACRE_YIELD;
         }
-        HarvestEntry earlyEntry = new HarvestEntry(getEarlyHarvDt(), (int) ceil(earlyYield));
-        if (!yieldRecords.contains(earlyEntry)) {
-            addToYieldRecord(earlyEntry);
-        }
+        addToYieldRecord(new HarvestEntry(getEarlyHarvDt(), (int) ceil(earlyYield)));
 
         double midYield = midAcres * ACRE_YIELD * 0.9;
         if(irrigated){
             midYield = midAcres * I_ACRE_YIELD * 0.9;
         }
 
-        HarvestEntry midEntry = new HarvestEntry(getMidHarvDt(), (int) ceil(midYield));
-        if (!yieldRecords.contains(midEntry)) {
-            addToYieldRecord(midEntry);
-        }
+        addToYieldRecord(new HarvestEntry(getMidHarvDt(), (int) ceil(midYield)));
 
         double fullYield = fullAcres * ACRE_YIELD * 0.75;
         if(irrigated){
             fullYield = fullAcres * I_ACRE_YIELD * 0.75;
         }
-        HarvestEntry fullEntry = new HarvestEntry(getFullHarvDt(), (int) ceil(fullYield));
-        if (!yieldRecords.contains(fullEntry)) {
-            addToYieldRecord(fullEntry);
-        }
+
+        addToYieldRecord(new HarvestEntry(getFullHarvDt(), (int) ceil(fullYield)));
 
         ttlCwt = (int) ceil(earlyYield + midYield + fullYield);
 
     }
 
-    public void addToSaleRecords(BushelLedgerEntry entry) {
+    void addToSaleRecords(BushelLedgerEntry entry) {
         saleRecords.add(entry);
         sort(saleRecords);
     }
 
-    public void addToYieldRecord(HarvestEntry entry) {
+    private void addToYieldRecord(HarvestEntry entry) {
         yieldRecords.add(entry);
         sort(yieldRecords);
     }

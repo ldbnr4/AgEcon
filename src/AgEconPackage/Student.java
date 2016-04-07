@@ -4,11 +4,12 @@
 
 package AgEconPackage;
 
-import com.google.gson.Gson;
+import AgEconPackage.Consts.Student_Stage;
 
 import java.util.HashMap;
 
 import static AgEconPackage.Consts.DB;
+import static AgEconPackage.Consts.GSON;
 
 /**
  * Created by Lorenzo on 9/22/2015.
@@ -16,10 +17,10 @@ import static AgEconPackage.Consts.DB;
  */
 
 public class Student {
-    public HashMap<Integer, Object> studentSeasons = new HashMap<>();
-    public String uName;
-    protected String password;
-    protected String salt;
+    String uName;
+    String password;
+    String salt;
+    private HashMap<Integer, Object> studentSeasons = new HashMap<>();
 
     public Student(String name, String pass) {
         uName = name;
@@ -30,33 +31,60 @@ public class Student {
     }
 
     public Sector getSector(int year) {
-        Sector farm = (Farm) studentSeasons.get(year);
-        if(farm instanceof Farm) return (Farm) farm;
-        return null;
+        String toJson = GSON.toJson(studentSeasons.get(year));
+
+        Farm fromJsonFarm = GSON.fromJson(toJson, Farm.class);
+        MarketingSector fromJsonMarketing = GSON.fromJson(toJson, MarketingSector.class);
+
+        if (fromJsonFarm.isComplete()) {
+            return fromJsonFarm;
+        }
+        return fromJsonMarketing;
     }
 
     public Sector getSector() {
-        Gson gson = new Gson();
-        String toJson = gson.toJson(studentSeasons.get(Consts.DB.NNgetGameFlow().getCurrentYear()));
-        Farm fromJsonFarm = gson.fromJson(toJson, Farm.class);
-        MarketingSector fromJsonMarketing = gson.fromJson(toJson, MarketingSector.class);
+        String toJson = GSON.toJson(studentSeasons.get(Consts.DB.NNgetGameFlow().getCurrentYear()));
 
-        if(fromJsonFarm.isComplete()){
+        Farm fromJsonFarm = GSON.fromJson(toJson, Farm.class);
+        MarketingSector fromJsonMarketing = GSON.fromJson(toJson, MarketingSector.class);
 
+        if (fromJsonFarm.isComplete()) {
+            return fromJsonFarm;
         }
-        //return fromJsonFarm;
-        return new Farm();
+        return fromJsonMarketing;
     }
 
     public int numOfSeasonsPlayed() {
         return studentSeasons.size();
     }
 
-    public void addReplaceFarm(Farm farm) {
+    public void addReplaceSector(Sector sector) {
         if (studentSeasons.containsKey(DB.NNgetGameFlow().getCurrentYear())) {
             studentSeasons.remove(DB.NNgetGameFlow().getCurrentYear());
         }
-        studentSeasons.put(DB.NNgetGameFlow().getCurrentYear(), farm);
+        studentSeasons.put(DB.NNgetGameFlow().getCurrentYear(), sector);
+    }
+
+    Student_Stage getStage() {
+        return getSector().stage;
+    }
+
+    public void setStage(Student_Stage newStage) {
+        Farm farm = (Farm) getSector();
+        farm.stage = newStage;
+        addReplaceSector(farm);
+    }
+
+    Student_Stage getStage(int year) {
+        return getSector(year).stage;
+    }
+
+    public String getuName() {
+        return uName;
+    }
+
+    public String getPassword() {
+        return password;
     }
 }
 

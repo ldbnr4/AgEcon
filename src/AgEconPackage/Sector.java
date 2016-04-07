@@ -4,14 +4,14 @@
 
 package AgEconPackage;
 
+import AgEconPackage.Consts.Student_Stage;
+
 /**
  * Created by Lorenzo on 3/14/2016.
  *
  */
-public abstract class Sector {
-    //Consts.Student_Stage stage;
-    public Sector(){
-    }
+abstract class Sector {
+    Student_Stage stage;
 
     public abstract boolean isComplete();
 }

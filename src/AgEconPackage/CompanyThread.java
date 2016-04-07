@@ -4,6 +4,8 @@
 
 package AgEconPackage;
 
+import AgEconPackage.farmerPages.BuySeedsPage;
+
 import javax.swing.*;
 
 import static AgEconPackage.Consts.Seed_Type.*;

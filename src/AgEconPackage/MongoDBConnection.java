@@ -4,7 +4,6 @@
 
 package AgEconPackage;
 
-import com.google.gson.Gson;
 import com.mongodb.*;
 import com.mongodb.util.JSON;
 import com.sun.istack.internal.NotNull;
@@ -15,6 +14,7 @@ import java.util.Collections;
 import java.util.HashMap;
 
 import static AgEconPackage.Consts.Farm_Size.*;
+import static AgEconPackage.Consts.GSON;
 
 /**
  * Created by Lorenzo on 10/6/2015.
@@ -23,7 +23,6 @@ import static AgEconPackage.Consts.Farm_Size.*;
 public class MongoDBConnection{
     private static MongoDBConnection ourInstance = new MongoDBConnection();
     private MongoClient mongoClient = null;
-    private Gson gson = new Gson();
     private DB db = openConnection();
     private DBCollection gameFlowColl = db.getCollection("gameFlow");
     private DBCollection adminsColl = db.getCollection("admins");
@@ -33,7 +32,7 @@ public class MongoDBConnection{
 
     private MongoDBConnection() {}
 
-    public static MongoDBConnection getInstance() {
+    static MongoDBConnection getInstance() {
         return ourInstance;
     }
 
@@ -45,15 +44,15 @@ public class MongoDBConnection{
         adminsColl.remove(new BasicDBObject("name", admin));
     }
 
-    public void removeInput(String input) {
+    private void removeInput(String input) {
         inputColl.remove(new BasicDBObject("name", input));
     }
 
-    public void removeMarketComp(String marketName) {
+    private void removeMarketComp(String marketName) {
         marketColl.remove(new BasicDBObject("name", marketName));
     }
 
-    public void removeAllStudents() {
+    void removeAllStudents() {
         try (DBCursor cursor = usersColl.find()) {
             while (cursor.hasNext()) {
                 usersColl.remove(cursor.next());
@@ -66,17 +65,17 @@ public class MongoDBConnection{
         addStudent(student);
     }
 
-    public void saveGameFlow(GameFlow gameFlow) {
+    void saveGameFlow(GameFlow gameFlow) {
         gameFlowColl.remove(new BasicDBObject("name", gameFlow.getName()));
         addGameFlow(gameFlow);
     }
 
-    public void saveInput(InputSector inputSector) {
+    void saveInput(InputSector inputSector) {
         removeInput(inputSector.getName());
         addInputComp(inputSector);
     }
 
-    public void saveMarketing(MarketingSector marketingSector) {
+    void saveMarketing(MarketingSector marketingSector) {
         removeMarketComp(marketingSector.getName());
         addMarketComp(marketingSector);
     }
@@ -86,23 +85,23 @@ public class MongoDBConnection{
         if (person == null) {
             return null;
         }
-        return gson.fromJson(person.toString(), Student.class);
+        return GSON.fromJson(person.toString(), Student.class);
     }
 
-    public Admin getAdmin(String username) {
+    Admin getAdmin(String username) {
         DBObject person = adminsColl.findOne(new BasicDBObject("name", username));
         if (person == null) {
             return null;
         }
-        return gson.fromJson(person.toString(), Admin.class);
+        return GSON.fromJson(person.toString(), Admin.class);
     }
 
-    public GameFlow getGameFlow() {
+    GameFlow getGameFlow() {
         DBObject person = gameFlowColl.findOne(new BasicDBObject("name", "GameFlow"));
         if (person == null) {
             return null;
         }
-        return gson.fromJson(person.toString(), GameFlow.class);
+        return GSON.fromJson(person.toString(), GameFlow.class);
     }
 
     @NotNull
@@ -111,7 +110,7 @@ public class MongoDBConnection{
         while (gf == null) {
             gf = gameFlowColl.findOne(new BasicDBObject("name", "GameFlow"));
         }
-        return gson.fromJson(gf.toString(), GameFlow.class);
+        return GSON.fromJson(gf.toString(), GameFlow.class);
     }
 
     @NotNull
@@ -120,19 +119,19 @@ public class MongoDBConnection{
         while (one == null) {
             one = inputColl.findOne(new BasicDBObject("name", name));
         }
-        return gson.fromJson(one.toString(), InputSector.class);
+        return GSON.fromJson(one.toString(), InputSector.class);
     }
 
     @NotNull
-    public MarketingSector getMarketingComp(String name) {
+    MarketingSector getMarketingComp(String name) {
         DBObject one = marketColl.findOne(new BasicDBObject("name", name));
         while (one == null) {
             one = marketColl.findOne(new BasicDBObject("name", name));
         }
-        return gson.fromJson(one.toString(), MarketingSector.class);
+        return GSON.fromJson(one.toString(), MarketingSector.class);
     }
 
-    public int getTotalPlayers(int year) {
+    int getTotalPlayers(int year) {
         HashMap<String, Integer> farmHash = new HashMap<>();
         int count = 0;
         try (DBCursor cursor = usersColl.find()) {
@@ -144,15 +143,15 @@ public class MongoDBConnection{
         return count;
     }
 
-    public int getTotalAdmins() {
+    int getTotalAdmins() {
         return (int) adminsColl.count();
     }
 
-    public int getSeedsNeeded() {
+    int getSeedsNeeded() {
         return (10 * 100) * 8 + (10 * 250) * 14 + (10 * 500) * 8;
     }
 
-    public int getBshlsNeeded() {
+    int getBshlsNeeded() {
         return (Consts.ACRE_YIELD * Consts.S_ACRE) * Consts.S_FARM_CAP + (Consts.ACRE_YIELD * Consts.M_ACRE) * Consts.M_FARM_CAP + (Consts.ACRE_YIELD * Consts.L_ACRE) * Consts.L_FARM_CAP;
     }
 
@@ -173,39 +172,39 @@ public class MongoDBConnection{
         return numRes;
     }
 
-    public void addStudent(Student student) {
-        if(getStudent(student.uName) == null) usersColl.insert((BasicDBObject) JSON.parse(new Gson().toJson(student)));
+    void addStudent(Student student) {
+        if (getStudent(student.uName) == null) usersColl.insert((BasicDBObject) JSON.parse(GSON.toJson(student)));
     }
 
-    public void addAdmin(Admin admin) {
-        adminsColl.insert((BasicDBObject) JSON.parse(gson.toJson(admin)));
+    void addAdmin(Admin admin) {
+        adminsColl.insert((BasicDBObject) JSON.parse(GSON.toJson(admin)));
     }
 
-    public void addGameFlow(GameFlow gameFlow) {
-        gameFlowColl.insert((BasicDBObject) JSON.parse(gson.toJson(gameFlow)));
+    void addGameFlow(GameFlow gameFlow) {
+        gameFlowColl.insert((BasicDBObject) JSON.parse(GSON.toJson(gameFlow)));
     }
 
-    public void addInputComp(InputSector inputComp) {
+    private void addInputComp(InputSector inputComp) {
         try {
-            inputColl.insert((BasicDBObject) JSON.parse(gson.toJson(inputComp)));
+            inputColl.insert((BasicDBObject) JSON.parse(GSON.toJson(inputComp)));
         } catch (MongoException ignored) {
 
         }
     }
 
-    public void addMarketComp(MarketingSector marketingSector) {
-        marketColl.insert((BasicDBObject) JSON.parse(gson.toJson(marketingSector)));
+    private void addMarketComp(MarketingSector marketingSector) {
+        marketColl.insert((BasicDBObject) JSON.parse(GSON.toJson(marketingSector)));
     }
 
-    public void yearChange(int dir) {
+    void yearChange(int dir) {
         int newYr = NNgetGameFlow().getCurrentYear();
         Student student;
 
         try (DBCursor users = usersColl.find()) {
             while (users.hasNext()) {
-                student = gson.fromJson(users.next().toString(), Student.class);
+                student = GSON.fromJson(users.next().toString(), Student.class);
                 if (student.getSector(newYr) == null) {
-                    student.addReplaceFarm(new Farm(NO_FARM));
+                    student.addReplaceSector(new Farm(NO_FARM));
                     saveStudent(student);
                 }
             }
@@ -216,7 +215,7 @@ public class MongoDBConnection{
         ArrayList<Student> list = new ArrayList<>();
         try (DBCursor cursor = usersColl.find()) {
             while (cursor.hasNext()) {
-                list.add(gson.fromJson(cursor.next().toString(), Student.class));
+                list.add(GSON.fromJson(cursor.next().toString(), Student.class));
             }
         }
         return list;
@@ -226,19 +225,23 @@ public class MongoDBConnection{
         ArrayList<Admin> list = new ArrayList<>();
         try (DBCursor cursor = adminsColl.find()) {
             while (cursor.hasNext()) {
-                list.add(gson.fromJson(cursor.next().toString(), Admin.class));
+                list.add(GSON.fromJson(cursor.next().toString(), Admin.class));
             }
         }
         return list;
     }
 
-    public void setGenInput() {
+    public int getAllUserCount() {
+        return (int) usersColl.count();
+    }
+
+    void setGenInput() {
         GameFlow gameFlow = NNgetGameFlow();
         gameFlow.setGameFlowsInput(gameFlow.getCurrentYear(), true);
         saveGameFlow(gameFlow);
     }
 
-    public void setGenMark() {
+    void setGenMark() {
         GameFlow gameFlow = NNgetGameFlow();
         gameFlow.setGameFlowsMarket(gameFlow.getCurrentYear(), true);
         saveGameFlow(gameFlow);

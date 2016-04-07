@@ -5,6 +5,8 @@
 
 package AgEconPackage;
 
+import AgEconPackage.farmerPages.BuySeedsPage;
+import AgEconPackage.farmerPages.FarmerDecisionPage;
 import net.java.balloontip.BalloonTip;
 import net.java.balloontip.styles.MinimalBalloonStyle;
 import net.java.balloontip.utils.TimingUtils;
@@ -22,6 +24,8 @@ import static AgEconPackage.Consts.*;
  * Created by Lorenzo on 9/22/2015.
  *
  */
+
+//TODO: add to cases on stages after loggin to include marketing sector stages
 public class WelcomePage extends JFrame implements ActionListener {
     private JPanel rootPanel;
     private JTextField userNameField;
@@ -33,7 +37,6 @@ public class WelcomePage extends JFrame implements ActionListener {
     private JPasswordField confirmPasswordPasswordField;
     private JPasswordField passwordPasswordField;
     private JButton submitButton;
-    private MinimalBalloonStyle modern;
     private BalloonTip createBalloon;
     private UNameVerifier usernameVerifier;
     private PassVerifier passwordVerifier;
@@ -46,15 +49,12 @@ public class WelcomePage extends JFrame implements ActionListener {
         setResizable(false);
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         setMaximumSize(new Dimension(200, (int) screen.getHeight() - 50));
-        //System.out.println(Toolkit.getDefaultToolkit().getScreenSize());
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        //System.out.println("Frame Size: " + getSize());
-        //System.out.println("Resolution: " + Toolkit.getDefaultToolkit().getScreenResolution());
 
-        modern = new MinimalBalloonStyle(Color.yellow, 5);
+        MinimalBalloonStyle modern = new MinimalBalloonStyle(Color.yellow, 5);
 
         createBalloon = new BalloonTip(usernameTextField, new JLabel(), modern,
                 BalloonTip.Orientation.RIGHT_ABOVE, BalloonTip.AttachLocation.ALIGNED, 10, 10, false);
@@ -182,7 +182,6 @@ public class WelcomePage extends JFrame implements ActionListener {
     }
 
     private void createUIComponents() {
-        // TODO: place custom component creation code here
         usernameTextField = new RoundJTextField();
         usernameTextField.setBorder(BorderFactory.createCompoundBorder(
                 usernameTextField.getBorder(),
@@ -276,7 +275,7 @@ public class WelcomePage extends JFrame implements ActionListener {
                         String inEncrypt = EncryptPassword.encrpyt(inPass, salt);
                         if (inEncrypt.equals(grabbedStudent.password)) {
                             passwordField.setBackground(Color.GREEN);
-                            switch (grabbedStudent.getSector().getStage()) {
+                            switch (grabbedStudent.getStage()) {
                                 case Select_Size:
                                     new FarmerDecisionPage(grabbedStudent);
                                     break;

@@ -4,6 +4,7 @@
 
 package AgEconPackage;
 
+import AgEconPackage.farmerPages.ViewSeedOrdersPage;
 import net.java.balloontip.BalloonTip;
 import net.java.balloontip.styles.MinimalBalloonStyle;
 import net.java.balloontip.utils.TimingUtils;
@@ -16,6 +17,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,6 +27,8 @@ import java.util.*;
  * Created by Lorenzo on 12/15/2015.
  *
  */
+
+//TODO: restore functionality
 public class MarketingDealsPage extends JFrame implements ActionListener {
     private JPanel rootPanel;
     private JLabel compABushels, compAPrice, compADate, compBBushels, compBDate, compBPrice, compCDate, compCBushels,
@@ -40,7 +44,6 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
     private BalloonTip balloonTip, successBalloon;
 
     private Student stu;
-    private String stuName;
 
     public MarketingDealsPage(Student student) {
         super("Markets Page");
@@ -58,8 +61,8 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         this.stu = student;
-        this.stuName = student.uName;
-        welcomeLabel.setText("Hey " + this.stuName + "!");
+        String stuName = student.uName;
+        welcomeLabel.setText("Hey " + stuName + "!");
         logoutButton.addActionListener(e -> {
             new WelcomePage();
             setVisible(false);
@@ -91,7 +94,7 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
                     " additional deals after continuing.", 4);
             int option = JOptionPane.showConfirmDialog(rootPanel, msg, "Deals confirmation", JOptionPane.YES_NO_OPTION);
             if (option == JOptionPane.YES_OPTION) {
-                stu.getSector().setStage(Consts.Student_Stage.End_of_Season);
+                stu.setStage(Consts.Student_Stage.End_of_Season);
                 Consts.DB.saveStudent(stu);
                 new EndofSeasonPage(stu);
                 setVisible(false);
@@ -115,7 +118,7 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
 
     }
 
-    void initCompThreads() {
+    private void initCompThreads() {
         new Thread(new CompanyThread(this, Consts.MARKETING_COMPANY_A_NAME, compABushels, compAPrice, compADate)).start();
         new Thread(new CompanyThread(this, Consts.MARKETING_COMPANY_B_NAME, compBBushels, compBPrice, compBDate)).start();
         new Thread(new CompanyThread(this, Consts.MARKETING_COMPANY_C_NAME, compCBushels, compCPrice, compCDate)).start();
@@ -124,14 +127,13 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
     }
 
     private void createUIComponents() {
-        // TODO: place custom component creation code here
 
         UtilDateModel model = new UtilDateModel();
         Date initDate = null;
         try {
-            /*String string = "January 2, 2010";
+            String string = "January 2, 2010";
             DateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
-            Date date = format.parse();*/
+            Date date = format.parse(string);
             initDate = Consts.sd2.parse(Consts.getEarlyHarvDt());
         } catch (ParseException e) {
             e.printStackTrace();
@@ -206,7 +208,7 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
         }
     }
 
-    void printBalSheet() {
+    private void printBalSheet() {
         DefaultTableModel nModel = new DefaultTableModel(new String[]{"Date", "Amount(cwt)"}, 0) {
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -214,22 +216,14 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
         };
 
         int runTtl = 0;
-        //int row = 0;
-        for (HarvestEntry ledger : stu.getSector().getYieldRecords()) {
+        for (HarvestEntry ledger : ((Farm) stu.getSector()).getYieldRecords()) {
             runTtl += ledger.getAmount();
-/*            if (row > 0) {
-                if (ledger.getDate().equals(nModel.getValueAt(row - 1, 0))) {
-                    nModel.setValueAt(NumberFormat.getNumberInstance(Locale.US).format(runTtl), row - 1, 1);
-                    continue;
-                }
-            }*/
             try {
                 nModel.addRow(new Object[]{Consts.sd2.format(Consts.sd2.parse(ledger.getDate())),
                         NumberFormat.getNumberInstance(Locale.US).format(runTtl)});
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            //row++;
         }
         bshlBalSheet.setFont(new Font("Segoe UI", 0, 18));
         bshlBalSheet.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 20));
@@ -238,7 +232,7 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
         bshlBalSheet.setModel(nModel);
     }
 
-    void printCurrentDeals() {
+    private void printCurrentDeals() {
         DefaultTableModel nModel = new DefaultTableModel(new String[]{
                 "Company Name",
                 "Date of yield transfer",
@@ -247,7 +241,7 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
                 return false;
             }
         };
-        stu.getSector().getSaleRecords().forEach(entry -> nModel.addRow(new Object[]{
+        ((Farm) stu.getSector()).getSaleRecords().forEach(entry -> nModel.addRow(new Object[]{
                 entry.getSeller(),
                 entry.getDate(),
                 NumberFormat.getNumberInstance(Locale.US).format(-entry.getAmount()),
@@ -260,9 +254,9 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
         tbl_currentDeals.setModel(nModel);
     }
 
-    boolean attemptTrans(BushelLedgerEntry sell) {
+    private boolean attemptTrans(BushelLedgerEntry sell) {
         ArrayList<HarvestEntry> usableHarvs = new ArrayList<>();
-        stu.getSector().getYieldRecords().stream().filter(harvestEntry -> {
+        ((Farm) stu.getSector()).getYieldRecords().stream().filter(harvestEntry -> {
             try {
                 return (Consts.sd2.parse(harvestEntry.getDate()).before(Consts.sd2.parse(sell.getDate())) ||
                         sell.getDate().equals(harvestEntry.getDate())
@@ -283,18 +277,18 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
                 tmpEntries.add(new HarvestEntry(usableEntry.getDate(), -usableEntry.getAmount()));
             } else {
                 tmpEntries.add(new BushelLedgerEntry(usableEntry.getDate(), -sellAmnt, 0, ""));
-                stu.getSector().getYieldRecords().addAll(tmpEntries);
+                ((Farm) stu.getSector()).getYieldRecords().addAll(tmpEntries);
                 condenseYieldRecords();
                 sell.setAmount(-sell.getAmount());
-                stu.getSector().addToSaleRecords(sell);
+                ((Farm) stu.getSector()).addToSaleRecords(sell);
                 return true;
             }
         }
         return false;
     }
 
-    void buttonHandler(JDatePickerImpl jDatePicker, JLabel dateLabel, JTextField amntField, String compName,
-                       double bndlPrice) {
+    private void buttonHandler(JDatePickerImpl jDatePicker, JLabel dateLabel, JTextField amntField, String compName,
+                               double bndlPrice) {
         if (amntField.getText().isEmpty() || amntField.getForeground().equals(Color.GRAY)) {
             balloonTip.setAttachedComponent(amntField);
             balloonTip.setTextContents("Please enter a number to sell.");
@@ -352,7 +346,6 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
             TimingUtils.showTimedBalloon(balloonTip, 4500);
 
             Consts.DB.getMarketingComp(compName).subtractBshls(-amount);
-            //Consts.DB.getMarketingComp(compName).subtractBshls(-amount);
             return;
         }
         printBalSheet();
@@ -370,7 +363,7 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
         ArrayList<HarvestEntry> harvList = new ArrayList<>();
         int first = 0, second = 0, third = 0;
 
-        for (HarvestEntry ledger : stu.getSector().getYieldRecords()) {
+        for (HarvestEntry ledger : ((Farm) stu.getSector()).getYieldRecords()) {
             if (ledger.getDate().equals(Consts.getEarlyHarvDt())) {
                 first += ledger.getAmount();
             } else if (ledger.getDate().equals(Consts.getMidHarvDt())) {
@@ -384,10 +377,12 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
         harvList.add(new HarvestEntry(Consts.getMidHarvDt(), second));
         harvList.add(new HarvestEntry(Consts.getFullHarvDt(), third));
 
-        stu.getSector().setYieldRecords(harvList);
+        Farm stuFarm = (Farm) stu.getSector();
+        stuFarm.setYieldRecords(harvList);
+        stu.addReplaceSector(stuFarm);
     }
 
-    class DateLabelFormatter extends JFormattedTextField.AbstractFormatter {
+    private class DateLabelFormatter extends JFormattedTextField.AbstractFormatter {
         private String datePattern = "MMMM dd, yyyy";
         private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
 

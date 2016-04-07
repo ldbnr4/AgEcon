@@ -9,8 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Random;
 
-import static AgEconPackage.Consts.Farm_Size.MED_FARM;
-import static AgEconPackage.Consts.Farm_Size.SMALL_FARM;
 import static AgEconPackage.Consts.Seed_Type.MID;
 import static java.lang.Thread.sleep;
 
@@ -18,6 +16,8 @@ import static java.lang.Thread.sleep;
  * Created by Lorenzo on 1/10/2016.
  *
  */
+
+//TODO: restore functionality
 public class SoftTestPage extends JFrame implements ActionListener {
     private JButton buyingSeedsLoadTestButton;
     private JPanel rootPanel;
@@ -75,13 +75,14 @@ public class SoftTestPage extends JFrame implements ActionListener {
             }).start();
         } else if (btn.equals(generateFarmersButton)) {
             int sCnt = 0, mCnt = 0, lCnt = 0;
-            for (int i = 0; i < Consts.TOTAL_STUS - 1; i++) {
+            int allUserCount = Consts.DB.getAllUserCount();
+            for (int i = 0; i < allUserCount - 1; i++) {
                 Student student = new Student("farmer" + i, "password");
-                student.addReplaceFarm(new Farm(Consts.randomFarmSize()));
+                student.addReplaceSector(new Farm(Consts.randomFarmSize()));
 
-                if (student.getSector().getSize().equals(SMALL_FARM)) sCnt++;
+                /*if (student.getSector().getSize().equals(SMALL_FARM)) sCnt++;
                 else if (student.getSector().getSize().equals(MED_FARM)) mCnt++;
-                else lCnt++;
+                else lCnt++;*/
                 System.out.println("Created Farmer " + i);
             }
         } else if (btn.equals(removeStudentButton)) {
