@@ -17,11 +17,13 @@ public class GameDriver {
 
         //new WaitPage();
         new WelcomePage();
-        Student realFarmer = Consts.DB.getStudent("realFarmer");
+        new SoftTestPage();
+        new AdminDecisionPage(Consts.DB.getAdmin("ldbnr4"));
+        /*Student realFarmer = Consts.DB.getStudent("realFarmer");
         Farm realFarmerSector = (Farm) realFarmer.getSector();
         realFarmerSector.plantAction();
         realFarmer.addReplaceSector(realFarmerSector);
-        Consts.DB.saveStudent(realFarmer);
+        Consts.DB.saveStudent(realFarmer);*/
         /*Student student = Consts.DB.getStudent("tester2");
         Student student1 = new Student("name", "pass");
         student1.addReplaceSector(new MarketingSector("name", getEarlyHarvDt(), 5.5, 1000));

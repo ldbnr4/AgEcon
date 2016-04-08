@@ -256,7 +256,8 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
 
     private boolean attemptTrans(BushelLedgerEntry sell) {
         ArrayList<HarvestEntry> usableHarvs = new ArrayList<>();
-        ((Farm) stu.getSector()).getYieldRecords().stream().filter(harvestEntry -> {
+        Farm stuSector = (Farm) stu.getSector();
+        stuSector.getYieldRecords().stream().filter(harvestEntry -> {
             try {
                 return (Consts.sd2.parse(harvestEntry.getDate()).before(Consts.sd2.parse(sell.getDate())) ||
                         sell.getDate().equals(harvestEntry.getDate())
@@ -277,10 +278,12 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
                 tmpEntries.add(new HarvestEntry(usableEntry.getDate(), -usableEntry.getAmount()));
             } else {
                 tmpEntries.add(new BushelLedgerEntry(usableEntry.getDate(), -sellAmnt, 0, ""));
-                ((Farm) stu.getSector()).getYieldRecords().addAll(tmpEntries);
-                condenseYieldRecords();
+                stuSector.getYieldRecords().addAll(tmpEntries);
+                stu.addReplaceSector(stuSector);
+                condenseYieldRecords(stuSector);
                 sell.setAmount(-sell.getAmount());
-                ((Farm) stu.getSector()).addToSaleRecords(sell);
+                stuSector.addToSaleRecords(sell);
+                stu.addReplaceSector(stuSector);
                 return true;
             }
         }
@@ -359,11 +362,11 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
 
     }
 
-    private void condenseYieldRecords() {
+    private void condenseYieldRecords(Farm stuSector) {
         ArrayList<HarvestEntry> harvList = new ArrayList<>();
         int first = 0, second = 0, third = 0;
 
-        for (HarvestEntry ledger : ((Farm) stu.getSector()).getYieldRecords()) {
+        for (HarvestEntry ledger : stuSector.getYieldRecords()) {
             if (ledger.getDate().equals(Consts.getEarlyHarvDt())) {
                 first += ledger.getAmount();
             } else if (ledger.getDate().equals(Consts.getMidHarvDt())) {
@@ -377,9 +380,7 @@ public class MarketingDealsPage extends JFrame implements ActionListener {
         harvList.add(new HarvestEntry(Consts.getMidHarvDt(), second));
         harvList.add(new HarvestEntry(Consts.getFullHarvDt(), third));
 
-        Farm stuFarm = (Farm) stu.getSector();
-        stuFarm.setYieldRecords(harvList);
-        stu.addReplaceSector(stuFarm);
+        stuSector.setYieldRecords(harvList);
     }
 
     private class DateLabelFormatter extends JFormattedTextField.AbstractFormatter {

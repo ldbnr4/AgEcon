@@ -80,10 +80,10 @@ public class BuySeedsPage extends JFrame {
                     " additional orders after continuing.", 4);
             int option = JOptionPane.showConfirmDialog(rootPanel, msg, "Order confirmation", JOptionPane.YES_NO_OPTION);
             if (option == JOptionPane.YES_OPTION) {
+                callPlantAction(stu);
                 new MarketingDealsPage(Consts.DB.getStudent(stu.getuName()));
                 setVisible(false);
                 dispose();
-                callPlantAction(stu);
             }
         });
 
