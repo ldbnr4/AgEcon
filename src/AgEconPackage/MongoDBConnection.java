@@ -31,9 +31,7 @@ class MongoDBConnection{
     private DBCollection inputColl = db.getCollection("inputSector");
     private DBCollection marketColl = db.getCollection("marketingSector");
 
-    private MongoDBConnection() {
-        //morphia.mapPackage("AgEconPackage");
-    }
+    private MongoDBConnection() {}
 
     static MongoDBConnection getInstance() {
         return ourInstance;
